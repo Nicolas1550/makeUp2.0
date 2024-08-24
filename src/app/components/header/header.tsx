@@ -1,15 +1,11 @@
-"use client";
 import React, { useState, useRef, useEffect } from "react";
-import { Canvas } from "@react-three/fiber";
-import Particles from "./Particles";
+import ParticlesBg from "particles-bg"; // Importar la librería de partículas
 import {
   HeaderContainer,
   HeaderContent,
   HeaderText,
   Button,
   ArrowIcon,
-  TopCanvasContainer,
-  BottomCanvasContainer,
   PaginationContainer,
   PaginationDot,
 } from "./headerStyled";
@@ -34,7 +30,9 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 1000);
+      if (typeof window !== "undefined") {
+        setIsMobile(window.innerWidth <= 1000);
+      }
     };
 
     handleResize();
@@ -56,13 +54,9 @@ const Header: React.FC = () => {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <TopCanvasContainer>
-        <Canvas>
-          <Particles />
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} />
-        </Canvas>
-      </TopCanvasContainer>
+      {/* Partículas de fondo */}
+      <ParticlesBg type="cobweb" bg={true} />
+
       <HeaderContent>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -70,18 +64,11 @@ const Header: React.FC = () => {
           transition={{ duration: 1 }}
         >
           <HeaderText>Bienvenidos a Salon Unisex</HeaderText>
-          <Link href={"/reservation"}>
+          <Link href={"/servicios"}>
             <Button whileHover={{ scale: 1.1 }}>Reserva Ahora</Button>
           </Link>
         </motion.div>
       </HeaderContent>
-      <BottomCanvasContainer>
-        <Canvas>
-          <Particles />
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} />
-        </Canvas>
-      </BottomCanvasContainer>
       <ArrowIcon onClick={nextImage}>
         <ArrowForwardIosIcon style={{ fontSize: "2rem", color: "#ffd700" }} />
       </ArrowIcon>
