@@ -93,7 +93,6 @@ export const deleteProduct = createAsyncThunk(
       );
       return response.data;
     } catch (error) {
-      // Manejo de errores
     }
   }
 );

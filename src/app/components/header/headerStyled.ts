@@ -21,8 +21,8 @@ export const HeaderContainer = styled.header<{ $isMobile: boolean }>`
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.4); /* Ajusta la opacidad según sea necesario */
-    z-index: 1; /* Asegura que la superposición esté por encima de la imagen de fondo */
+    background: rgba(0, 0, 0, 0.4); 
+    z-index: 1; */
   }
 
   ${({ $isMobile }) =>

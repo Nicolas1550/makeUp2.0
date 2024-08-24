@@ -55,13 +55,13 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
     }
   );
   const [currentView, setCurrentView] = useState<View>("month");
-  const [currentDate, setCurrentDate] = useState(new Date()); // Estado para la fecha actual
+  const [currentDate, setCurrentDate] = useState(new Date()); 
   const [isMounted, setIsMounted] = useState(false);
   const [isReserveModalOpen, setIsReserveModalOpen] = useState(false);
 
   useEffect(() => {
     dispatch(fetchDisponibilidadesByService(servicioId));
-  }, [dispatch, servicioId, currentDate]); // Recargar los datos cuando cambia la fecha
+  }, [dispatch, servicioId, currentDate]); 
 
   useEffect(() => {
     setIsMounted(true);
@@ -89,13 +89,13 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
   const handleSelectSlot = (slotInfo: SlotInfo) => {
     // Al seleccionar un slot en la vista de "mes", cambiar la vista a "día" y establecer la fecha seleccionada
     if (currentView === "month") {
-      setCurrentDate(slotInfo.start); // Establecer la fecha seleccionada como la fecha actual
-      setCurrentView("day"); // Cambiar a la vista de día
+      setCurrentDate(slotInfo.start); 
+      setCurrentView("day"); 
     } else if (user?.role === "admin") {
       setNewDisponibilidad({
         ...newDisponibilidad,
-        fecha_inicio: slotInfo.start.toISOString(), // Sin manipulación de moment
-        fecha_fin: slotInfo.end.toISOString(), // Sin manipulación de moment
+        fecha_inicio: slotInfo.start.toISOString(), 
+        fecha_fin: slotInfo.end.toISOString(), 
       });
       setShowAddModal(true);
     }
@@ -142,7 +142,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
 
   // Controla la navegación (next, back)
   const handleNavigate = (date: Date, view: View, action: NavigateAction) => {
-    setCurrentDate(date); // Actualiza la fecha actual según la navegación
+    setCurrentDate(date); 
   };
 
   if (!isMounted) return null;
@@ -162,8 +162,8 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
           onSelectSlot={handleSelectSlot}
           view={currentView}
           onView={setCurrentView}
-          date={currentDate} // Pasa la fecha actual
-          onNavigate={handleNavigate} // Manejador de la navegación
+          date={currentDate} 
+          onNavigate={handleNavigate} 
         />
       </CalendarContainer>
 
@@ -195,7 +195,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
             <label>Fecha y Hora de Inicio:</label>
             <input
               type="datetime-local"
-              value={selectedEvent.fecha_inicio.slice(0, 16)} // Formato ISO compatible con datetime-local
+              value={selectedEvent.fecha_inicio.slice(0, 16)}
               onChange={(e) =>
                 setSelectedEvent({
                   ...selectedEvent,
@@ -206,7 +206,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
             <label>Fecha y Hora de Fin:</label>
             <input
               type="datetime-local"
-              value={selectedEvent.fecha_fin.slice(0, 16)} // Formato ISO compatible con datetime-local
+              value={selectedEvent.fecha_fin.slice(0, 16)} 
               onChange={(e) =>
                 setSelectedEvent({
                   ...selectedEvent,

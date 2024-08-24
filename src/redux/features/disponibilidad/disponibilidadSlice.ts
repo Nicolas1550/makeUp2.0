@@ -100,8 +100,8 @@ export const fetchDisponibilidades = createAsyncThunk<
     return response.data.map((disp: any) => ({
       ...disp,
       title: disp.servicio_nombre,
-      start: disp.fecha_inicio, // Almacenar como cadena
-      end: disp.fecha_fin, // Almacenar como cadena
+      start: disp.fecha_inicio, 
+      end: disp.fecha_fin, 
     }));
   } catch (err) {
     if (axios.isAxiosError(err) && err.response) {
@@ -134,16 +134,16 @@ export const addDisponibilidad = createAsyncThunk<
         "http://localhost:3001/api/disponibilidades",
         {
           servicio_id: disponibilidad.servicio_id,
-          fecha_inicio: disponibilidad.fecha_inicio, // Enviar como cadena
-          fecha_fin: disponibilidad.fecha_fin, // Enviar como cadena
+          fecha_inicio: disponibilidad.fecha_inicio, 
+          fecha_fin: disponibilidad.fecha_fin, 
           disponible: disponibilidad.disponible,
         }
       );
       return {
         ...response.data,
         title: `Servicio ${response.data.servicio_nombre}`,
-        start: response.data.fecha_inicio, // Almacenar como cadena
-        end: response.data.fecha_fin, // Almacenar como cadena
+        start: response.data.fecha_inicio,
+        end: response.data.fecha_fin, 
       };
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {
@@ -177,16 +177,16 @@ export const updateDisponibilidad = createAsyncThunk<
         `http://localhost:3001/api/disponibilidades/${disponibilidad.id}`,
         {
           servicio_id: disponibilidad.servicio_id,
-          fecha_inicio: disponibilidad.fecha_inicio, // Enviar como cadena
-          fecha_fin: disponibilidad.fecha_fin, // Enviar como cadena
+          fecha_inicio: disponibilidad.fecha_inicio, 
+          fecha_fin: disponibilidad.fecha_fin, 
           disponible: disponibilidad.disponible,
         }
       );
       return {
         ...response.data,
         title: `Servicio ${response.data.servicio_nombre}`,
-        start: response.data.fecha_inicio, // Almacenar como cadena
-        end: response.data.fecha_fin, // Almacenar como cadena
+        start: response.data.fecha_inicio, 
+        end: response.data.fecha_fin, 
       };
     } catch (err) {
       if (axios.isAxiosError(err) && err.response) {

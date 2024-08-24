@@ -1,4 +1,3 @@
-// src/app/store.ts
 import { configureStore } from "@reduxjs/toolkit";
 import productReducer from "../redux/features/product/productSlice";
 import cartReducer from "../redux/features/cart/cartSlice";

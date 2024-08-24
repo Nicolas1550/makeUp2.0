@@ -1,6 +1,6 @@
 import { Providers } from "@/redux/provider";
-import "./globals.css";  // Para aplicar los estilos globales en CSS
-import SocketHandler from "./socketHandler";  // Si tienes este componente para gestionar sockets
+import "./globals.css";  
+import SocketHandler from "./socketHandler"; 
 
 export const metadata = {
   title: "Peluqueria The Best",
@@ -17,12 +17,11 @@ export default function RootLayout({
       <head>
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
-        {/* Aquí puedes agregar más meta tags o enlaces a fuentes, iconos, etc. */}
       </head>
       <body>
         <Providers>
           {children}
-          <SocketHandler />   {/* Mantiene la funcionalidad de sockets */}
+          <SocketHandler />  
         </Providers>
       </body>
     </html>

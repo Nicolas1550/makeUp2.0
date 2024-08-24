@@ -1,4 +1,3 @@
-// modalStyled.ts
 import styled from "styled-components";
 
 interface ModalOverlayProps {

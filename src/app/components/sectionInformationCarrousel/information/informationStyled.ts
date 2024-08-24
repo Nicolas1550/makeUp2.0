@@ -1,4 +1,3 @@
-// components/sectionInformationCarrousel/informationStyled.ts
 import styled from 'styled-components';
 import { FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
 

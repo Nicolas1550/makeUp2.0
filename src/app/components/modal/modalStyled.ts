@@ -11,7 +11,7 @@ export const ModalOverlay = styled.div`
     0,
     0,
     0.7
-  ); // Aumentamos la opacidad para un fondo más oscuro
+  ); 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,26 +27,26 @@ export const ModalContainer = styled.div`
   width: 80vw;
   max-width: 1200px;
   height: auto;
-  max-height: 80vh; // Limitar la altura máxima
-  overflow-y: auto; // Añadir scroll si el contenido es demasiado alto
+  max-height: 80vh;
+  overflow-y: auto; 
   transition: transform 0.3s ease;
   transform: scale(1);
-  scrollbar-width: thin; // Para Firefox
-  scrollbar-color: #ffd700 transparent; // Para Firefox
+  scrollbar-width: thin; 
+  scrollbar-color: #ffd700 transparent; 
 
   &::-webkit-scrollbar {
     width: 10px; // Ancho del scroll
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: #ffd700; // Color del scroll
-    border-radius: 10px; // Radio del borde del scroll
-    border: 3px solid transparent; // Espacio entre el scroll y el borde
-    background-clip: content-box; // Ajuste del clip del fondo
+    background-color: #ffd700; 
+    border-radius: 10px; 
+    border: 3px solid transparent; 
+    background-clip: content-box; 
   }
 
   &::-webkit-scrollbar-track {
-    background: transparent; // Color de fondo del track
+    background: transparent; 
   }
 
   @media (max-width: 900px) {

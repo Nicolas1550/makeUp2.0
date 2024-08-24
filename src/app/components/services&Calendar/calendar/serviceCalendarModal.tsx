@@ -27,7 +27,7 @@ const ServiceCalendarModal: React.FC<ServiceCalendarModalProps> = ({
       <MyCalendar
         isAdmin={isAdmin}
         servicioId={servicio.id}
-        closeParentModal={onClose} // Pass onClose as closeParentModal
+        closeParentModal={onClose} 
       />
     </Modal>
   );

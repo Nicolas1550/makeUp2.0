@@ -13,7 +13,7 @@ export const useAuthToken = () => {
     const token = urlParams.get("token");
     if (token) {
       localStorage.setItem("token", token);
-      window.history.replaceState({}, document.title, window.location.pathname); // Limpiar la URL
+      window.history.replaceState({}, document.title, window.location.pathname); 
       dispatch(checkAuthentication());
     }
   }, [dispatch]);
@@ -21,8 +21,7 @@ export const useAuthToken = () => {
   const logout = async () => {
     await dispatch(logoutUser());
     localStorage.removeItem("token");
-    // Redirigir a la página de inicio
-    window.location.href = "http://localhost:3000"; // Redirige a la página de inicio
+    window.location.href = "http://localhost:3000";
   };
 
   return { logout };

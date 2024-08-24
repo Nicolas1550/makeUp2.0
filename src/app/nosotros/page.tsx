@@ -63,8 +63,8 @@ const TeamMember = styled.div`
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Centra los elementos horizontalmente */
-  justify-content: center; /* Centra los elementos verticalmente */
+  align-items: center; 
+  justify-content: center; 
 
   &:hover {
     transform: translateY(-5px);

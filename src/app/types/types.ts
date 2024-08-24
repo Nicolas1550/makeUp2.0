@@ -6,15 +6,15 @@ export interface BaseProduct {
 }
 
 export interface Product extends BaseProduct {
-  imageUrl?: string; // Opcional
-  imageFileName?: string; // Opcional
+  imageUrl?: string; 
+  imageFileName?: string; 
 }
 
 export interface CartProduct extends BaseProduct {
-  imageUrl: string; // Obligatorio en el carrito
+  imageUrl: string; 
 }
 export interface Disponibilidad {
-  numOrders?: number; // Hacerlo opcional si no está siempre presente
+  numOrders?: number; 
   id: number;
   servicio_id: number;
   fecha_inicio: string;

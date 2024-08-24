@@ -25,7 +25,7 @@ import { useAuthToken } from "../../hooks/useAuthToken";
 import {
   selectIsAuthenticated,
   selectIsLoading,
-  selectIsAdmin, // Importa el selector para verificar si es admin
+  selectIsAdmin, 
 } from "@/redux/authSelectors";
 
 const AuthModal = dynamic(() => import("../authModel/authModel"), {
@@ -47,7 +47,7 @@ const Navbar: React.FC = () => {
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const isLoading = useAppSelector(selectIsLoading);
-  const isAdmin = useAppSelector(selectIsAdmin); // Usa el selector para verificar si es admin
+  const isAdmin = useAppSelector(selectIsAdmin); 
 
   const { logout } = useAuthToken();
 
@@ -171,7 +171,7 @@ const Navbar: React.FC = () => {
         <OrdersModalWrapper
           isOpen={isOrdersModalOpen}
           onClose={toggleOrdersModal}
-          isAdmin={isAdmin} // Pasar el valor de isAdmin a OrdersModalWrapper
+          isAdmin={isAdmin} 
         />
       )}
     </Nav>

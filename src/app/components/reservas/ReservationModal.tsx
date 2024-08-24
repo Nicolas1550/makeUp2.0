@@ -101,8 +101,7 @@ const ReserveModal: React.FC<ReserveModalProps> = ({
     }
   };
 
-  // Aquí puedes calcular cuántas órdenes tienes, por ejemplo:
-  const numOrders = disponibilidad.numOrders || 0; // Usar numOrders si está disponible, o 0 por defecto
+  const numOrders = disponibilidad.numOrders || 0; 
 
   return (
     <ModalOverlay isOpen={isOpen} onClick={onClose}>
@@ -110,7 +109,7 @@ const ReserveModal: React.FC<ReserveModalProps> = ({
         onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
       >
         <ModalHeader>Confirmar Reserva</ModalHeader>
-        <ModalContent numOrders={numOrders}> {/* Pasa el valor de numOrders aquí */}
+        <ModalContent numOrders={numOrders}> 
           <p>Servicio: {disponibilidad.servicio_nombre}</p>
           <p>
             Fecha Inicio:{" "}

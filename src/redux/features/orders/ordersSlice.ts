@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "../../store";
 
-// Definir el tipo Servicio
 interface Servicio {
   id: number;
   nombre: string;
@@ -10,7 +9,6 @@ interface Servicio {
   precio: number;
 }
 
-// Actualizar el tipo Disponibilidad para incluir Servicio
 interface Disponibilidad {
   id: number;
   servicio_id: number;
@@ -18,7 +16,7 @@ interface Disponibilidad {
   fecha_fin: string;
   disponible: boolean;
   servicio: Servicio | null;
-  numOrders?: number; // Hacer opcional si no siempre está presente
+  numOrders?: number; 
 }
 
 
@@ -45,7 +43,7 @@ interface OrdersState {
 
 const initialState: OrdersState = {
   orders: [],
-  adminOrders: [], // Estado para las órdenes del administrador
+  adminOrders: [], 
   status: "idle",
   error: null,
 };

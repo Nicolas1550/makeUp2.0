@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { Canvas } from "@react-three/fiber";
-import Particles from "./Particles"; // Importamos el componente de partículas
+import Particles from "./Particles"; 
 
 const HeroContainer = styled.div`
   position: relative;
@@ -16,7 +16,7 @@ const HeroContainer = styled.div`
   margin-top: 0.5rem;
 
   @media (max-width: 768px) {
-    height: 60vh; /* Incrementa la altura en dispositivos móviles */
+    height: 60vh; 
   }
 `;
 
@@ -41,10 +41,10 @@ const HeroTitle = styled(motion.h1)`
   z-index: 2;
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   font-weight: bold;
-  opacity: 1; /* Inicialmente visible */
+  opacity: 1; 
 
   @media (max-width: 768px) {
-    font-size: 2rem; /* Ajusta el tamaño de la fuente en móviles */
+    font-size: 2rem;
   }
 `;
 
@@ -63,8 +63,8 @@ const HeroSubtitle = styled(motion.h2)`
   opacity: 0; /* Inicialmente oculto */
 
   @media (max-width: 768px) {
-    top: 70%; /* Ajusta la posición en móviles */
-    font-size: 1.5rem; /* Ajusta el tamaño de la fuente en móviles */
+    top: 70%; 
+    font-size: 1.5rem; 
   }
 `;
 

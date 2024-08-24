@@ -39,7 +39,7 @@ const Services: React.FC<ServicesProps> = ({ onReserveClick }) => {
         <ReserveButton
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.9 }}
-          onClick={onReserveClick} // Llamamos a la función para hacer scroll
+          onClick={onReserveClick} 
         >
           Reservar Ahora
         </ReserveButton>

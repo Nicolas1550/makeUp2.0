@@ -16,5 +16,5 @@ export const selectIsLoading = createSelector(
 // Selecciona si el usuario es admin basado en su rol
 export const selectIsAdmin = createSelector(
   [selectAuth],
-  (auth) => auth.user?.role === "admin" // Verifica el rol del usuario
+  (auth) => auth.user?.role === "admin" 
 );

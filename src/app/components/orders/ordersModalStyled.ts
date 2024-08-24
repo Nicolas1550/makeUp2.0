@@ -133,7 +133,7 @@ export const ExpandButton = styled.button`
   align-items: center;
 
   &:hover {
-    background: rgba(50, 50, 50, 0.9); /* Fondo oscuro en hover */
-    color: #ffd700; /* Texto amarillo en hover para buen contraste */
+    background: rgba(50, 50, 50, 0.9);
+    color: #ffd700; 
   }
 `;

@@ -1,4 +1,3 @@
-// src/redux/features/sidebar/sidebarSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface FiltersState {

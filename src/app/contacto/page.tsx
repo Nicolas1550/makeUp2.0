@@ -121,7 +121,6 @@ const ContactPage: React.FC = () => {
 
     try {
       const response = await fetch("http://localhost:3001/api/email", {
-        // Apunta a tu backend en el puerto 3001
         method: "POST",
         headers: {
           "Content-Type": "application/json",

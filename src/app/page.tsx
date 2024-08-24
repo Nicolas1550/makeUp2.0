@@ -11,14 +11,12 @@ import AuthModal from "./components/authModel/authModel";
 function Home() {
   const [hasMounted, setHasMounted] = useState(false);
 
-  // Este hook asegura que el componente se renderice completamente en el cliente.
   useEffect(() => {
     setHasMounted(true);
   }, []);
 
-  // Mientras no se haya montado, no renderizará el contenido, evitando problemas de estilos y renderización.
   if (!hasMounted) {
-    return null; // Esto evita el renderizado hasta que se confirme que el componente está montado
+    return null; 
   }
 
   return (

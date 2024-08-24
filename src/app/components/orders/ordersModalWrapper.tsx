@@ -22,7 +22,7 @@ import AdminOrdersModal from "./adminOrderModal ";
 interface OrdersModalWrapperProps {
   isOpen: boolean;
   onClose: () => void;
-  isAdmin: boolean; // Esta prop determina si es admin o no
+  isAdmin: boolean; 
 }
 
 const OrdersModalWrapper: React.FC<OrdersModalWrapperProps> = ({
