@@ -70,7 +70,7 @@ const Header: React.FC = () => {
           transition={{ duration: 1 }}
         >
           <HeaderText>Bienvenidos a Salon Unisex</HeaderText>
-          <Link href={"/servicios"}>
+          <Link href={"/reservation"}>
             <Button whileHover={{ scale: 1.1 }}>Reserva Ahora</Button>
           </Link>
         </motion.div>

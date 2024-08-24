@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import { Canvas } from "@react-three/fiber";
+import Particles from "./Particles"; // Importamos el componente de partículas
 
 const HeroContainer = styled.div`
   position: relative;
@@ -66,6 +68,16 @@ const HeroSubtitle = styled(motion.h2)`
   }
 `;
 
+const CanvasContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+`;
+
 const HeroSlider: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
   const [showSubtitle, setShowSubtitle] = useState(false);
@@ -76,12 +88,10 @@ const HeroSlider: React.FC = () => {
       const newScrollY = window.scrollY;
       setScrollY(newScrollY);
 
-      // Mostrar el subtítulo y comenzar a ocultar el título rápidamente
       if (newScrollY > 400) {
         setShowSubtitle(true);
-        setHideTitle(true); // Hacer que desaparezca instantáneamente
+        setHideTitle(true);
       } else if (newScrollY < 50) {
-        // Cuando regrese cerca de la posición inicial, mostrar el primer texto nuevamente
         setShowSubtitle(false);
         setHideTitle(false);
       }
@@ -97,8 +107,8 @@ const HeroSlider: React.FC = () => {
       <HeroTitle
         style={{
           transform: `translate(-50%, calc(-50% - ${scrollY * 0.1}px))`,
-          opacity: hideTitle ? 0 : 1, // Control de la visibilidad del título
-          transition: "opacity 0.1s ease-in-out", // Transición casi instantánea al desaparecer y reaparecer
+          opacity: hideTitle ? 0 : 1,
+          transition: "opacity 0.1s ease-in-out",
         }}
       >
         Los mejores servicios a un click
@@ -107,11 +117,19 @@ const HeroSlider: React.FC = () => {
         style={{
           transform: `translate(-50%, calc(-50% - ${scrollY * 0.1}px))`,
           opacity: showSubtitle ? 1 : 0,
-          transition: "opacity 0.1s ease-in-out", // Transición casi instantánea para la aparición del subtítulo
+          transition: "opacity 0.1s ease-in-out",
         }}
       >
         Prepárate para conocer la magia
       </HeroSubtitle>
+
+      <CanvasContainer>
+        <Canvas>
+          <Particles />
+          <ambientLight intensity={0.5} />
+          <pointLight position={[10, 10, 10]} />
+        </Canvas>
+      </CanvasContainer>
     </HeroContainer>
   );
 };
