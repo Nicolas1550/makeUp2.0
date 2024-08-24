@@ -34,16 +34,13 @@ const ReserveModal: React.FC<ReserveModalProps> = ({
   );
 
   useEffect(() => {
-    console.log("ReserveModal mounted. Checking authentication status...");
     if (!isAuthenticated) {
       dispatch(checkAuthentication());
     }
   }, [isAuthenticated, dispatch]);
 
   const handleConfirmReserve = async () => {
-    console.log("Confirming reservation...");
     if (!isAuthenticated || !user) {
-      console.log("User not authenticated. Opening login modal...");
       dispatch(showAuthModal("login"));
       closeParentModal();
       return;
@@ -54,16 +51,13 @@ const ReserveModal: React.FC<ReserveModalProps> = ({
       const token = localStorage.getItem("token");
 
       if (!token) {
-        console.error("Token not found. User is not authenticated.");
         throw new Error("Token not found.");
       }
 
-      // Verificar expiración del token
       const decodedToken = JSON.parse(atob(token.split(".")[1]));
       const currentTime = Date.now() / 1000;
 
       if (decodedToken.exp < currentTime) {
-        console.error("Token has expired");
         alert("Tu sesión ha expirado. Por favor, vuelve a iniciar sesión.");
         localStorage.removeItem("token");
         localStorage.removeItem("user");
@@ -71,13 +65,6 @@ const ReserveModal: React.FC<ReserveModalProps> = ({
         closeParentModal();
         return;
       }
-
-      console.log("Token is valid:", token);
-
-      // Agregando log para verificar las cabeceras
-      console.log("Sending request with headers:", {
-        Authorization: `Bearer ${token}`,
-      });
 
       const response = await axios.post(
         "http://localhost:3001/api/orders",
@@ -93,7 +80,6 @@ const ReserveModal: React.FC<ReserveModalProps> = ({
         }
       );
 
-      console.log("Reservation successful:", response.data);
       alert("Reserva realizada con éxito.");
       onClose();
     } catch (error: any) {
@@ -102,9 +88,8 @@ const ReserveModal: React.FC<ReserveModalProps> = ({
         error.response || error.message
       );
 
-      // Manejo de error más amigable
       if (error.response && error.response.status === 400) {
-        alert(error.response.data.message); // Mensaje amigable si la reserva ya está tomada
+        alert(error.response.data.message);
       } else {
         alert(
           "Error realizando la reserva. Por favor, inicia sesión nuevamente."
@@ -116,13 +101,16 @@ const ReserveModal: React.FC<ReserveModalProps> = ({
     }
   };
 
+  // Aquí puedes calcular cuántas órdenes tienes, por ejemplo:
+  const numOrders = disponibilidad.numOrders || 0; // Usar numOrders si está disponible, o 0 por defecto
+
   return (
     <ModalOverlay isOpen={isOpen} onClick={onClose}>
       <ModalContainer
         onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
       >
         <ModalHeader>Confirmar Reserva</ModalHeader>
-        <ModalContent>
+        <ModalContent numOrders={numOrders}> {/* Pasa el valor de numOrders aquí */}
           <p>Servicio: {disponibilidad.servicio_nombre}</p>
           <p>
             Fecha Inicio:{" "}
@@ -143,3 +131,4 @@ const ReserveModal: React.FC<ReserveModalProps> = ({
 };
 
 export default ReserveModal;
+

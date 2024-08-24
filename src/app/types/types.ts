@@ -14,6 +14,7 @@ export interface CartProduct extends BaseProduct {
   imageUrl: string; // Obligatorio en el carrito
 }
 export interface Disponibilidad {
+  numOrders?: number; // Hacerlo opcional si no está siempre presente
   id: number;
   servicio_id: number;
   fecha_inicio: string;

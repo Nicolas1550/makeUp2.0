@@ -17,8 +17,10 @@ interface Disponibilidad {
   fecha_inicio: string;
   fecha_fin: string;
   disponible: boolean;
-  servicio: Servicio | null; // Relación con el modelo Servicio
+  servicio: Servicio | null;
+  numOrders?: number; // Hacer opcional si no siempre está presente
 }
+
 
 interface Order {
   id: number;
