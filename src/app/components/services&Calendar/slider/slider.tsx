@@ -1,9 +1,6 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Points, PointMaterial, Preload } from "@react-three/drei";
-import * as THREE from "three";
 
 const HeroContainer = styled.div`
   position: relative;
@@ -17,7 +14,7 @@ const HeroContainer = styled.div`
   margin-top: 0.5rem;
 
   @media (max-width: 768px) {
-    height: 60vh; 
+    height: 60vh; /* Incrementa la altura en dispositivos móviles */
   }
 `;
 
@@ -42,10 +39,10 @@ const HeroTitle = styled(motion.h1)`
   z-index: 2;
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   font-weight: bold;
-  opacity: 1;
+  opacity: 1; /* Inicialmente visible */
 
   @media (max-width: 768px) {
-    font-size: 2rem;
+    font-size: 2rem; /* Ajusta el tamaño de la fuente en móviles */
   }
 `;
 
@@ -61,46 +58,13 @@ const HeroSubtitle = styled(motion.h2)`
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   font-weight: bold;
   margin-top: 20px;
-  opacity: 0;
+  opacity: 0; /* Inicialmente oculto */
 
   @media (max-width: 768px) {
-    top: 70%;
-    font-size: 1.5rem;
+    top: 70%; /* Ajusta la posición en móviles */
+    font-size: 1.5rem; /* Ajusta el tamaño de la fuente en móviles */
   }
 `;
-
-const Particles = () => {
-  const points = useRef<THREE.Points | null>(null);
-
-  // Animar las partículas rotando constantemente sin importar el scroll
-  useFrame(() => {
-    if (points.current) {
-      points.current.rotation.y += 0.0005; // Rotación más lenta y constante
-    }
-  });
-
-  const particlesCount = 5000;
-  const positions = new Float32Array(particlesCount * 3);
-
-  // Generar las posiciones iniciales de las partículas
-  for (let i = 0; i < particlesCount; i++) {
-    positions[i * 3 + 0] = (Math.random() - 0.5) * 10; // X
-    positions[i * 3 + 1] = (Math.random() - 0.5) * 10; // Y
-    positions[i * 3 + 2] = (Math.random() - 0.5) * 10; // Z
-  }
-
-  return (
-    <Points ref={points} positions={positions} stride={3}>
-      <PointMaterial
-        transparent
-        color="#ffd700"
-        size={0.02}
-        sizeAttenuation={true}
-        depthWrite={false}
-      />
-    </Points>
-  );
-};
 
 const HeroSlider: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
@@ -112,10 +76,12 @@ const HeroSlider: React.FC = () => {
       const newScrollY = window.scrollY;
       setScrollY(newScrollY);
 
+      // Mostrar el subtítulo y comenzar a ocultar el título rápidamente
       if (newScrollY > 400) {
         setShowSubtitle(true);
-        setHideTitle(true);
+        setHideTitle(true); // Hacer que desaparezca instantáneamente
       } else if (newScrollY < 50) {
+        // Cuando regrese cerca de la posición inicial, mostrar el primer texto nuevamente
         setShowSubtitle(false);
         setHideTitle(false);
       }
@@ -131,8 +97,8 @@ const HeroSlider: React.FC = () => {
       <HeroTitle
         style={{
           transform: `translate(-50%, calc(-50% - ${scrollY * 0.1}px))`,
-          opacity: hideTitle ? 0 : 1,
-          transition: "opacity 0.1s ease-in-out",
+          opacity: hideTitle ? 0 : 1, // Control de la visibilidad del título
+          transition: "opacity 0.1s ease-in-out", // Transición casi instantánea al desaparecer y reaparecer
         }}
       >
         Los mejores servicios a un click
@@ -141,30 +107,13 @@ const HeroSlider: React.FC = () => {
         style={{
           transform: `translate(-50%, calc(-50% - ${scrollY * 0.1}px))`,
           opacity: showSubtitle ? 1 : 0,
-          transition: "opacity 0.1s ease-in-out",
+          transition: "opacity 0.1s ease-in-out", // Transición casi instantánea para la aparición del subtítulo
         }}
       >
         Prepárate para conocer la magia
       </HeroSubtitle>
-      
-      <CanvasContainer>
-        <Canvas camera={{ position: [0, 0, 5] }}>
-          <Particles />
-          <Preload all />
-        </Canvas>
-      </CanvasContainer>
     </HeroContainer>
   );
 };
 
 export default HeroSlider;
-
-const CanvasContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-  pointer-events: none;
-`;
