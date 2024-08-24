@@ -1,11 +1,15 @@
+"use client";
 import React, { useState, useRef, useEffect } from "react";
-import ParticlesBg from "particles-bg"; // Importar la librería de partículas
+import { Canvas } from "@react-three/fiber";
+import Particles from "./Particles";
 import {
   HeaderContainer,
   HeaderContent,
   HeaderText,
   Button,
   ArrowIcon,
+  TopCanvasContainer,
+  BottomCanvasContainer,
   PaginationContainer,
   PaginationDot,
 } from "./headerStyled";
@@ -30,9 +34,7 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (typeof window !== "undefined") {
-        setIsMobile(window.innerWidth <= 1000);
-      }
+      setIsMobile(window.innerWidth <= 1000);
     };
 
     handleResize();
@@ -54,9 +56,13 @@ const Header: React.FC = () => {
         backgroundRepeat: "no-repeat",
       }}
     >
-      {/* Partículas de fondo */}
-      <ParticlesBg type="cobweb" bg={true} />
-
+      <TopCanvasContainer>
+        <Canvas>
+          <Particles />
+          <ambientLight intensity={0.5} />
+          <pointLight position={[10, 10, 10]} />
+        </Canvas>
+      </TopCanvasContainer>
       <HeaderContent>
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -69,6 +75,13 @@ const Header: React.FC = () => {
           </Link>
         </motion.div>
       </HeaderContent>
+      <BottomCanvasContainer>
+        <Canvas>
+          <Particles />
+          <ambientLight intensity={0.5} />
+          <pointLight position={[10, 10, 10]} />
+        </Canvas>
+      </BottomCanvasContainer>
       <ArrowIcon onClick={nextImage}>
         <ArrowForwardIosIcon style={{ fontSize: "2rem", color: "#ffd700" }} />
       </ArrowIcon>
