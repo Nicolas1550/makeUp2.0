@@ -14,8 +14,8 @@ function Home() {
     <>
       <GlobalStyle />
       <Navbar />
-      <Header />
-      <Information />
+{/*       <Header />
+ */}      <Information />
       <Footer />
       <AuthModal />
     </>
