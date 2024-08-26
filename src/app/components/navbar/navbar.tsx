@@ -120,16 +120,16 @@ const Navbar: React.FC = () => {
               {!isAuthenticated ? (
                 <>
                   <AuthButton onClick={() => handleAuthButtonClick("login")}>
-                    Sign In
+                    Iniciar Sesión
                   </AuthButton>
                   <AuthButton onClick={() => handleAuthButtonClick("register")}>
-                    Sign Up
+                    Registrarse
                   </AuthButton>
                 </>
               ) : (
                 <>
-                  <AuthButton onClick={handleLogoutClick}>Log Out</AuthButton>
-                  <AuthButton onClick={toggleOrdersModal}>Orders</AuthButton>
+                  <AuthButton onClick={handleLogoutClick}>Cerrar Sesión</AuthButton>
+                  <AuthButton onClick={toggleOrdersModal}>Pedidos</AuthButton>
                 </>
               )}
             </>
@@ -148,16 +148,16 @@ const Navbar: React.FC = () => {
               {!isAuthenticated ? (
                 <>
                   <AuthButton onClick={() => handleAuthButtonClick("login")}>
-                    Sign In
+                    Iniciar Sesión
                   </AuthButton>
                   <AuthButton onClick={() => handleAuthButtonClick("register")}>
-                    Sign Up
+                    Registrarse
                   </AuthButton>
                 </>
               ) : (
                 <>
-                  <AuthButton onClick={handleLogoutClick}>Log Out</AuthButton>
-                  <AuthButton onClick={toggleOrdersModal}>Orders</AuthButton>
+                  <AuthButton onClick={handleLogoutClick}>Cerrar Sesión</AuthButton>
+                  <AuthButton onClick={toggleOrdersModal}>Pedidos</AuthButton>
                 </>
               )}
             </>

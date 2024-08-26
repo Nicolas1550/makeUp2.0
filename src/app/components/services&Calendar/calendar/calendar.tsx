@@ -15,6 +15,7 @@ import {
   addDisponibilidad,
   deleteDisponibilidad,
   fetchDisponibilidadesByService,
+  updateDisponibilidad,
 } from "@/redux/features/disponibilidad/disponibilidadSlice";
 import { Disponibilidad } from "@/app/types/types";
 import { RootState } from "@/redux/store";
@@ -89,7 +90,6 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
 
   const handleSelectEvent = (event: Disponibilidad) => {
     if (user?.role === "admin") {
-      // Si es admin, mostramos el modal de opciones para eliminar o reservar
       // Ajustamos el tiempo sumando 3 horas para corregir el desfase también en el modal de admin
       const adjustedEvent = {
         ...event,
@@ -99,7 +99,6 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
       setSelectedDisponibilidad(adjustedEvent);
       setIsAdminModalOpen(true);
     } else {
-      // Ajustamos el tiempo sumando 3 horas solo para los usuarios
       const adjustedEvent = {
         ...event,
         fecha_inicio: moment(event.fecha_inicio).add(3, "hours").toISOString(),
@@ -120,6 +119,26 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
     }
   };
 
+  const handleReserveDisponibilidad = () => {
+    if (selectedDisponibilidad && selectedDisponibilidad.id) {
+      const updatedDisponibilidad = {
+        ...selectedDisponibilidad,
+        disponible: false, // Cambiamos a false para marcar como reservada
+      };
+
+      dispatch(updateDisponibilidad(updatedDisponibilidad))
+        .then(() => {
+          alert("Reserva realizada con éxito");
+          setSelectedDisponibilidad(null); // Limpiamos la selección
+          setIsAdminModalOpen(false); // Cierra el modal después de reservar
+          dispatch(fetchDisponibilidadesByService(servicioId)); // Refrescamos la lista de disponibilidades
+        })
+        .catch((error) => {
+          console.error("Error al reservar la disponibilidad", error);
+        });
+    }
+  };
+
   const handleCloseReserveModal = () => {
     setIsReserveModalOpen(false);
     setSelectedDisponibilidad(null); // Limpiamos la selección después de cerrar el modal
@@ -135,7 +154,6 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
     .filter((disp) => disp.disponible)
     .map((disp) => ({
       ...disp,
-      // Ajustar las horas +3 horas solo para la visualización en el calendario
       start: moment(disp.fecha_inicio).add(3, "hours").toDate(),
       end: moment(disp.fecha_fin).add(3, "hours").toDate(),
     }));
@@ -154,7 +172,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
           endAccessor="end"
           titleAccessor="title"
           style={{ height: "100%" }}
-          selectable={user?.role === "admin"} // Solo los administradores pueden seleccionar slots
+          selectable={user?.role === "admin"}
           onSelectSlot={handleSelectSlot}
           onSelectEvent={handleSelectEvent}
           view={currentView}
@@ -183,7 +201,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
           onClose={handleCloseAdminModal}
           actions={[
             { label: "Eliminar", handler: handleDeleteDisponibilidad },
-            { label: "Reservar", handler: handleCloseAdminModal }, // Aquí puedes agregar la lógica de reserva si la tienes
+            { label: "Reservar", handler: handleReserveDisponibilidad }, // Mismo flujo de reserva que los usuarios
             { label: "Cerrar", handler: handleCloseAdminModal },
           ]}
         >
