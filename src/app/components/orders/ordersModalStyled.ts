@@ -8,7 +8,46 @@ const fadeIn = keyframes`
     opacity: 1;
   }
 `;
+export const StatusSelectContainer = styled.div`
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 
+  label {
+    font-size: 1rem;
+    color: #ffd700;
+    font-weight: bold;
+  }
+`;
+
+export const StatusSelect = styled.select`
+  padding: 10px 15px;
+  background-color: #1c1c1c;
+  color: #ffd700;
+  border: 2px solid #ffd700;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  appearance: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+
+  &:hover {
+    background-color: #ffd700;
+    color: #1c1c1c;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+  }
+`;
+
+export const StatusOption = styled.option`
+  background-color: #1c1c1c;
+  color: #ffd700;
+`;
 export const ModalOverlay = styled.div<{ isOpen: boolean }>`
   display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
   align-items: center;
@@ -134,6 +173,27 @@ export const ExpandButton = styled.button`
 
   &:hover {
     background: rgba(50, 50, 50, 0.9);
-    color: #ffd700; 
+    color: #ffd700;
   }
+`;
+export const StatusLabel = styled.span<{ status: string }>`
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-weight: bold;
+  color: #fff;
+  display: inline-block;
+
+  /* Colores personalizados para cada estado */
+  background-color: ${({ status }) =>
+    status === "aprobado"
+      ? "#28a745"
+      : status === "rechazado"
+      ? "#dc3545"
+      : status === "pendiente"
+      ? "#ffc107"
+      : "#6c757d"}; /* Color de fondo según el estado */
+
+  /* Estilo adicional según el estado */
+  text-transform: uppercase;
+  font-size: 0.9rem;
 `;

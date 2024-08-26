@@ -1,10 +1,10 @@
-"use client"
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Navbar from "../components/navbar/navbar";
 import Footer from "../components/footer/footer";
 
-const AboutContainer = styled.div`
+const ContenedorSobreNosotros = styled.div`
   background-color: #1c1c1c;
   color: #f8f9fa;
   min-height: 100vh;
@@ -14,7 +14,7 @@ const AboutContainer = styled.div`
   align-items: center;
 `;
 
-const AboutContent = styled.div`
+const ContenidoSobreNosotros = styled.div`
   max-width: 1200px;
   text-align: center;
   background: rgba(28, 28, 28, 0.8);
@@ -26,7 +26,7 @@ const AboutContent = styled.div`
   transition: background 0.3s ease, border 0.3s ease;
 `;
 
-const AboutHeading = styled.h1`
+const EncabezadoSobreNosotros = styled.h1`
   color: #ffd700;
   font-size: 2.5rem;
   margin-bottom: 1.5rem;
@@ -34,19 +34,19 @@ const AboutHeading = styled.h1`
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 `;
 
-const AboutParagraph = styled.p`
+const ParrafoSobreNosotros = styled.p`
   font-size: 1.1rem;
   line-height: 1.6;
   margin-bottom: 1.5rem;
   color: #f8f9fa;
 `;
 
-const Highlight = styled.span`
+const Resaltado = styled.span`
   color: #ffd700;
   font-weight: bold;
 `;
 
-const TeamSection = styled.div`
+const SeccionEquipo = styled.div`
   margin-top: 3rem;
   display: flex;
   justify-content: space-around;
@@ -54,7 +54,7 @@ const TeamSection = styled.div`
   gap: 2rem;
 `;
 
-const TeamMember = styled.div`
+const MiembroEquipo = styled.div`
   background: rgba(28, 28, 28, 0.9);
   padding: 1.5rem;
   border-radius: 10px;
@@ -63,8 +63,8 @@ const TeamMember = styled.div`
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
-  align-items: center; 
-  justify-content: center; 
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     transform: translateY(-5px);
@@ -72,7 +72,7 @@ const TeamMember = styled.div`
   }
 `;
 
-const MemberPhoto = styled.img`
+const FotoMiembro = styled.img`
   width: 100px;
   height: 100px;
   border-radius: 50%;
@@ -81,60 +81,70 @@ const MemberPhoto = styled.img`
   object-fit: cover;
   display: block;
 `;
-const MemberName = styled.h3`
+
+const NombreMiembro = styled.h3`
   color: #ffd700;
   margin-bottom: 0.5rem;
 `;
 
-const MemberRole = styled.p`
+const RolMiembro = styled.p`
   color: #f8f9fa;
   font-size: 1rem;
 `;
 
-const AboutPage: React.FC = () => {
+const PaginaSobreNosotros: React.FC = () => {
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  if (!hasMounted) {
+    return null;
+  }
+
   return (
-    <div>
+    <>
       <Navbar />
+      <ContenedorSobreNosotros>
+        <ContenidoSobreNosotros>
+          <EncabezadoSobreNosotros>Sobre Nosotros</EncabezadoSobreNosotros>
+          <ParrafoSobreNosotros>
+            Bienvenidos a <Resaltado>Mi Empresa</Resaltado>, donde brindamos los
+            mejores servicios en la industria. Nuestro equipo está comprometido
+            en ofrecer soluciones de alta calidad adaptadas a sus necesidades.
+          </ParrafoSobreNosotros>
+          <ParrafoSobreNosotros>
+            En <Resaltado>Mi Empresa</Resaltado>, nuestra misión es garantizar
+            la satisfacción del cliente a través de la innovación, dedicación y
+            experiencia. Nos enorgullece nuestra capacidad para enfrentar
+            desafíos complejos y convertirlos en oportunidades.
+          </ParrafoSobreNosotros>
 
-      <AboutContainer>
-        <AboutContent>
-          <AboutHeading>About Us</AboutHeading>
-          <AboutParagraph>
-            Welcome to <Highlight>Mi Empresa</Highlight>, where we provide the
-            best services in the industry. Our team is committed to delivering
-            high-quality solutions tailored to your needs.
-          </AboutParagraph>
-          <AboutParagraph>
-            At <Highlight>Mi Empresa</Highlight>, our mission is to ensure
-            customer satisfaction through innovation, dedication, and expertise.
-            We take pride in our ability to tackle complex challenges and turn
-            them into opportunities.
-          </AboutParagraph>
+          <SeccionEquipo>
+            <MiembroEquipo>
+              <FotoMiembro src="/1a.webp" alt="Miembro del equipo 1" />
+              <NombreMiembro>John Doe</NombreMiembro>
+              <RolMiembro>CEO</RolMiembro>
+            </MiembroEquipo>
 
-          <TeamSection>
-            <TeamMember>
-              <MemberPhoto src="/1a.webp" alt="Team Member 1" />
-              <MemberName>John Doe</MemberName>
-              <MemberRole>CEO</MemberRole>
-            </TeamMember>
+            <MiembroEquipo>
+              <FotoMiembro src="/2a.webp" alt="Miembro del equipo 2" />
+              <NombreMiembro>Jane Smith</NombreMiembro>
+              <RolMiembro>CTO</RolMiembro>
+            </MiembroEquipo>
 
-            <TeamMember>
-              <MemberPhoto src="/2a.webp" alt="Team Member 2" />
-              <MemberName>Jane Smith</MemberName>
-              <MemberRole>CTO</MemberRole>
-            </TeamMember>
-
-            <TeamMember>
-              <MemberPhoto src="/3a.webp" alt="Team Member 3" />
-              <MemberName>Sam Wilson</MemberName>
-              <MemberRole>Lead Developer</MemberRole>
-            </TeamMember>
-          </TeamSection>
-        </AboutContent>
-      </AboutContainer>
-      <Footer/>
-    </div>
+            <MiembroEquipo>
+              <FotoMiembro src="/3a.webp" alt="Miembro del equipo 3" />
+              <NombreMiembro>Sam Wilson</NombreMiembro>
+              <RolMiembro>Desarrollador Principal</RolMiembro>
+            </MiembroEquipo>
+          </SeccionEquipo>
+        </ContenidoSobreNosotros>
+      </ContenedorSobreNosotros>
+      <Footer />
+    </>
   );
 };
 
-export default AboutPage;
+export default PaginaSobreNosotros;

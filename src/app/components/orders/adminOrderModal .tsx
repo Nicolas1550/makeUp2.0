@@ -4,7 +4,15 @@ import {
   ModalContainer,
   ModalActions,
   Button,
-} from "../services&Calendar/modalStyled/modalStyled";
+  ModalContent,
+  OrderDetails,
+  OrderItem,
+  ExpandButton,
+  StatusLabel,
+  StatusSelectContainer,
+  StatusSelect,
+  StatusOption,
+} from "./ordersModalStyled"; // Asegúrate de importar todos los estilos
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   fetchAdminOrders,
@@ -14,12 +22,6 @@ import {
   selectAdminOrders,
   updateOrderStatus,
 } from "@/redux/features/orders/ordersSlice";
-import {
-  ExpandButton,
-  ModalContent,
-  OrderDetails,
-  OrderItem,
-} from "./ordersModalStyled";
 import { ModalHeader } from "../modal/modalStyled";
 import OrdersChart from "./ordersChart";
 
@@ -37,14 +39,10 @@ const AdminOrdersModal: React.FC<AdminOrdersModalProps> = ({
   const ordersStatus = useAppSelector(getOrdersStatus);
   const error = useAppSelector(getOrdersError);
 
-  // Estado separado para la expansión de las órdenes y el gráfico
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
   const [isChartVisible, setIsChartVisible] = useState<boolean>(false);
-
   const [selectedStatus, setSelectedStatus] = useState<string>("pendiente");
   const [loadingOrderId, setLoadingOrderId] = useState<number | null>(null);
-
-  // Definir fechas para el gráfico
   const [startDate, setStartDate] = useState<string>(
     new Date().toISOString().split("T")[0]
   );
@@ -60,21 +58,15 @@ const AdminOrdersModal: React.FC<AdminOrdersModalProps> = ({
 
   const handleOrderClick = async (orderId: number) => {
     if (expandedOrderId === orderId) {
-      // Contraer si la misma orden está expandida
       setExpandedOrderId(null);
     } else {
-      // Expande la orden y contrae el gráfico si está abierto
       setExpandedOrderId(orderId);
       setIsChartVisible(false);
       setLoadingOrderId(orderId);
 
       const order = adminOrders.find((o) => o.id === orderId);
 
-      // Recupera la orden si no está completamente cargada
       if (!order || !order.disponibilidad || !order.disponibilidad.servicio) {
-        console.warn(
-          `Orden ${orderId} no tiene disponibilidad completa, recuperando datos...`
-        );
         const result = await dispatch(fetchOrderById(orderId));
         console.log("Datos recuperados de la orden:", result.payload);
       }
@@ -88,9 +80,8 @@ const AdminOrdersModal: React.FC<AdminOrdersModalProps> = ({
   };
 
   const toggleChartVisibility = () => {
-    // Alterna la visibilidad del gráfico y contrae cualquier orden expandida
     setIsChartVisible(!isChartVisible);
-    setExpandedOrderId(null); // Contraer todas las órdenes al expandir el gráfico
+    setExpandedOrderId(null);
   };
 
   return (
@@ -98,7 +89,6 @@ const AdminOrdersModal: React.FC<AdminOrdersModalProps> = ({
       <ModalContainer onClick={(e) => e.stopPropagation()}>
         <ModalHeader>Órdenes Administrativas</ModalHeader>
 
-        {/* Inputs para seleccionar las fechas */}
         <div
           style={{
             display: "flex",
@@ -129,22 +119,19 @@ const AdminOrdersModal: React.FC<AdminOrdersModalProps> = ({
           </div>
         </div>
 
-        {/* Botón para contraer/expandir el gráfico */}
         <div style={{ textAlign: "center", margin: "10px 0" }}>
           <Button onClick={toggleChartVisibility}>
             {isChartVisible ? "Contraer Gráfico" : "Expandir Gráfico"}
           </Button>
         </div>
 
-        {/* Mostrar el gráfico solo si está expandido */}
         {isChartVisible && (
           <OrdersChart
-            startDate={startDate ? startDate : "2000-01-01"} // Fecha inicial por defecto
-            endDate={endDate ? endDate : new Date().toISOString().split("T")[0]} // Fecha final por defecto (hoy)
+            startDate={startDate ? startDate : "2000-01-01"}
+            endDate={endDate ? endDate : new Date().toISOString().split("T")[0]}
           />
         )}
 
-        {/* Mostrar/ocultar las órdenes */}
         <ModalContent numOrders={adminOrders.length}>
           {ordersStatus === "loading" && <p>Cargando órdenes...</p>}
           {ordersStatus === "failed" && <p>{error}</p>}
@@ -193,7 +180,10 @@ const AdminOrdersModal: React.FC<AdminOrdersModalProps> = ({
                     <strong>Precio:</strong> ${order.total}
                   </p>
                   <p>
-                    <strong>Estado:</strong> {order.status}
+                    <strong>Estado:</strong>{" "}
+                    <StatusLabel status={order.status}>
+                      {order.status}
+                    </StatusLabel>
                   </p>
                   <p>
                     <strong>Creado en:</strong>{" "}
@@ -207,21 +197,21 @@ const AdminOrdersModal: React.FC<AdminOrdersModalProps> = ({
                     <strong>Email:</strong>{" "}
                     {order.user?.email || "No disponible"}
                   </p>
-                  <div>
+                  <StatusSelectContainer>
                     <label htmlFor="status-select">Cambiar estado:</label>
-                    <select
+                    <StatusSelect
                       id="status-select"
                       value={selectedStatus}
                       onChange={(e) => setSelectedStatus(e.target.value)}
                     >
-                      <option value="pendiente">Pendiente</option>
-                      <option value="aprobado">Aprobado</option>
-                      <option value="rechazado">Rechazado</option>
-                    </select>
+                      <StatusOption value="pendiente">Pendiente</StatusOption>
+                      <StatusOption value="aprobado">Aprobado</StatusOption>
+                      <StatusOption value="rechazado">Rechazado</StatusOption>
+                    </StatusSelect>
                     <Button onClick={() => handleStatusChange(order.id)}>
                       Actualizar Estado
                     </Button>
-                  </div>
+                  </StatusSelectContainer>
                 </OrderDetails>
               )}
             </OrderItem>

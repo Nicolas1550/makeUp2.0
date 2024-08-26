@@ -15,16 +15,28 @@ import {
   addDisponibilidad,
   deleteDisponibilidad,
   fetchDisponibilidadesByService,
-  updateDisponibilidad,
 } from "@/redux/features/disponibilidad/disponibilidadSlice";
-import { Disponibilidad, NewDisponibilidad } from "@/app/types/types";
-import Modal from "../../modal/modal";
-import { Button, FormContainer } from "../../modal/modalStyled";
+import { Disponibilidad } from "@/app/types/types";
 import { RootState } from "@/redux/store";
-import ReserveModal from "../../reservas/ReservationModal";
 
 moment.tz.setDefault("America/Argentina/Buenos_Aires");
 const localizer = momentLocalizer(moment);
+
+const messages = {
+  allDay: "Todo el día",
+  previous: "Anterior",
+  next: "Siguiente",
+  today: "Hoy",
+  month: "Mes",
+  week: "Semana",
+  day: "Día",
+  agenda: "Agenda",
+  date: "Fecha",
+  time: "Hora",
+  event: "Evento",
+  noEventsInRange: "No hay eventos en este rango.",
+  showMore: (total: number) => `+ Ver más (${total})`,
+};
 
 interface MyCalendarProps {
   isAdmin: boolean;
@@ -41,111 +53,63 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
   const disponibilidades = useAppSelector(
     (state: RootState) => state.disponibilidad.disponibilidades
   );
-  const user = useAppSelector((state: RootState) => state.auth.user);
-  const [selectedEvent, setSelectedEvent] = useState<Disponibilidad | null>(
-    null
-  );
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [newDisponibilidad, setNewDisponibilidad] = useState<NewDisponibilidad>(
-    {
-      servicio_id: servicioId,
-      fecha_inicio: "",
-      fecha_fin: "",
-      disponible: true,
-    }
-  );
   const [currentView, setCurrentView] = useState<View>("month");
-  const [currentDate, setCurrentDate] = useState(new Date()); 
-  const [isMounted, setIsMounted] = useState(false);
-  const [isReserveModalOpen, setIsReserveModalOpen] = useState(false);
+  const [currentDate, setCurrentDate] = useState<Date>(new Date());
+  const [selectedDisponibilidad, setSelectedDisponibilidad] =
+    useState<Disponibilidad | null>(null);
 
   useEffect(() => {
     dispatch(fetchDisponibilidadesByService(servicioId));
-  }, [dispatch, servicioId, currentDate]); 
+  }, [dispatch, servicioId, currentDate]);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
+  const handleSelectSlot = (slotInfo: SlotInfo) => {
+    if (isAdmin && currentView === "day") {
+      const start = moment(slotInfo.start).toISOString();
+      const end = moment(slotInfo.end).toISOString();
 
-  // Filtrar las disponibilidades no reservadas (disponibles)
+      const disponibilidadToSave = {
+        servicio_id: servicioId,
+        fecha_inicio: start,
+        fecha_fin: end,
+        disponible: true,
+        servicio_nombre: "Nombre del servicio",
+        servicio_precio: 100, // Rellenar con el precio correcto
+      };
+
+      dispatch(addDisponibilidad(disponibilidadToSave)).then(() => {
+        dispatch(fetchDisponibilidadesByService(servicioId));
+      });
+    }
+  };
+
+  const handleSelectEvent = (event: Disponibilidad) => {
+    if (isAdmin) {
+      setSelectedDisponibilidad(event);
+    }
+  };
+
+  const handleDeleteDisponibilidad = () => {
+    if (selectedDisponibilidad && selectedDisponibilidad.id) {
+      dispatch(deleteDisponibilidad(selectedDisponibilidad.id)).then(() => {
+        setSelectedDisponibilidad(null); // Limpiamos la selección
+        dispatch(fetchDisponibilidadesByService(servicioId));
+      });
+    }
+  };
+
+  // Ajuste para la visualización en el calendario
   const events = disponibilidades
     .filter((disp) => disp.disponible)
     .map((disp) => ({
       ...disp,
-      start: new Date(disp.fecha_inicio),
-      end: new Date(disp.fecha_fin),
-      allDay: false,
+      // Ajustar las horas +3 horas solo para la visualización en el calendario
+      start: moment(disp.fecha_inicio).add(3, "hours").toDate(),
+      end: moment(disp.fecha_fin).add(3, "hours").toDate(),
     }));
 
-  const handleSelectEvent = (event: Disponibilidad) => {
-    if (user?.role === "admin") {
-      setSelectedEvent(event);
-    } else {
-      setSelectedEvent(event);
-      setIsReserveModalOpen(true);
-    }
-  };
-
-  const handleSelectSlot = (slotInfo: SlotInfo) => {
-    // Al seleccionar un slot en la vista de "mes", cambiar la vista a "día" y establecer la fecha seleccionada
-    if (currentView === "month") {
-      setCurrentDate(slotInfo.start); 
-      setCurrentView("day"); 
-    } else if (user?.role === "admin") {
-      setNewDisponibilidad({
-        ...newDisponibilidad,
-        fecha_inicio: slotInfo.start.toISOString(), 
-        fecha_fin: slotInfo.end.toISOString(), 
-      });
-      setShowAddModal(true);
-    }
-  };
-
-  const closeModal = () => setSelectedEvent(null);
-
-  const handleAddDisponibilidad = () => {
-    dispatch(addDisponibilidad(newDisponibilidad as Disponibilidad)).then(
-      () => {
-        dispatch(fetchDisponibilidadesByService(servicioId));
-      }
-    );
-    setShowAddModal(false);
-  };
-
-  const handleDeleteDisponibilidad = (id: number) => {
-    dispatch(deleteDisponibilidad(id)).then(() => {
-      dispatch(fetchDisponibilidadesByService(servicioId));
-    });
-    setSelectedEvent(null);
-  };
-
-  const handleUpdateDisponibilidad = () => {
-    if (selectedEvent) {
-      dispatch(
-        updateDisponibilidad({
-          ...selectedEvent,
-          title: selectedEvent.title,
-          start: new Date(selectedEvent.fecha_inicio),
-          end: new Date(selectedEvent.fecha_fin),
-        })
-      ).then(() => {
-        dispatch(fetchDisponibilidadesByService(servicioId));
-      });
-      setSelectedEvent(null);
-    }
-  };
-
-  const handleCloseReserveModal = () => {
-    setIsReserveModalOpen(false);
-    setSelectedEvent(null);
-  };
-
-  // Controla la navegación (next, back)
   const handleNavigate = (date: Date, view: View, action: NavigateAction) => {
-    setCurrentDate(date); 
+    setCurrentDate(date);
   };
-
-  if (!isMounted) return null;
 
   return (
     <div>
@@ -157,132 +121,23 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
           endAccessor="end"
           titleAccessor="title"
           style={{ height: "100%" }}
-          onSelectEvent={handleSelectEvent}
-          selectable={user?.role === "admin"}
+          selectable={isAdmin}
           onSelectSlot={handleSelectSlot}
+          onSelectEvent={handleSelectEvent}
           view={currentView}
           onView={setCurrentView}
-          date={currentDate} 
-          onNavigate={handleNavigate} 
+          date={currentDate}
+          onNavigate={handleNavigate}
+          messages={messages}
         />
       </CalendarContainer>
 
-      {user?.role === "admin" && (
-        <Button onClick={() => setShowAddModal(true)}>
-          Agregar Disponibilidad
-        </Button>
-      )}
-
-      {selectedEvent && user?.role === "admin" && (
-        <Modal
-          title="Detalles del Evento"
-          onClose={closeModal}
-          actions={[
-            {
-              label: "Guardar Cambios",
-              handler: handleUpdateDisponibilidad,
-            },
-            {
-              label: "Eliminar",
-              handler: () => handleDeleteDisponibilidad(selectedEvent.id),
-            },
-            { label: "Cerrar", handler: closeModal },
-          ]}
-        >
-          <FormContainer>
-            <label>Servicio ID:</label>
-            <input type="number" value={selectedEvent.servicio_id} readOnly />
-            <label>Fecha y Hora de Inicio:</label>
-            <input
-              type="datetime-local"
-              value={selectedEvent.fecha_inicio.slice(0, 16)}
-              onChange={(e) =>
-                setSelectedEvent({
-                  ...selectedEvent,
-                  fecha_inicio: e.target.value,
-                })
-              }
-            />
-            <label>Fecha y Hora de Fin:</label>
-            <input
-              type="datetime-local"
-              value={selectedEvent.fecha_fin.slice(0, 16)} 
-              onChange={(e) =>
-                setSelectedEvent({
-                  ...selectedEvent,
-                  fecha_fin: e.target.value,
-                })
-              }
-            />
-            <label>Disponible:</label>
-            <input
-              type="checkbox"
-              checked={selectedEvent.disponible}
-              onChange={(e) =>
-                setSelectedEvent({
-                  ...selectedEvent,
-                  disponible: e.target.checked,
-                })
-              }
-            />
-          </FormContainer>
-        </Modal>
-      )}
-
-      {selectedEvent && user?.role !== "admin" && (
-        <ReserveModal
-          disponibilidad={selectedEvent}
-          isOpen={isReserveModalOpen}
-          onClose={handleCloseReserveModal}
-          closeParentModal={closeParentModal}
-        />
-      )}
-
-      {showAddModal && (
-        <Modal
-          title="Agregar Disponibilidad"
-          onClose={() => setShowAddModal(false)}
-          actions={[
-            { label: "Agregar", handler: handleAddDisponibilidad },
-            { label: "Cerrar", handler: () => setShowAddModal(false) },
-          ]}
-        >
-          <FormContainer>
-            <label>Fecha y Hora de Inicio:</label>
-            <input
-              type="datetime-local"
-              value={newDisponibilidad.fecha_inicio.slice(0, 16)}
-              onChange={(e) =>
-                setNewDisponibilidad({
-                  ...newDisponibilidad,
-                  fecha_inicio: e.target.value,
-                })
-              }
-            />
-            <label>Fecha y Hora de Fin:</label>
-            <input
-              type="datetime-local"
-              value={newDisponibilidad.fecha_fin.slice(0, 16)}
-              onChange={(e) =>
-                setNewDisponibilidad({
-                  ...newDisponibilidad,
-                  fecha_fin: e.target.value,
-                })
-              }
-            />
-            <label>Disponible:</label>
-            <input
-              type="checkbox"
-              checked={newDisponibilidad.disponible}
-              onChange={(e) =>
-                setNewDisponibilidad({
-                  ...newDisponibilidad,
-                  disponible: e.target.checked,
-                })
-              }
-            />
-          </FormContainer>
-        </Modal>
+      {isAdmin && selectedDisponibilidad && (
+        <div style={{ marginTop: "10px" }}>
+          <button onClick={handleDeleteDisponibilidad}>
+            Eliminar Disponibilidad
+          </button>
+        </div>
       )}
     </div>
   );

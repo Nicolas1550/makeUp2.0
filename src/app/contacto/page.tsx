@@ -1,9 +1,9 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import Navbar from "../components/navbar/navbar";
 
-const ContactContainer = styled.div`
+const ContenedorContacto = styled.div`
   background-color: #1c1c1c;
   color: #f8f9fa;
   min-height: 100vh;
@@ -13,7 +13,7 @@ const ContactContainer = styled.div`
   align-items: center;
 `;
 
-const ContactContent = styled.div`
+const ContenidoContacto = styled.div`
   max-width: 1200px;
   text-align: center;
   background: rgba(28, 28, 28, 0.8);
@@ -25,7 +25,7 @@ const ContactContent = styled.div`
   transition: background 0.3s ease, border 0.3s ease;
 `;
 
-const ContactHeading = styled.h1`
+const EncabezadoContacto = styled.h1`
   color: #ffd700;
   font-size: 2.5rem;
   margin-bottom: 1.5rem;
@@ -33,19 +33,19 @@ const ContactHeading = styled.h1`
   text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 `;
 
-const ContactParagraph = styled.p`
+const ParrafoContacto = styled.p`
   font-size: 1.1rem;
   line-height: 1.6;
   margin-bottom: 1.5rem;
   color: #f8f9fa;
 `;
 
-const Highlight = styled.span`
+const Resaltado = styled.span`
   color: #ffd700;
   font-weight: bold;
 `;
 
-const ContactForm = styled.form`
+const FormularioContacto = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -53,7 +53,7 @@ const ContactForm = styled.form`
   margin-top: 2rem;
 `;
 
-const FormInput = styled.input`
+const InputFormulario = styled.input`
   width: 100%;
   max-width: 500px;
   padding: 0.75rem;
@@ -70,7 +70,7 @@ const FormInput = styled.input`
   }
 `;
 
-const FormTextArea = styled.textarea`
+const TextAreaFormulario = styled.textarea`
   width: 100%;
   max-width: 500px;
   padding: 0.75rem;
@@ -88,7 +88,7 @@ const FormTextArea = styled.textarea`
   }
 `;
 
-const SubmitButton = styled.button`
+const BotonEnviar = styled.button`
   padding: 0.75rem 2rem;
   background-color: #ffd700;
   color: #1c1c1c;
@@ -104,81 +104,92 @@ const SubmitButton = styled.button`
   }
 `;
 
-const ContactPage: React.FC = () => {
-  const form = useRef<HTMLFormElement>(null);
-  const [loading, setLoading] = useState(false);
+const PaginaContacto: React.FC = () => {
+  const [hasMounted, setHasMounted] = useState(false);
+  const formulario = useRef<HTMLFormElement>(null);
+  const [cargando, setCargando] = useState(false);
 
-  const sendEmail = async (e: React.FormEvent) => {
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  const enviarCorreo = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setCargando(true);
 
-    const formData = new FormData(form.current!);
-    const data = {
-      user_name: formData.get("user_name"),
-      user_email: formData.get("user_email"),
-      message: formData.get("message"),
+    const datosFormulario = new FormData(formulario.current!);
+    const datos = {
+      nombre_usuario: datosFormulario.get("user_name"),
+      correo_usuario: datosFormulario.get("user_email"),
+      mensaje: datosFormulario.get("message"),
     };
 
     try {
-      const response = await fetch("http://localhost:3001/api/email", {
+      const respuesta = await fetch("http://localhost:3001/api/email", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(datos),
       });
 
-      if (response.ok) {
-        alert("Message sent successfully!");
+      if (respuesta.ok) {
+        alert("¡Mensaje enviado con éxito!");
       } else {
-        alert("Failed to send message. Please try again.");
+        alert("Error al enviar el mensaje. Inténtalo de nuevo.");
       }
     } catch (error) {
-      console.error("Error sending email:", error);
-      alert("An error occurred. Please try again.");
+      console.error("Error al enviar el correo:", error);
+      alert("Ocurrió un error. Inténtalo de nuevo.");
     } finally {
-      setLoading(false);
+      setCargando(false);
     }
   };
+
+  if (!hasMounted) {
+    return null;
+  }
+
   return (
-    <div>
+    <>
       <Navbar />
 
-      <ContactContainer>
-        <ContactContent>
-          <ContactHeading>Contact Us</ContactHeading>
-          <ContactParagraph>
-            We are here to help! Fill out the form below and a member of our team
-            will get back to you as soon as possible.
-          </ContactParagraph>
+      <ContenedorContacto>
+        <ContenidoContacto>
+          <EncabezadoContacto>Contáctanos</EncabezadoContacto>
+          <ParrafoContacto>
+            ¡Estamos aquí para ayudarte! Llena el formulario a continuación y un
+            miembro de nuestro equipo se pondrá en contacto contigo lo antes
+            posible.
+          </ParrafoContacto>
 
-          <ContactForm ref={form} onSubmit={sendEmail}>
-            <FormInput
+          <FormularioContacto ref={formulario} onSubmit={enviarCorreo}>
+            <InputFormulario
               type="text"
               name="user_name"
-              placeholder="Your Name"
+              placeholder="Tu Nombre"
               required
             />
-            <FormInput
+            <InputFormulario
               type="email"
               name="user_email"
-              placeholder="Your Email"
+              placeholder="Tu Correo Electrónico"
               required
             />
-            <FormTextArea
+            <TextAreaFormulario
               name="message"
-              placeholder="Your Message"
+              placeholder="Tu Mensaje"
               rows={6}
               required
             />
-            <SubmitButton type="submit" disabled={loading}>
-              {loading ? "Sending..." : "Send Message"}
-            </SubmitButton>
-          </ContactForm>
-        </ContactContent>
-      </ContactContainer>
-    </div>
+            <BotonEnviar type="submit" disabled={cargando}>
+              {cargando ? "Enviando..." : "Enviar Mensaje"}
+            </BotonEnviar>
+          </FormularioContacto>
+        </ContenidoContacto>
+      </ContenedorContacto>
+    </>
   );
 };
 
-export default ContactPage;
+export default PaginaContacto;
