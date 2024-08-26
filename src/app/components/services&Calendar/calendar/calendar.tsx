@@ -18,6 +18,8 @@ import {
 } from "@/redux/features/disponibilidad/disponibilidadSlice";
 import { Disponibilidad } from "@/app/types/types";
 import { RootState } from "@/redux/store";
+import ReserveModal from "../../reservas/ReservationModal";
+import Modal from "../../modal/modal"; // Modal para administradores
 
 moment.tz.setDefault("America/Argentina/Buenos_Aires");
 const localizer = momentLocalizer(moment);
@@ -53,17 +55,20 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
   const disponibilidades = useAppSelector(
     (state: RootState) => state.disponibilidad.disponibilidades
   );
+  const user = useAppSelector((state: RootState) => state.auth.user);
   const [currentView, setCurrentView] = useState<View>("month");
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [selectedDisponibilidad, setSelectedDisponibilidad] =
     useState<Disponibilidad | null>(null);
+  const [isReserveModalOpen, setIsReserveModalOpen] = useState<boolean>(false);
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState<boolean>(false); // Para el modal del administrador
 
   useEffect(() => {
     dispatch(fetchDisponibilidadesByService(servicioId));
   }, [dispatch, servicioId, currentDate]);
 
   const handleSelectSlot = (slotInfo: SlotInfo) => {
-    if (isAdmin && currentView === "day") {
+    if (user?.role === "admin" && currentView === "day") {
       const start = moment(slotInfo.start).toISOString();
       const end = moment(slotInfo.end).toISOString();
 
@@ -83,8 +88,25 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
   };
 
   const handleSelectEvent = (event: Disponibilidad) => {
-    if (isAdmin) {
-      setSelectedDisponibilidad(event);
+    if (user?.role === "admin") {
+      // Si es admin, mostramos el modal de opciones para eliminar o reservar
+      // Ajustamos el tiempo sumando 3 horas para corregir el desfase también en el modal de admin
+      const adjustedEvent = {
+        ...event,
+        fecha_inicio: moment(event.fecha_inicio).add(3, "hours").toISOString(),
+        fecha_fin: moment(event.fecha_fin).add(3, "hours").toISOString(),
+      };
+      setSelectedDisponibilidad(adjustedEvent);
+      setIsAdminModalOpen(true);
+    } else {
+      // Ajustamos el tiempo sumando 3 horas solo para los usuarios
+      const adjustedEvent = {
+        ...event,
+        fecha_inicio: moment(event.fecha_inicio).add(3, "hours").toISOString(),
+        fecha_fin: moment(event.fecha_fin).add(3, "hours").toISOString(),
+      };
+      setSelectedDisponibilidad(adjustedEvent);
+      setIsReserveModalOpen(true);
     }
   };
 
@@ -92,9 +114,20 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
     if (selectedDisponibilidad && selectedDisponibilidad.id) {
       dispatch(deleteDisponibilidad(selectedDisponibilidad.id)).then(() => {
         setSelectedDisponibilidad(null); // Limpiamos la selección
+        setIsAdminModalOpen(false); // Cierra el modal después de eliminar
         dispatch(fetchDisponibilidadesByService(servicioId));
       });
     }
+  };
+
+  const handleCloseReserveModal = () => {
+    setIsReserveModalOpen(false);
+    setSelectedDisponibilidad(null); // Limpiamos la selección después de cerrar el modal
+  };
+
+  const handleCloseAdminModal = () => {
+    setIsAdminModalOpen(false);
+    setSelectedDisponibilidad(null); // Limpiamos la selección después de cerrar el modal
   };
 
   // Ajuste para la visualización en el calendario
@@ -121,7 +154,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
           endAccessor="end"
           titleAccessor="title"
           style={{ height: "100%" }}
-          selectable={isAdmin}
+          selectable={user?.role === "admin"} // Solo los administradores pueden seleccionar slots
           onSelectSlot={handleSelectSlot}
           onSelectEvent={handleSelectEvent}
           view={currentView}
@@ -132,12 +165,35 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
         />
       </CalendarContainer>
 
-      {isAdmin && selectedDisponibilidad && (
-        <div style={{ marginTop: "10px" }}>
-          <button onClick={handleDeleteDisponibilidad}>
-            Eliminar Disponibilidad
-          </button>
-        </div>
+      {/* Modal para confirmar reserva solo visible para usuarios no admin */}
+      {selectedDisponibilidad && user?.role !== "admin" && (
+        <ReserveModal
+          disponibilidad={selectedDisponibilidad}
+          isOpen={isReserveModalOpen}
+          onClose={handleCloseReserveModal}
+          closeParentModal={closeParentModal}
+        />
+      )}
+
+      {/* Modal para opciones de admin: Eliminar o Reservar */}
+      {selectedDisponibilidad && user?.role === "admin" && (
+        <Modal
+          title="Opciones de Disponibilidad"
+          isOpen={isAdminModalOpen}
+          onClose={handleCloseAdminModal}
+          actions={[
+            { label: "Eliminar", handler: handleDeleteDisponibilidad },
+            { label: "Reservar", handler: handleCloseAdminModal }, // Aquí puedes agregar la lógica de reserva si la tienes
+            { label: "Cerrar", handler: handleCloseAdminModal },
+          ]}
+        >
+          <p>¿Qué te gustaría hacer con esta disponibilidad?</p>
+          <p>Servicio: {selectedDisponibilidad.servicio_nombre}</p>
+          <p>
+            Desde: {moment(selectedDisponibilidad.fecha_inicio).format("LLL")}
+          </p>
+          <p>Hasta: {moment(selectedDisponibilidad.fecha_fin).format("LLL")}</p>
+        </Modal>
       )}
     </div>
   );

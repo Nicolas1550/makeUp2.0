@@ -11,12 +11,16 @@ import {
 
 interface ModalProps {
   title: string;
-  children: ReactNode;
+  isOpen: boolean;
   onClose: () => void;
   actions: { label: string; handler: () => void }[];
+  children: React.ReactNode;
 }
 
-const Modal: React.FC<ModalProps> = ({ title, children, onClose, actions }) => {
+const Modal: React.FC<ModalProps> = ({ title, isOpen, onClose, children, actions }) => {
+  // Si isOpen es false, el modal no se renderiza
+  if (!isOpen) return null;
+
   return (
     <ModalOverlay onClick={onClose}>
       <ModalContainer
@@ -37,3 +41,4 @@ const Modal: React.FC<ModalProps> = ({ title, children, onClose, actions }) => {
 };
 
 export default Modal;
+

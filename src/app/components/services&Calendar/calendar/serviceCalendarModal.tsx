@@ -16,18 +16,19 @@ const ServiceCalendarModal: React.FC<ServiceCalendarModalProps> = ({
   onClose,
   isAdmin,
 }) => {
-  if (!isOpen) return null;
+  if (!isOpen) return null; // Evita renderizar el modal si isOpen es falso
 
   return (
     <Modal
       title={`Disponibilidades para ${servicio.nombre}`}
+      isOpen={isOpen} // Pasamos isOpen al modal
       onClose={onClose}
       actions={[{ label: "Cerrar", handler: onClose }]}
     >
       <MyCalendar
         isAdmin={isAdmin}
         servicioId={servicio.id}
-        closeParentModal={onClose} 
+        closeParentModal={onClose}
       />
     </Modal>
   );
