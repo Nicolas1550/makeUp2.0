@@ -125,7 +125,7 @@ const PaginaContacto: React.FC = () => {
     };
 
     try {
-      const respuesta = await fetch("http://localhost:3001/api/email", {
+      const respuesta = await fetch("https://backendiaecommerce.onrender.com/api/email", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

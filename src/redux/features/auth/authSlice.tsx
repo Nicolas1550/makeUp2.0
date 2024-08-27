@@ -55,8 +55,8 @@ const getToken = (): string | null =>
 
 const API_BASE_URL =
   process.env.NODE_ENV === "development"
-    ? "http://localhost:3001/auth"
-    : "http://localhost:3001/api/auth";
+    ? "https://backendiaecommerce.onrender.com/auth"
+    : "https://backendiaecommerce.onrender.com/api/auth";
 
 export const checkAuthentication = createAsyncThunk<
   { isAuthenticated: boolean; user: User | null },
@@ -77,7 +77,7 @@ export const checkAuthentication = createAsyncThunk<
   }
 
   try {
-    const response = await axios.get(`http://localhost:3001/api/auth/verify`, {
+    const response = await axios.get(`https://backendiaecommerce.onrender.com/api/auth/verify`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     console.log("Token verified successfully. User:", response.data);

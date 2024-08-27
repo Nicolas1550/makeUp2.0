@@ -50,7 +50,7 @@ const initialState: OrdersState = {
 
 // Thunk para obtener todas las órdenes de un usuario
 export const fetchOrders = createAsyncThunk("orders/fetchOrders", async () => {
-  const response = await axios.get("http://localhost:3001/api/orders", {
+  const response = await axios.get("https://backendiaecommerce.onrender.com/api/orders", {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -63,7 +63,7 @@ export const fetchOrders = createAsyncThunk("orders/fetchOrders", async () => {
 export const fetchAdminOrders = createAsyncThunk(
   "orders/fetchAdminOrders",
   async () => {
-    const response = await axios.get("http://localhost:3001/api/orders/admin/orders", {
+    const response = await axios.get("https://backendiaecommerce.onrender.com/api/orders/admin/orders", {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -78,7 +78,7 @@ export const updateOrderStatus = createAsyncThunk(
   "orders/updateOrderStatus",
   async ({ orderId, status }: { orderId: number; status: string }) => {
     const response = await axios.put(
-      `http://localhost:3001/api/orders/admin/orders/${orderId}`,
+      `https://backendiaecommerce.onrender.com/api/orders/admin/orders/${orderId}`,
       { status },
       {
         headers: {
@@ -96,7 +96,7 @@ export const fetchOrderById = createAsyncThunk(
   "orders/fetchOrderById",
   async (orderId: number) => {
     const response = await axios.get(
-      `http://localhost:3001/api/orders/${orderId}`,
+      `https://backendiaecommerce.onrender.com/api/orders/${orderId}`,
       {
         headers: {
           "Content-Type": "application/json",

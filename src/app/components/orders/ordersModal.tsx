@@ -43,7 +43,7 @@ const OrdersModal: React.FC<OrdersModalProps> = ({ isOpen, onClose }) => {
   }, [isOpen, ordersStatus, dispatch]);
 
   useEffect(() => {
-    const socket = io("http://localhost:3001", {
+    const socket = io("https://backendiaecommerce.onrender.com", {
       withCredentials: true,
     });
 
