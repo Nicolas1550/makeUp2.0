@@ -83,7 +83,7 @@ const AuthModal: React.FC = () => {
         dispatch(clearError());
       }, 3000);
     }
-  }, [status, isLogin, dispatch, error]);
+  }, [status, dispatch, error]);
 
   useEffect(() => {
     if (!showModal) {
@@ -95,6 +95,7 @@ const AuthModal: React.FC = () => {
   }, [showModal, dispatch]);
 
   const toggleAuthMode = () => {
+    // Cambia solo el modo sin cerrar el modal
     dispatch(setAuthModalMode(isLogin ? "register" : "login"));
   };
 
@@ -104,7 +105,7 @@ const AuthModal: React.FC = () => {
         <ModalClose onClick={() => dispatch(hideAuthModal())}>
           &times;
         </ModalClose>
-        <h1>{isLogin ? "Login" : "Register"}</h1>
+        <h1>{isLogin ? "Iniciar Sesión" : "Registrarse"}</h1>
         <form onSubmit={isLogin ? handleLogin : handleRegister}>
           <Field>
             <Input
@@ -114,7 +115,7 @@ const AuthModal: React.FC = () => {
               placeholder=" "
               autoComplete="email"
             />
-            <Label className={email ? "filled" : ""}>Email</Label>
+            <Label className={email ? "filled" : ""}>Correo Electrónico</Label>
           </Field>
           <Field>
             <Input
@@ -124,7 +125,7 @@ const AuthModal: React.FC = () => {
               placeholder=" "
               autoComplete="current-password"
             />
-            <Label className={password ? "filled" : ""}>Password</Label>
+            <Label className={password ? "filled" : ""}>Contraseña</Label>
           </Field>
           {!isLogin && (
             <Field>
@@ -147,12 +148,12 @@ const AuthModal: React.FC = () => {
           )}
           <div className="mt-4">
             <Button type="submit" disabled={isLoading}>
-              {isLogin ? "Login" : "Register"}
+              {isLogin ? "Iniciar Sesión" : "Registrarse"}
             </Button>
           </div>
           <div className="mt-4">
             <Button type="button" onClick={toggleAuthMode}>
-              {isLogin ? "Go to Register" : "Go to Login"}
+              {isLogin ? "Ir a Registrarse" : "Ir a Iniciar Sesión"}
             </Button>
           </div>
         </form>
