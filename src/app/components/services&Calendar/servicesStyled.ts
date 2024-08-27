@@ -18,11 +18,32 @@ export const ImageSection = styled(motion.div)`
   flex: 1;
   background: url("/zzzzz .webp") center center/cover no-repeat;
   border-right: 1px solid rgba(255, 215, 0, 0.3);
+  position: relative;
+  transition: height 0.3s ease, opacity 0.3s ease;
 
   @media (max-width: 768px) {
     border-right: none;
     border-bottom: 1px solid rgba(255, 215, 0, 0.3);
-    height: 50vh;
+    height: 60vh; /* Aumenta la altura en dispositivos móviles */
+    opacity: 0.7; /* Aumenta la opacidad para resaltar el contenido */
+  }
+
+  /* Agregamos un pseudo-elemento para controlar la opacidad de la imagen */
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    opacity: 0.8; /* Opacidad predeterminada */
+    z-index: -1;
+    transition: opacity 0.3s ease;
+
+    @media (max-width: 768px) {
+      opacity: 0.3; /* Más opaco en pantallas pequeñas */
+    }
   }
 `;
 
@@ -40,7 +61,7 @@ export const TextSection = styled(motion.div)`
   @media (max-width: 768px) {
     border-left: none;
     border-top: 1px solid rgba(255, 215, 0, 0.3);
-    height: 50vh;
+    height: auto;
   }
 `;
 
