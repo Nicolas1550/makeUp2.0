@@ -65,7 +65,7 @@ export const fetchDisponibilidadesByService = createAsyncThunk<
       );
       return response.data.map((disp: any) => ({
         ...disp,
-        title: disp.servicio_nombre,
+        title: disp.servicio_nombre, 
         start: disp.fecha_inicio,
         end: disp.fecha_fin,
       }));
