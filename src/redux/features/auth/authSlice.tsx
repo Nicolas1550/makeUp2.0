@@ -56,7 +56,7 @@ const getToken = (): string | null =>
 const API_BASE_URL =
   process.env.NODE_ENV === "development"
     ? "https://backendiaecommerce.onrender.com/auth"
-    : "https://backendiaecommerce.onrender.com/api/auth";
+    : "https://backendiaecommerce.onrender.com/auth";
 
 export const checkAuthentication = createAsyncThunk<
   { isAuthenticated: boolean; user: User | null },
