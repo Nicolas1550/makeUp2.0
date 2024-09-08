@@ -13,7 +13,6 @@ import "swiper/swiper-bundle.css";
 import ProductCard from "./productCard";
 import { CarouselContainer } from "./styles/productCarousel";
 
-
 interface ProductCarouselProps {
   products: Array<{
     id: number;
@@ -54,9 +53,13 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({ products }) => {
           slideShadows: true,
         }}
         breakpoints={{
-          640: {
+          320: { // Ajuste para pantallas pequeñas
             slidesPerView: 1,
             spaceBetween: 10,
+          },
+          640: {
+            slidesPerView: 1,
+            spaceBetween: 15,
           },
           768: {
             slidesPerView: 2,
