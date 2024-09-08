@@ -63,6 +63,7 @@ const AuthModal: React.FC = () => {
 
     if (password !== confirmPassword) {
       setPasswordError("Las contraseñas no coinciden");
+      setIsRegistering(false); // Resetear el estado de registro
       return;
     }
     setPasswordError("");
@@ -103,14 +104,14 @@ const AuthModal: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-
-    // Solo cambiar a "login" después de un registro exitoso, no al cambiar manualmente entre modos
+    // Solo cambiar a "login" después de un registro exitoso
     if (status === "succeeded" && isRegistering) {
       dispatch(setAuthModalMode("login"));  
       setIsRegistering(false);  
     } else if (status === "failed" && error) {
       setTimeout(() => {
         dispatch(clearError());
+        setIsRegistering(false);  // Resetear estado de registro si falla
       }, 3000);
     }
 
