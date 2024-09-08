@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   selectCartItems,
@@ -36,6 +36,15 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   const isAuthenticated = useAppSelector(selectIsAuthenticated); // Verificar autenticación
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
+  // Actualiza el estado de checkout basado en autenticación
+  useEffect(() => {
+    if (!isAuthenticated && isCheckoutOpen) {
+      // Si el usuario no está autenticado y se intenta abrir el checkout, mostrar el modal de login
+      dispatch(showAuthModal("login"));
+      setIsCheckoutOpen(false); // Cierra el modal de checkout
+    }
+  }, [isAuthenticated, isCheckoutOpen, dispatch]);
+
   const handleIncrement = (id: number) => {
     dispatch(incrementQuantity(id));
   };
@@ -50,7 +59,7 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
 
   const handleCheckout = () => {
     if (isAuthenticated) {
-      setIsCheckoutOpen(true);
+      setIsCheckoutOpen(true); // Solo abre el checkout si el usuario está autenticado
     } else {
       dispatch(showAuthModal("login")); // Mostrar modal de inicio de sesión si no está autenticado
     }
@@ -111,8 +120,9 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
         )}
       </CartContainer>
 
+      {/* Modal de Checkout */}
       <CheckoutModal
-        open={isCheckoutOpen}
+        open={isCheckoutOpen && isAuthenticated} // Solo abre si el usuario está autenticado
         onClose={() => {
           setIsCheckoutOpen(false);
           dispatch(clearCart());
