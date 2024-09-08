@@ -8,6 +8,8 @@ import {
   clearCart,
 } from "@/redux/features/cart/cartSlice";
 import CheckoutModal from "../checkoutModal/checkoutModal";
+import { showAuthModal } from "@/redux/features/ui/uiSlice"; // Para mostrar el modal de autenticación
+import { selectIsAuthenticated } from "@/redux/authSelectors"; // Para verificar si está autenticado
 import {
   CartContainer,
   CartHeader,
@@ -31,6 +33,7 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
 }) => {
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector(selectCartItems);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated); // Verificar autenticación
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   const handleIncrement = (id: number) => {
@@ -46,7 +49,11 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   };
 
   const handleCheckout = () => {
-    setIsCheckoutOpen(true);
+    if (isAuthenticated) {
+      setIsCheckoutOpen(true);
+    } else {
+      dispatch(showAuthModal("login")); // Mostrar modal de inicio de sesión si no está autenticado
+    }
   };
 
   // Calcular el total del carrito
@@ -108,8 +115,8 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
         open={isCheckoutOpen}
         onClose={() => {
           setIsCheckoutOpen(false);
-          dispatch(clearCart()); 
-          onClose(); 
+          dispatch(clearCart());
+          onClose();
         }}
       />
     </>
