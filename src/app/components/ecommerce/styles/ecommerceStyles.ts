@@ -121,23 +121,24 @@ export const HighlightedSection = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center; /* Centra el texto */
-  min-height: 500px;  /* Asegura que haya suficiente espacio para el carrusel */
+  text-align: center;
+  min-height: 500px;
 
-  /* Ajusta el carrusel para que ocupe todo el espacio disponible */
+  /* Estilo para el contenedor de Swiper */
   .swiper {
     width: 100%;
     max-width: 1200px;  /* Limita el ancho máximo del carrusel */
     height: 100%;       /* Asegura que el carrusel ocupe el espacio completo */
   }
 
-  /* Asegúrate de que los slides se ajusten correctamente */
+  /* Estilo de las diapositivas (slides) */
   .swiper-slide {
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
+  /* Asegúrate de que los ul/li tengan el estilo adecuado */
   ul {
     list-style: none;
     padding: 0;
@@ -145,6 +146,37 @@ export const HighlightedSection = styled.section`
 
   li {
     margin-bottom: 0.5rem;
+  }
+
+  /* Responsividad */
+  @media (max-width: 1024px) {
+    padding: 2.5rem 1.5rem;
+    margin-bottom: 3rem;
+    min-height: 450px;
+
+    .swiper {
+      max-width: 900px;  /* Reduce el tamaño máximo en pantallas medianas */
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 2rem 1rem;
+    margin-bottom: 2.5rem;
+    min-height: 400px;
+
+    .swiper {
+      max-width: 700px;  /* Reduce el tamaño máximo en pantallas medianas */
+    }
+  }
+
+  @media (max-width: 480px) {
+    padding: 1.5rem 0.5rem;
+    margin-bottom: 2rem;
+    min-height: 350px;
+
+    .swiper {
+      max-width: 100%;  /* Ocupar todo el ancho disponible en móviles */
+    }
   }
 `;
 

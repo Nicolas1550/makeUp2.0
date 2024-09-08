@@ -25,6 +25,16 @@ const CardContainer = styled.li`
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
     filter: brightness(1.1);
   }
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+    border-radius: 15px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.8rem;
+    border-radius: 10px;
+  }
 `;
 
 const DiscountBadge = styled.div`
@@ -38,6 +48,11 @@ const DiscountBadge = styled.div`
   padding: 0.5rem 1rem;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+  @media (max-width: 480px) {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+  }
 `;
 
 const ImageContainer = styled.div`
@@ -55,6 +70,10 @@ const ImageContainer = styled.div`
 
   &:hover {
     transform: scale(1.05);
+  }
+
+  @media (max-width: 480px) {
+    height: 180px;
   }
 `;
 
@@ -75,6 +94,10 @@ const ProductName = styled.h3`
   font-weight: 700;
   margin-bottom: 0.5rem;
   color: #eaeaea;
+
+  @media (max-width: 480px) {
+    font-size: 1.2rem;
+  }
 `;
 
 const ProductPrice = styled.p`
@@ -82,6 +105,10 @@ const ProductPrice = styled.p`
   font-weight: 600;
   margin-bottom: 0.5rem;
   color: #ffd700;
+
+  @media (max-width: 480px) {
+    font-size: 1.2rem;
+  }
 `;
 
 const OldPrice = styled.span`
@@ -89,6 +116,10 @@ const OldPrice = styled.span`
   color: #b0b0b0;
   text-decoration: line-through;
   margin-right: 0.5rem;
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+  }
 `;
 
 const ProductDescription = styled.p`
@@ -97,7 +128,13 @@ const ProductDescription = styled.p`
   line-height: 1.4;
   text-align: center;
   margin-top: 0.8rem;
-  margin-bottom: 1.2rem; /* Añadir un margen inferior para separación */
+  margin-bottom: 1.2rem;
+
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+    margin-top: 0.6rem;
+    margin-bottom: 1rem;
+  }
 `;
 
 const AddToCartButton = styled.button`
@@ -115,7 +152,13 @@ const AddToCartButton = styled.button`
     transform: translateY(-3px);
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   }
+
+  @media (max-width: 480px) {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
 `;
+
 interface ProductCardProps {
   id: number;
   name: string;
@@ -128,6 +171,7 @@ interface ProductCardProps {
   createdAt?: string;  
   updatedAt?: string;  
 }
+
 const ProductCard: React.FC<ProductCardProps> = ({
   id,
   name,
@@ -137,13 +181,22 @@ const ProductCard: React.FC<ProductCardProps> = ({
   quantity,
   description,
   discount,
-  createdAt = new Date().toISOString(), 
-  updatedAt = new Date().toISOString(), 
+  createdAt = new Date().toISOString(),
+  updatedAt = new Date().toISOString(),
 }) => {
   const dispatch = useAppDispatch();
 
   const handleAddToCart = () => {
-    const product = { id, name, price, imageFileName, quantity, description, createdAt, updatedAt };
+    const product = {
+      id,
+      name,
+      price,
+      imageFileName,
+      quantity,
+      description,
+      createdAt,
+      updatedAt,
+    };
     dispatch(addToCart(product));
   };
 
@@ -166,7 +219,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <ProductDescription>{description.slice(0, 60)}...</ProductDescription>
         </div>
       </Link>
-      <AddToCartButton onClick={handleAddToCart}>Agregar al carrito</AddToCartButton>
+      <AddToCartButton onClick={handleAddToCart}>
+        Agregar al carrito
+      </AddToCartButton>
     </CardContainer>
   );
 };

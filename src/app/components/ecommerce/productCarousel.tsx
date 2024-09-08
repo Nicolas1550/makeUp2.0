@@ -37,7 +37,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({ products }) => {
       <Swiper
         modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay, EffectCoverflow]}
         spaceBetween={30}
-        slidesPerView={3}
+        slidesPerView={3}  // Mostrar 3 por defecto en pantallas grandes
         slidesPerGroup={1}
         navigation
         pagination={{ clickable: true }}
@@ -53,20 +53,20 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({ products }) => {
           slideShadows: true,
         }}
         breakpoints={{
-          320: { // Ajuste para pantallas pequeñas
-            slidesPerView: 1,
+          320: { // Ajuste para pantallas móviles pequeñas
+            slidesPerView: 1, // Mostrar solo 1 card en pantallas pequeñas
             spaceBetween: 10,
           },
           640: {
-            slidesPerView: 1,
+            slidesPerView: 1, // Mantener 1 card en pantallas pequeñas-medias
             spaceBetween: 15,
           },
           768: {
-            slidesPerView: 2,
+            slidesPerView: 2, // Mostrar 2 cards en pantallas medianas
             spaceBetween: 20,
           },
           1024: {
-            slidesPerView: 3,
+            slidesPerView: 3, // Mostrar 3 cards en pantallas grandes
             spaceBetween: 30,
           },
         }}
