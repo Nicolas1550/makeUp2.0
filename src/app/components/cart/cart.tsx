@@ -10,6 +10,7 @@ import {
 import CheckoutModal from "../checkoutModal/checkoutModal";
 import { showAuthModal } from "@/redux/features/ui/uiSlice"; // Para mostrar el modal de autenticación
 import { selectIsAuthenticated } from "@/redux/authSelectors"; // Para verificar si está autenticado
+import { RootState } from "@/redux/store"; // Importar RootState para acceder al estado global
 import {
   CartContainer,
   CartHeader,
@@ -34,7 +35,17 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector(selectCartItems);
   const isAuthenticated = useAppSelector(selectIsAuthenticated); // Verificar autenticación
+  const isAuthModalVisible = useAppSelector(
+    (state: RootState) => state.ui.isAuthModalVisible
+  ); // Verificar si el modal de autenticación está visible
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+
+  // Cerrar el modal del carrito si se abre el modal de autenticación
+  useEffect(() => {
+    if (isAuthModalVisible && isOpen) {
+      onClose(); // Cerrar el modal del carrito
+    }
+  }, [isAuthModalVisible, isOpen, onClose]);
 
   // Actualiza el estado de checkout basado en autenticación
   useEffect(() => {
