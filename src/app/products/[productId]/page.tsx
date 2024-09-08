@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
@@ -9,6 +9,8 @@ import {
 import {
   addToCart,
 } from "@/redux/features/cart/cartSlice"; 
+import styled from "styled-components";
+
 import {
   BuyButton,
   ProductDescription,
@@ -24,14 +26,43 @@ import {
   SubSectionTitle,
 } from "@/app/components/ecommerce/styles/productPageStyle";
 
+// Spinner centrado y estilizado
+const SpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Ocupa toda la altura de la ventana */
+`;
+
+const Spinner = styled.div`
+  border: 8px solid #f3f3f3;
+  border-top: 8px solid #fbc02d; /* Color amarillo */
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
 const ProductPage: React.FC = () => {
   const { productId } = useParams();
   const dispatch = useAppDispatch();
   const products = useAppSelector(selectAllProducts);
+  const [isLoading, setIsLoading] = useState(true); // Estado de carga
 
   useEffect(() => {
     if (products.length === 0) {
-      dispatch(fetchProducts());
+      dispatch(fetchProducts()).finally(() => setIsLoading(false)); // Detener el spinner al cargar productos
+    } else {
+      setIsLoading(false);
     }
   }, [dispatch, products.length]);
 
@@ -42,6 +73,15 @@ const ProductPage: React.FC = () => {
       dispatch(addToCart(product));
     }
   };
+
+  // Mostrar spinner mientras se cargan los productos
+  if (isLoading) {
+    return (
+      <SpinnerContainer>
+        <Spinner /> {/* Spinner amarillo */}
+      </SpinnerContainer>
+    );
+  }
 
   if (!product) {
     return (
