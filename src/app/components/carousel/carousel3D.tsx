@@ -121,7 +121,7 @@ const CustomParticles = () => {
 
   const geometry = new THREE.BufferGeometry();
   const vertices = [];
-  const particleCount = 1000; // Reducido para mejorar el rendimiento en dispositivos móviles
+  const particleCount = 1000;
 
   for (let i = 0; i < particleCount; i++) {
     const x = THREE.MathUtils.randFloatSpread(150);
@@ -180,11 +180,16 @@ const Carousel3D: React.FC = () => {
           effect="coverflow"
           grabCursor={true}
           centeredSlides={true}
-          slidesPerView="auto"
+          slidesPerView={1} // Mostrar solo 1 slide en móviles
+          breakpoints={{
+            768: {
+              slidesPerView: 3, // Mostrar 3 slides a partir de pantallas de 768px
+            },
+          }}
           coverflowEffect={{
             rotate: 40,
             stretch: 0,
-            depth: 80, // Ajustar para pantallas pequeñas
+            depth: 80,
             modifier: 1,
             slideShadows: true,
           }}
