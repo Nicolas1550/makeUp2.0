@@ -32,10 +32,10 @@ const EcommercePage: React.FC = () => {
   const productError = useAppSelector(getProductError);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
-  const [visibleProducts, setVisibleProducts] = useState<number>(6); 
+  const [visibleProducts, setVisibleProducts] = useState<number>(6);
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
+  const [hasMounted, setHasMounted] = useState(false); // Estado para verificar el montaje
 
-  // Referencias para el carrusel y para la detección de scroll
   const carouselRef = useRef<HTMLDivElement>(null);
   const loaderRef = useRef<HTMLDivElement>(null);
 
@@ -45,25 +45,27 @@ const EcommercePage: React.FC = () => {
     }
   }, [productStatus, dispatch]);
 
-  // Función para manejar el scroll hasta el carrusel
+  // Verificar que el componente está completamente montado
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
   const handleExploreClick = () => {
     if (carouselRef.current) {
       carouselRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
-  // Callback para cargar más productos al hacer scroll
   const loadMoreProducts = useCallback(() => {
     if (!loadingMore && visibleProducts < products.length) {
       setLoadingMore(true);
       setTimeout(() => {
         setVisibleProducts((prev) => prev + 6);
         setLoadingMore(false);
-      }, 1000); // Simulación de tiempo de carga
+      }, 1000);
     }
   }, [loadingMore, products.length, visibleProducts]);
 
-  // Hook para detectar el scroll al final de la lista
   useEffect(() => {
     const currentLoader = loaderRef.current;
 
@@ -87,13 +89,20 @@ const EcommercePage: React.FC = () => {
     };
   }, [loadMoreProducts]);
 
+  // Si el componente aún no se ha montado, no renderiza nada
+  if (!hasMounted) {
+    return null;
+  }
+
   return (
     <>
       <PageContainer>
         {/* Banner de Bienvenida */}
         <BannerContainer>
           <BannerTitle>¡Descubre nuestras ofertas exclusivas!</BannerTitle>
-          <BannerButton onClick={handleExploreClick}>Explorar Tienda</BannerButton>
+          <BannerButton onClick={handleExploreClick}>
+            Explorar Tienda
+          </BannerButton>
         </BannerContainer>
 
         {/* Sección de Ofertas Destacadas */}
@@ -135,7 +144,8 @@ const EcommercePage: React.FC = () => {
         <TestimonialSection>
           <SectionTitle>Lo que dicen nuestros clientes</SectionTitle>
           <Testimonial>
-            &quot;Excelente calidad y atención al cliente, sin duda volveré a comprar.&quot;
+            &quot;Excelente calidad y atención al cliente, sin duda volveré a
+            comprar.&quot;
           </Testimonial>
           <CustomerName>— Juan Pérez</CustomerName>
         </TestimonialSection>
