@@ -68,7 +68,7 @@ export const useNavbarLogic = () => {
       }
     };
     fetchServicios();
-  }, []);
+  }, [baseURL]); // Agregar baseURL como dependencia
 
   // Manejar el URL de la imagen de perfil con localStorage solo en el cliente
   useEffect(() => {
@@ -82,7 +82,7 @@ export const useNavbarLogic = () => {
         setProfileImageUrl(storedImageUrl);
       }
     }
-  }, [user]);
+  }, [user, baseURL]); // Agregar baseURL y user como dependencias
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const handleLogoutClick = () => {
