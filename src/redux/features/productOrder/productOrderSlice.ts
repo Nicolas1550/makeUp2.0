@@ -80,7 +80,7 @@ export const fetchProductOrders = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        "http://localhost:3001/api/productOrders",
+        "https://backendiaecommerce.onrender.com/api/productOrders",
         {
           headers: {
             "Content-Type": "application/json",
@@ -117,7 +117,7 @@ export const createProductOrder = createAsyncThunk(
   async (formData: FormData, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:3001/api/productOrders/add",
+        "https://backendiaecommerce.onrender.com/api/productOrders/add",
         formData,
         {
           headers: {
@@ -141,7 +141,7 @@ export const createProductOrderMercadoPago = createAsyncThunk(
   async (orderData: OrderCreationPayload, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:3001/api/productOrders/mercadopago",
+        "https://backendiaecommerce.onrender.com/api/productOrders/mercadopago",
         orderData,
         {
           headers: {
@@ -169,7 +169,7 @@ export const updateOrderStatus = createAsyncThunk(
   ) => {
     try {
       const response = await axios.patch(
-        `http://localhost:3001/api/productOrders/${id}/status`,
+        `https://backendiaecommerce.onrender.com/api/productOrders/${id}/status`,
         { status },
         {
           headers: {

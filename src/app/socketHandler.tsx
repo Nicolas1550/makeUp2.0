@@ -13,7 +13,7 @@ export default function SocketHandler() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const socket = io("http://localhost:3001", {
+    const socket = io("https://backendiaecommerce.onrender.com", {
       withCredentials: true,
     });
 

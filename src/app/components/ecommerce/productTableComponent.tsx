@@ -43,7 +43,7 @@ const ProductTableComponent: React.FC<ProductTableProps> = ({
   useEffect(() => {
     setLocalEditedProduct(editedProduct);
     if (editedProduct.imageFileName) {
-      setImagePreview(`http://localhost:3001/uploads/images/${editedProduct.imageFileName}`);
+      setImagePreview(`https://backendiaecommerce.onrender.com/uploads/images/${editedProduct.imageFileName}`);
     } else {
       setImagePreview(null);
     }
@@ -144,7 +144,7 @@ const ProductTableComponent: React.FC<ProductTableProps> = ({
                     ) : (
                       product.imageFileName && (
                         <Image
-                          src={`http://localhost:3001/uploads/images/${product.imageFileName}`}
+                          src={`https://backendiaecommerce.onrender.com/uploads/images/${product.imageFileName}`}
                           alt={product.name}
                           width={50} 
                           height={50} 
@@ -195,7 +195,7 @@ const ProductTableComponent: React.FC<ProductTableProps> = ({
                   <td>
                     {product.imageFileName && (
                       <Image
-                        src={`http://localhost:3001/uploads/images/${product.imageFileName}`}
+                        src={`https://backendiaecommerce.onrender.com/uploads/images/${product.imageFileName}`}
                         alt={product.name}
                         width={50} 
                         height={50} 

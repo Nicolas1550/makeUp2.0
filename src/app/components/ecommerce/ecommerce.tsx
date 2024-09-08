@@ -61,7 +61,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
     <Link href={`/product/${id}`} passHref>
       <CardContainer>
         <ProductImage
-          src={`http://localhost:3001/uploads/images/${imageFileName}`}
+          src={`https://backendiaecommerce.onrender.com/uploads/images/${imageFileName}`}
           alt={name}
         />
         <ProductName>{name}</ProductName>

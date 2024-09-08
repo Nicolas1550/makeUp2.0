@@ -67,7 +67,7 @@ const ReserveModal: React.FC<ReserveModalProps> = ({
       }
 
       const response = await axios.post(
-        "http://localhost:3001/api/orders",
+        "https://backendiaecommerce.onrender.com/api/orders",
         {
           user_id: user.id,
           disponibilidad_id: disponibilidad.id,

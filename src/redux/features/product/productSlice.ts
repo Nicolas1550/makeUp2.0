@@ -34,7 +34,7 @@ const initialState: ProductState = {
 
 // Obtener todos los productos
 export const fetchProducts = createAsyncThunk("products/fetchProducts", async () => {
-  const response = await axios.get("http://localhost:3001/api/products", {
+  const response = await axios.get("https://backendiaecommerce.onrender.com/api/products", {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -47,7 +47,7 @@ export const fetchProducts = createAsyncThunk("products/fetchProducts", async ()
 export const fetchFeaturedProducts = createAsyncThunk(
   "products/fetchFeaturedProducts",
   async () => {
-    const response = await axios.get("http://localhost:3001/api/products/featured", {
+    const response = await axios.get("https://backendiaecommerce.onrender.com/api/products/featured", {
       headers: {
         "Content-Type": "application/json",
       },
@@ -61,7 +61,7 @@ export const featureProduct = createAsyncThunk(
   "products/featureProduct",
   async (id: number) => {
     const response = await axios.put(
-      `http://localhost:3001/api/products/featured/${id}`,
+      `https://backendiaecommerce.onrender.com/api/products/featured/${id}`,
       { isFeatured: true },
       {
         headers: {
@@ -79,7 +79,7 @@ export const unfeatureProduct = createAsyncThunk(
   "products/unfeatureProduct",
   async (id: number) => {
     const response = await axios.put(
-      `http://localhost:3001/api/products/unfeature/${id}`,
+      `https://backendiaecommerce.onrender.com/api/products/unfeature/${id}`,
       {},
       {
         headers: {
@@ -96,7 +96,7 @@ export const unfeatureProduct = createAsyncThunk(
 export const addProduct = createAsyncThunk(
   "products/addProduct",
   async (newProduct: FormData) => {
-    const response = await axios.post("http://localhost:3001/api/products/add", newProduct, {
+    const response = await axios.post("https://backendiaecommerce.onrender.com/api/products/add", newProduct, {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -111,7 +111,7 @@ export const updateProduct = createAsyncThunk(
   "products/updateProduct",
   async ({ id, updatedProduct }: { id: number; updatedProduct: FormData }) => {
     const response = await axios.put(
-      `http://localhost:3001/api/products/update/${id}`,
+      `https://backendiaecommerce.onrender.com/api/products/update/${id}`,
       updatedProduct,
       {
         headers: {
@@ -126,7 +126,7 @@ export const updateProduct = createAsyncThunk(
 
 // Eliminar un producto
 export const deleteProduct = createAsyncThunk("products/deleteProduct", async (id: number) => {
-  await axios.delete(`http://localhost:3001/api/products/delete/${id}`, {
+  await axios.delete(`https://backendiaecommerce.onrender.com/api/products/delete/${id}`, {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("token")}`,

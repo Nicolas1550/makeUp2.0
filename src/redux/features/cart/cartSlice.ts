@@ -40,7 +40,7 @@ export const cartSlice = createSlice({
       );
       const cartProduct: CartProduct = {
         ...action.payload,
-        imageUrl: `http://localhost:3001/uploads/images/${
+        imageUrl: `https://backendiaecommerce.onrender.com/uploads/images/${
           action.payload.imageFileName || ""
         }`,
       };

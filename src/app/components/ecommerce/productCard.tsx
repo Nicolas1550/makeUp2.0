@@ -154,7 +154,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <div>
           <ImageContainer>
             <ProductImage
-              src={`http://localhost:3001/uploads/images/${imageFileName}`}
+              src={`https://backendiaecommerce.onrender.com/uploads/images/${imageFileName}`}
               alt={name}
             />
           </ImageContainer>

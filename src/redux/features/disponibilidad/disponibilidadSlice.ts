@@ -25,7 +25,7 @@ export const fetchAllDisponibilidades = createAsyncThunk<
 >("disponibilidad/fetchAllDisponibilidades", async (_, { rejectWithValue }) => {
   try {
     const response = await axios.get(
-      "http://localhost:3001/api/disponibilidades"
+      "https://backendiaecommerce.onrender.com/api/disponibilidades"
     );
     return response.data.map((disp: any) => ({
       ...disp,
@@ -61,7 +61,7 @@ export const fetchDisponibilidadesByService = createAsyncThunk<
   async (servicioId, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `http://localhost:3001/api/disponibilidades/servicio/${servicioId}`
+        `https://backendiaecommerce.onrender.com/api/disponibilidades/servicio/${servicioId}`
       );
       return response.data.map((disp: any) => ({
         ...disp,
@@ -95,7 +95,7 @@ export const fetchDisponibilidades = createAsyncThunk<
 >("disponibilidad/fetchDisponibilidades", async (_, { rejectWithValue }) => {
   try {
     const response = await axios.get(
-      "http://localhost:3001/api/disponibilidades"
+      "https://backendiaecommerce.onrender.com/api/disponibilidades"
     );
     return response.data.map((disp: any) => ({
       ...disp,
@@ -131,7 +131,7 @@ export const addDisponibilidad = createAsyncThunk<
   async (disponibilidad, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:3001/api/disponibilidades",
+        "https://backendiaecommerce.onrender.com/api/disponibilidades",
         {
           servicio_id: disponibilidad.servicio_id,
           fecha_inicio: disponibilidad.fecha_inicio, 
@@ -174,7 +174,7 @@ export const updateDisponibilidad = createAsyncThunk<
   async (disponibilidad, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `http://localhost:3001/api/disponibilidades/${disponibilidad.id}`,
+        `https://backendiaecommerce.onrender.com/api/disponibilidades/${disponibilidad.id}`,
         {
           servicio_id: disponibilidad.servicio_id,
           fecha_inicio: disponibilidad.fecha_inicio, 
@@ -214,7 +214,7 @@ export const deleteDisponibilidad = createAsyncThunk<
   { rejectValue: SerializedError }
 >("disponibilidad/deleteDisponibilidad", async (id, { rejectWithValue }) => {
   try {
-    await axios.delete(`http://localhost:3001/api/disponibilidades/${id}`);
+    await axios.delete(`https://backendiaecommerce.onrender.com/api/disponibilidades/${id}`);
     return id;
   } catch (err) {
     if (axios.isAxiosError(err) && err.response) {

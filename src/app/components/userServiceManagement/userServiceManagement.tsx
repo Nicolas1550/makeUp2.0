@@ -26,7 +26,7 @@ import { io } from "socket.io-client";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
 // Configuración del socket.io
-const socket = io("http://localhost:3001", { transports: ["websocket"] });
+const socket = io("https://backendiaecommerce.onrender.com", { transports: ["websocket"] });
 
 const UserServiceManagement: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -47,7 +47,7 @@ const UserServiceManagement: React.FC = () => {
 
         // Fetch available employees
         const employeesResponse = await axios.get(
-          `http://localhost:3001/api/users/empleados/disponibles/general`,
+          `https://backendiaecommerce.onrender.com/api/users/empleados/disponibles/general`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
