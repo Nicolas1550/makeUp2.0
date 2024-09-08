@@ -14,9 +14,16 @@ const FullWidthBackground = styled.div`
   width: 100%;
   background: linear-gradient(135deg, #1c1c1c 30%, #2a2a2a 100%);
   position: relative;
-  padding: 3rem 0;
+  padding: 2rem 0;
   overflow: hidden;
   color: #f5f5f5;
+
+  @media (max-width: 768px) {
+    padding: 1.5rem 0;
+  }
+  @media (max-width: 480px) {
+    padding: 1rem 0;
+  }
 `;
 
 const PatternOverlay = styled.div`
@@ -26,7 +33,7 @@ const PatternOverlay = styled.div`
   width: 100%;
   height: 100%;
   background-image: url("/background.webp");
-  opacity: 0.1; /* Más sutil */
+  opacity: 0.1;
   z-index: 0;
   pointer-events: none;
 `;
@@ -36,12 +43,17 @@ const CarouselContainer = styled.div`
   max-width: 900px;
   margin: 0 auto;
   padding: 2rem 0;
-  background: rgba(40, 40, 40, 0.3); /* Fondo más oscuro y menos transparente */
+  background: rgba(40, 40, 40, 0.3);
   border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2); /* Sombras más suaves */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
   position: relative;
   z-index: 1;
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    padding: 1rem 0;
+  }
 `;
 
 const SlideContainer = styled.div`
@@ -55,28 +67,36 @@ const SlideContainer = styled.div`
 
 const Image = styled(motion.img)`
   width: 100%;
-  max-width: 70%; /* Imagen un poco más pequeña */
+  max-width: 70%;
   height: auto;
   border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Sombras más sutiles */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
   border: 3px solid transparent;
 
   &:hover {
-    transform: scale(1.05); /* Menos zoom en hover */
+    transform: scale(1.05);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
-    border: 3px solid #d4af37; /* Un dorado más sutil */
+    border: 3px solid #d4af37;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 90%;
   }
 `;
 
 const Caption = styled(motion.div)`
   margin-top: 1rem;
   font-size: 1rem;
-  color: #d4af37; /* Dorado más suave */
+  color: #d4af37;
   text-align: center;
   font-weight: 600;
   text-transform: uppercase;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); /* Menos intensidad en la sombra del texto */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+
+  @media (max-width: 480px) {
+    font-size: 0.8rem;
+  }
 `;
 
 const BackgroundScene = styled.div`
@@ -94,15 +114,14 @@ const CustomParticles = () => {
 
   useFrame(({ clock }) => {
     if (particlesRef.current) {
-      particlesRef.current.rotation.x =
-        clock.getElapsedTime() * 0.01; /* Rotación más lenta */
+      particlesRef.current.rotation.x = clock.getElapsedTime() * 0.01;
       particlesRef.current.rotation.y = clock.getElapsedTime() * 0.01;
     }
   });
 
   const geometry = new THREE.BufferGeometry();
   const vertices = [];
-  const particleCount = 1500; /* Menos partículas para un efecto más limpio */
+  const particleCount = 1000; // Reducido para mejorar el rendimiento en dispositivos móviles
 
   for (let i = 0; i < particleCount; i++) {
     const x = THREE.MathUtils.randFloatSpread(150);
@@ -121,8 +140,8 @@ const CustomParticles = () => {
       <bufferGeometry attach="geometry" {...geometry} />
       <pointsMaterial
         attach="material"
-        color="#c0c0c0" /* Un gris metálico para las partículas */
-        size={1.2}
+        color="#c0c0c0"
+        size={1.0}
         sizeAttenuation
         transparent
         opacity={0.6}
@@ -151,9 +170,9 @@ const Carousel3D: React.FC = () => {
               enablePan={false}
               enableRotate={false}
             />
-            <ambientLight intensity={0.4} /> {/* Luz ambiente más suave */}
+            <ambientLight intensity={0.4} />
             <directionalLight position={[5, 5, 5]} intensity={0.4} />
-            <Environment preset="city" /> {/* Ambiente urbano */}
+            <Environment preset="city" />
             <CustomParticles />
           </Canvas>
         </BackgroundScene>
@@ -165,7 +184,7 @@ const Carousel3D: React.FC = () => {
           coverflowEffect={{
             rotate: 40,
             stretch: 0,
-            depth: 90,
+            depth: 80, // Ajustar para pantallas pequeñas
             modifier: 1,
             slideShadows: true,
           }}
