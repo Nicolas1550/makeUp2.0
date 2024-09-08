@@ -11,13 +11,10 @@ import {
   fetchAdminOrders,
   getOrdersStatus,
   getOrdersError,
-  selectAllOrders,
-  selectAdminOrders,
 } from "@/redux/features/orders/ordersSlice";
 
 import { ModalHeader } from "../modal/modalStyled";
 import OrdersModal from "./ordersModal";
-import AdminOrdersModal from "./adminOrderModal ";
 
 interface OrdersModalWrapperProps {
   isOpen: boolean;
@@ -33,9 +30,6 @@ const OrdersModalWrapper: React.FC<OrdersModalWrapperProps> = ({
   const dispatch = useAppDispatch();
   const ordersStatus = useAppSelector(getOrdersStatus);
   const error = useAppSelector(getOrdersError);
-
-  // Seleccionamos las órdenes en función del rol del usuario
-  const orders = useAppSelector(isAdmin ? selectAdminOrders : selectAllOrders);
 
   useEffect(() => {
     if (isOpen && ordersStatus === "idle") {
@@ -53,11 +47,7 @@ const OrdersModalWrapper: React.FC<OrdersModalWrapperProps> = ({
         <ModalHeader>
           {isAdmin ? "Órdenes Administrativas" : "Órdenes"}
         </ModalHeader>
-        {isAdmin ? (
-          <AdminOrdersModal isOpen={isOpen} onClose={onClose} />
-        ) : (
-          <OrdersModal isOpen={isOpen} onClose={onClose} />
-        )}
+        <OrdersModal isOpen={isOpen} onClose={onClose} isAdmin={isAdmin} />
         <ModalActions>
           <Button onClick={onClose}>Cerrar</Button>
         </ModalActions>

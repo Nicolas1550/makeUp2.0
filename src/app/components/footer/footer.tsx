@@ -1,4 +1,5 @@
-import React from 'react';
+"use client";
+import React, { useEffect, useState } from 'react';
 import {
   FooterContainer,
   FooterWrapper,
@@ -6,12 +7,24 @@ import {
   FooterLink,
   FooterText,
   FooterIconContainer,
-  FooterIcon
+  FooterIcon,
+  LocationContainer,
+  LocationText,
 } from './footerStyled';
+import { useAppSelector } from "@/redux/hooks";
+import { selectIsAuthenticated } from "@/redux/authSelectors";
+import { FaMapMarkerAlt } from "react-icons/fa"; 
 
 const Footer: React.FC = () => {
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const [forceRenderKey, setForceRenderKey] = useState<number>(0);
+
+  useEffect(() => {
+    setForceRenderKey((prevKey) => prevKey + 1);
+  }, [isAuthenticated]);
+
   return (
-    <FooterContainer>
+    <FooterContainer key={forceRenderKey}>
       <FooterWrapper>
         <FooterLinks>
           <FooterLink href="#">Inicio</FooterLink>
@@ -19,6 +32,7 @@ const Footer: React.FC = () => {
           <FooterLink href="#">Servicios</FooterLink>
           <FooterLink href="#">Contacto</FooterLink>
         </FooterLinks>
+
         <FooterIconContainer>
           <FooterIcon href="https://facebook.com" target="_blank" rel="noopener noreferrer">
             <i className="fab fa-facebook-f"></i>
@@ -30,7 +44,17 @@ const Footer: React.FC = () => {
             <i className="fab fa-instagram"></i>
           </FooterIcon>
         </FooterIconContainer>
-        <FooterText>© {new Date().getFullYear()} Sofia Luciuk. Todos los derechos reservados.</FooterText>
+
+        {/* Sección de ubicación con icono */}
+        <LocationContainer>
+          <FaMapMarkerAlt size={24} color="#FFD700" />
+          <LocationText>Av. Siempre Viva 123, Springfield</LocationText>
+        </LocationContainer>
+
+        {/* Texto del footer con el nombre y enlace a LinkedIn */}
+        <FooterText>
+          © {new Date().getFullYear()} <a href="https://www.linkedin.com/in/sofia-luciuk/" target="_blank" rel="noopener noreferrer" style={{ color: '#FFD700', textDecoration: 'none' }}>Nicolás Luciuk</a>. Todos los derechos reservados.
+        </FooterText>
       </FooterWrapper>
     </FooterContainer>
   );

@@ -39,4 +39,14 @@ export interface Servicio {
   nombre: string;
   descripcion: string;
   precio: number;
+  imagenUrl?: string; // Añadimos la propiedad para la imagen
+}
+export interface User {
+  id: string;
+  nombre: string;
+  apellido: string;
+  email: string;
+  roles: string[]; // Cambiado a un array de roles
+  telefono?: string;
+  fotoUrl?: string;
 }

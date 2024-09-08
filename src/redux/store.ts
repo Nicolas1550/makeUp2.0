@@ -6,6 +6,9 @@ import authReducer from "../redux/features/auth/authSlice";
 import uiReducer from "./features/ui/uiSlice";
 import disponibilidadReducer from "./features/disponibilidad/disponibilidadSlice";
 import ordersReducer from "./features/orders/ordersSlice";
+import productOrderReducer from './features/productOrder/productOrderSlice';
+import userReducer from "./features/user/userSlice";
+import serviceReducer from "./features/services/serviceSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +19,9 @@ export const store = configureStore({
     auth: authReducer,
     disponibilidad: disponibilidadReducer,
     orders: ordersReducer,
+    productOrders: productOrderReducer,
+    users: userReducer,
+    services: serviceReducer, 
   },
 });
 

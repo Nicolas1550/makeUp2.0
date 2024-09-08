@@ -1,150 +1,197 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "../../store";
-import { API_BASE_URL } from "../../../config";
-import { getToken } from "@/app/utils/utils";
-import { Product } from "../cart/cartSlice";
 
+// Definición de la interfaz Product
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+  imageFileName?: string;
+  quantity: number;
+  description?: string;
+  createdAt: string;
+  updatedAt: string;
+  isFeatured: boolean;  
+}
+
+// Estado inicial para los productos
 interface ProductState {
-  visibleProducts: Product[];
-  showMore: boolean;
+  products: Product[];
+  featuredProducts: Product[]; 
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
 
 const initialState: ProductState = {
-  visibleProducts: [],
-  showMore: false,
+  products: [],
+  featuredProducts: [],
   status: "idle",
   error: null,
 };
 
-export const fetchProducts = createAsyncThunk(
-  "products/fetchProducts",
+// Thunks
+
+// Obtener todos los productos
+export const fetchProducts = createAsyncThunk("products/fetchProducts", async () => {
+  const response = await axios.get("http://localhost:3001/api/products", {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+  return response.data;
+});
+
+// Obtener productos destacados
+export const fetchFeaturedProducts = createAsyncThunk(
+  "products/fetchFeaturedProducts",
   async () => {
-    const response = await axios.get<Product[]>(`${API_BASE_URL}/api/products`);
+    const response = await axios.get("http://localhost:3001/api/products/featured", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     return response.data;
   }
 );
 
-export const addProduct = createAsyncThunk(
-  "products/addProduct",
-  async (productData: FormData) => {
-    const response = await axios.post<Product>(
-      `${API_BASE_URL}/api/products/add`,
-      productData,
+// Marcar un producto como destacado
+export const featureProduct = createAsyncThunk(
+  "products/featureProduct",
+  async (id: number) => {
+    const response = await axios.put(
+      `http://localhost:3001/api/products/featured/${id}`,
+      { isFeatured: true },
       {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       }
     );
-    return response.data;
+    return response.data.product;
   }
 );
 
+// Quitar un producto del carrusel de ofertas
+export const unfeatureProduct = createAsyncThunk(
+  "products/unfeatureProduct",
+  async (id: number) => {
+    const response = await axios.put(
+      `http://localhost:3001/api/products/unfeature/${id}`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
+    return response.data.product;
+  }
+);
+
+// Agregar un producto
+export const addProduct = createAsyncThunk(
+  "products/addProduct",
+  async (newProduct: FormData) => {
+    const response = await axios.post("http://localhost:3001/api/products/add", newProduct, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    return response.data.product;
+  }
+);
+
+// Actualizar un producto
 export const updateProduct = createAsyncThunk(
   "products/updateProduct",
-  async (
-    productData: { id: string; formData: FormData },
-    { rejectWithValue }
-  ) => {
-    const token = getToken();
-    if (!token) {
-      return rejectWithValue("Authentication token is not available.");
-    }
-
-    try {
-      const response = await axios.put<Product>(
-        `${API_BASE_URL}/api/products/update/${productData.id}`,
-        productData.formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      return response.data;
-    } catch (error: any) {
-      if (error.response) {
-        return rejectWithValue(error.response.data);
+  async ({ id, updatedProduct }: { id: number; updatedProduct: FormData }) => {
+    const response = await axios.put(
+      `http://localhost:3001/api/products/update/${id}`,
+      updatedProduct,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       }
-      return rejectWithValue("An unknown error occurred.");
-    }
+    );
+    return response.data.product;
   }
 );
 
-export const deleteProduct = createAsyncThunk(
-  "products/deleteProduct",
-  async (id: string) => {
-    try {
-      const token = getToken();
-      if (!token) {
-        throw new Error("Authentication token is not available.");
-      }
-      const response = await axios.delete(
-        `${API_BASE_URL}/api/products/delete/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      return response.data;
-    } catch (error) {
-    }
-  }
-);
-
-export const productSlice = createSlice({
-  name: "product",
-  initialState,
-  reducers: {
-    setShowMore: (state, action: PayloadAction<boolean>) => {
-      state.showMore = action.payload;
+// Eliminar un producto
+export const deleteProduct = createAsyncThunk("products/deleteProduct", async (id: number) => {
+  await axios.delete(`http://localhost:3001/api/products/delete/${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
-  },
+  });
+  return id;
+});
+
+// Slice para manejar el estado de productos
+const productSlice = createSlice({
+  name: "products",
+  initialState,
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchProducts.pending, (state) => {
         state.status = "loading";
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
-        state.visibleProducts = action.payload;
         state.status = "succeeded";
+        state.products = action.payload;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
-        state.error = action.error.message || null;
         state.status = "failed";
+        state.error = action.error.message || "Failed to fetch products";
+      })
+      .addCase(fetchFeaturedProducts.fulfilled, (state, action) => {
+        state.featuredProducts = action.payload;
       })
       .addCase(addProduct.fulfilled, (state, action) => {
-        state.visibleProducts.push(action.payload);
-        state.status = "succeeded";
+        state.products.push(action.payload);
       })
       .addCase(updateProduct.fulfilled, (state, action) => {
-        const index = state.visibleProducts.findIndex(
-          (product) => product.id === action.payload.id
-        );
+        const index = state.products.findIndex((product) => product.id === action.payload.id);
         if (index !== -1) {
-          state.visibleProducts[index] = action.payload;
+          state.products[index] = action.payload;
         }
       })
-      .addCase(updateProduct.rejected, (state, action) => {
-        state.error = action.payload as string;
-      })
       .addCase(deleteProduct.fulfilled, (state, action) => {
-        state.visibleProducts = state.visibleProducts.filter(
-          (product) => product.id !== action.payload
+        state.products = state.products.filter((product) => product.id !== action.payload);
+      })
+      .addCase(featureProduct.fulfilled, (state, action) => {
+        const index = state.products.findIndex((product) => product.id === action.payload.id);
+        if (index !== -1) {
+          state.products[index] = action.payload;
+        }
+        state.featuredProducts.push(action.payload);
+      })
+      .addCase(unfeatureProduct.fulfilled, (state, action) => {
+        const index = state.products.findIndex((product) => product.id === action.payload.id);
+        if (index !== -1) {
+          state.products[index] = action.payload;
+        }
+        state.featuredProducts = state.featuredProducts.filter(
+          (product) => product.id !== action.payload.id
         );
       });
   },
 });
 
-export const { setShowMore } = productSlice.actions;
-
-export const selectShowMore = (state: RootState) => state.product.showMore;
-export const selectVisibleProducts = (state: RootState) =>
-  state.product.visibleProducts;
-
+// Exportar el reducer por defecto
 export default productSlice.reducer;
+
+// Selectores para acceder al estado desde los componentes
+export const selectAllProducts = (state: RootState) => state.product.products;
+export const selectFeaturedProducts = (state: RootState) => state.product.featuredProducts;
+export const getProductStatus = (state: RootState) => state.product.status;
+export const getProductError = (state: RootState) => state.product.error;

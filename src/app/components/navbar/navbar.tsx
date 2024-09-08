@@ -1,135 +1,196 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import { Canvas } from "@react-three/fiber";
-import { FaBars, FaTimes } from "react-icons/fa";
-import { checkAuthentication } from "@/redux/features/auth/authSlice";
+import Image from "next/image"; 
+import { FaBars, FaTimes, FaShoppingCart, FaUserCircle } from "react-icons/fa";
+import Badge from "@mui/material/Badge";
+import { motion } from "framer-motion";
 import {
   Nav,
   NavLinks,
   NavLink,
   Logo,
   NavContainer,
-  CanvasContainer,
   HamburgerIcon,
   MobileMenu,
   AuthButtons,
   AuthButton,
   LoadingSpinner,
+  DropdownButtonContainer,
+  DropdownMenu,
+  DropdownButton,
+  DropdownItem,
+  ProfileIcon,
+  ProfileDropdown,
+  ProfileDropdownItem,
 } from "./navbarStyled";
-import { motion } from "framer-motion";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { showAuthModal } from "@/redux/features/ui/uiSlice";
-import { useAuthToken } from "../../hooks/useAuthToken";
-import {
-  selectIsAuthenticated,
-  selectIsLoading,
-  selectIsAdmin, 
-} from "@/redux/authSelectors";
+import { Modal } from "@mui/material";
+import Cart from "../cart/cart";
+import { useNavbarLogic } from "./navbarLogic";
 
 const AuthModal = dynamic(() => import("../authModel/authModel"), {
   ssr: false,
 });
-
-const OrdersModalWrapper = dynamic(
-  () => import("../orders/ordersModalWrapper"),
-  {
-    ssr: false,
-  }
+const ProductOrdersModal = dynamic(
+  () => import("../productOrderModal/orderModal"),
+  { ssr: false }
+);
+const EcommerceWithAdmin = dynamic(
+  () => import("../ecommerce/ecommerceWithAdmin"),
+  { ssr: false }
 );
 
 const Navbar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isAuthChecked, setIsAuthChecked] = useState(false);
-  const [showButtons, setShowButtons] = useState(false);
-  const [isOrdersModalOpen, setIsOrdersModalOpen] = useState(false);
-  const dispatch = useAppDispatch();
-  const isAuthenticated = useAppSelector(selectIsAuthenticated);
-  const isLoading = useAppSelector(selectIsLoading);
-  const isAdmin = useAppSelector(selectIsAdmin); 
+  const {
+    isOpen,
+    toggleMenu,
+    isAuthChecked,
+    showButtons,
+    isProductOrdersModalOpen,
+    toggleProductOrdersModal,
+    isAdminPanelOpen,
+    toggleAdminPanel,
+    isCartOpen,
+    toggleCart,
+    isDropdownOpen,
+    toggleDropdown,
+    isMoreDropdownOpen,
+    toggleMoreDropdown,
+    isServicesDropdownOpen,
+    toggleServicesDropdown,
+    dropdownMenuRef,
+    moreDropdownRef,
+    servicesDropdownRef,
+    isAuthenticated,
+    user,
+    isLoading,
+    isAdmin,
+    cartItems,
+    handleAuthButtonClick,
+    handleLogoutClick,
+    profileImageUrl,
+    servicios,
+  } = useNavbarLogic();
 
-  const { logout } = useAuthToken();
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const token = localStorage.getItem("token");
-      if (token) {
-        dispatch(checkAuthentication()).finally(() => {
-          setIsAuthChecked(true);
-          setTimeout(() => setShowButtons(true), 100);
-        });
-      } else {
-        setIsAuthChecked(true);
-        setTimeout(() => setShowButtons(true), 100);
-      }
-    }
-  }, [dispatch]);
-
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const handleLogoutClick = () => {
-    logout();
-  };
-
-  const handleAuthButtonClick = (mode: "login" | "register") => {
-    dispatch(showAuthModal(mode));
-  };
-
-  const toggleOrdersModal = () => {
-    setIsOrdersModalOpen(!isOrdersModalOpen);
-  };
-
-  if (!isAuthChecked) {
-    return null;
-  }
+  if (!isAuthChecked) return null;
 
   return (
     <Nav>
-      <CanvasContainer>
-        <Canvas>
-          <ambientLight intensity={0.5} />
-          <pointLight position={[10, 10, 10]} />
-        </Canvas>
-      </CanvasContainer>
       <NavContainer>
         <HamburgerIcon onClick={toggleMenu}>
           {isOpen ? <FaTimes /> : <FaBars />}
         </HamburgerIcon>
         <Logo href="/">Salon Unisex</Logo>
         <NavLinks>
-          {["Servicios", "Nosotros", "Contacto"].map((item) => (
-            <motion.div
-              key={item}
-              whileHover={{
-                scale: 1.2,
-                transition: { duration: 0.3 },
-              }}
-            >
-              <Link href={`/${item.toLowerCase()}`} passHref>
-                <NavLink>{item}</NavLink>
-              </Link>
-            </motion.div>
-          ))}
+          <motion.div
+            whileHover={{ scale: 1.2, transition: { duration: 0.3 } }}
+          >
+            <Link href="/" passHref>
+              <NavLink>Inicio</NavLink>
+            </Link>
+          </motion.div>
+
+          <DropdownButtonContainer ref={servicesDropdownRef}>
+            <DropdownButton onClick={toggleServicesDropdown}>
+              Servicios
+            </DropdownButton>
+            {isServicesDropdownOpen && (
+              <DropdownMenu>
+                <DropdownItem>
+                  <Link href="/servicios" passHref>
+                    <NavLink>Cualquiera</NavLink>
+                  </Link>
+                </DropdownItem>
+                {servicios.map((servicio: any) => (
+                  <DropdownItem key={servicio.id}>
+                    <Link href={`/servicios/${servicio.id}`} passHref>
+                      <NavLink>{servicio.nombre}</NavLink>
+                    </Link>
+                  </DropdownItem>
+                ))}
+              </DropdownMenu>
+            )}
+          </DropdownButtonContainer>
+
+          <motion.div
+            whileHover={{ scale: 1.2, transition: { duration: 0.3 } }}
+          >
+            <Link href="/tienda" passHref>
+              <NavLink>Tienda</NavLink>
+            </Link>
+          </motion.div>
+
+          <DropdownButtonContainer ref={moreDropdownRef}>
+            <DropdownButton onClick={toggleMoreDropdown}>Más</DropdownButton>
+            {isMoreDropdownOpen && (
+              <DropdownMenu>
+                <DropdownItem>
+                  <Link href="/nosotros" passHref>
+                    <NavLink>Nosotros</NavLink>
+                  </Link>
+                </DropdownItem>
+                <DropdownItem>
+                  <Link href="/contacto" passHref>
+                    <NavLink>Contacto</NavLink>
+                  </Link>
+                </DropdownItem>
+              </DropdownMenu>
+            )}
+          </DropdownButtonContainer>
         </NavLinks>
+
         <AuthButtons>
+          <Badge
+            badgeContent={cartItems.length}
+            color="primary"
+            style={{ cursor: "pointer" }}
+            onClick={toggleCart}
+          >
+            <FaShoppingCart />
+          </Badge>
+
+          {isAdmin && (
+            <motion.div
+              whileHover={{ scale: 1.2, transition: { duration: 0.3 } }}
+            >
+              <AuthButton onClick={toggleAdminPanel}>Admin Panel</AuthButton>
+            </motion.div>
+          )}
+
           {!isLoading && showButtons ? (
             <>
               {!isAuthenticated ? (
-                <>
-                  <AuthButton onClick={() => handleAuthButtonClick("login")}>
-                    Iniciar Sesión
-                  </AuthButton>
-                  <AuthButton onClick={() => handleAuthButtonClick("register")}>
-                    Registrarse
-                  </AuthButton>
-                </>
+                <AuthButton onClick={handleAuthButtonClick}>
+                  Iniciar Sesión
+                </AuthButton>
               ) : (
                 <>
-                  <AuthButton onClick={handleLogoutClick}>Cerrar Sesión</AuthButton>
-                  <AuthButton onClick={toggleOrdersModal}>Pedidos</AuthButton>
+                  <DropdownButtonContainer ref={dropdownMenuRef}>
+                    <ProfileIcon onClick={toggleDropdown}>
+                      {profileImageUrl ? (
+                        <Image
+                          src={profileImageUrl}
+                          alt="profile"
+                          width={30}
+                          height={30}
+                        />
+                      ) : (
+                        <FaUserCircle size={30} />
+                      )}
+                    </ProfileIcon>
+
+                    {isDropdownOpen && (
+                      <ProfileDropdown>
+                        <ProfileDropdownItem onClick={toggleProductOrdersModal}>
+                          Órdenes de Productos
+                        </ProfileDropdownItem>
+                        <ProfileDropdownItem onClick={handleLogoutClick}>
+                          Cerrar Sesión
+                        </ProfileDropdownItem>
+                      </ProfileDropdown>
+                    )}
+                  </DropdownButtonContainer>
                 </>
               )}
             </>
@@ -137,27 +198,55 @@ const Navbar: React.FC = () => {
             <LoadingSpinner />
           )}
         </AuthButtons>
+
         <MobileMenu $isOpen={isOpen}>
-          {["Servicios", "Nosotros", "Contacto"].map((item) => (
+          <Link href="/" passHref>
+            <NavLink onClick={toggleMenu}>Inicio</NavLink>
+          </Link>
+          {["Servicios", "Tienda", "Nosotros", "Contacto"].map((item) => (
             <Link href={`/${item.toLowerCase()}`} passHref key={item}>
               <NavLink onClick={toggleMenu}>{item}</NavLink>
             </Link>
           ))}
+          <Badge
+            badgeContent={cartItems.length}
+            color="primary"
+            style={{ cursor: "pointer", alignSelf: "center" }}
+            onClick={toggleCart}
+          >
+            <FaShoppingCart />
+          </Badge>
+
+          {isAdmin && (
+            <AuthButton
+              onClick={toggleAdminPanel}
+              style={{ marginTop: "1rem" }}
+            >
+              Admin Panel
+            </AuthButton>
+          )}
+
           {!isLoading && showButtons ? (
             <>
               {!isAuthenticated ? (
-                <>
-                  <AuthButton onClick={() => handleAuthButtonClick("login")}>
-                    Iniciar Sesión
-                  </AuthButton>
-                  <AuthButton onClick={() => handleAuthButtonClick("register")}>
-                    Registrarse
-                  </AuthButton>
-                </>
+                <AuthButton onClick={handleAuthButtonClick}>
+                  Iniciar Sesión
+                </AuthButton>
               ) : (
                 <>
-                  <AuthButton onClick={handleLogoutClick}>Cerrar Sesión</AuthButton>
-                  <AuthButton onClick={toggleOrdersModal}>Pedidos</AuthButton>
+                  <DropdownButton onClick={toggleDropdown}>
+                    Pedidos
+                  </DropdownButton>
+                  {isDropdownOpen && (
+                    <DropdownMenu>
+                      <DropdownItem onClick={toggleProductOrdersModal}>
+                        Órdenes de Productos
+                      </DropdownItem>
+                    </DropdownMenu>
+                  )}
+                  <AuthButton onClick={handleLogoutClick}>
+                    Cerrar Sesión
+                  </AuthButton>
                 </>
               )}
             </>
@@ -167,13 +256,30 @@ const Navbar: React.FC = () => {
         </MobileMenu>
       </NavContainer>
       {isAuthChecked && <AuthModal />}
-      {isOrdersModalOpen && (
-        <OrdersModalWrapper
-          isOpen={isOrdersModalOpen}
-          onClose={toggleOrdersModal}
-          isAdmin={isAdmin} 
+      {isProductOrdersModalOpen && (
+        <ProductOrdersModal
+          open={isProductOrdersModalOpen}
+          onClose={toggleProductOrdersModal}
         />
       )}
+      <Modal
+        open={isAdminPanelOpen}
+        onClose={toggleAdminPanel}
+        aria-labelledby="admin-panel-modal"
+      >
+        <div>
+          <EcommerceWithAdmin onClose={toggleAdminPanel} />
+        </div>
+      </Modal>
+      <Modal
+        open={isCartOpen}
+        onClose={toggleCart}
+        aria-labelledby="cart-modal"
+      >
+        <div>
+          <Cart isOpen={isCartOpen} onClose={toggleCart} />
+        </div>
+      </Modal>
     </Nav>
   );
 };

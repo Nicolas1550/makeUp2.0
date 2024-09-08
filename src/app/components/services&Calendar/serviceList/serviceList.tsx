@@ -1,26 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
 import { Servicio } from "@/app/types/types";
-import { useAppSelector } from "@/redux/hooks";
-import { RootState } from "@/redux/store";
-import ServiceCalendarModal from "../calendar/serviceCalendarModal";
-import ServiceCard from "../serviceCard/serviceCard";
 import { CardContainer } from "../serviceCard/serviceCardStyled";
+import ServiceCard from "../serviceCard/serviceCard";
+import ServiceEmployeesModal from "./serviceEmployees";
 
 const ServiceList: React.FC = () => {
   const [servicios, setServicios] = useState<Servicio[]>([]);
   const [selectedServicio, setSelectedServicio] = useState<Servicio | null>(
     null
   );
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const user = useAppSelector((state: RootState) => state.auth.user);
-  const isAdmin = user?.role === "admin";
 
   useEffect(() => {
     const fetchServicios = async () => {
       try {
-        const response = await axios.get("https://backendiaecommerce.onrender.com/api/servicios");
+        const response = await axios.get("http://localhost:3001/api/servicios");
         setServicios(response.data);
       } catch (error) {
         console.error("Error fetching servicios:", error);
@@ -31,11 +25,9 @@ const ServiceList: React.FC = () => {
 
   const handleReserveClick = (servicio: Servicio) => {
     setSelectedServicio(servicio);
-    setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
     setSelectedServicio(null);
   };
 
@@ -52,11 +44,9 @@ const ServiceList: React.FC = () => {
       </CardContainer>
 
       {selectedServicio && (
-        <ServiceCalendarModal
-          servicio={selectedServicio}
-          isOpen={isModalOpen}
+        <ServiceEmployeesModal
+          serviceId={selectedServicio.id.toString()}
           onClose={handleCloseModal}
-          isAdmin={isAdmin}
         />
       )}
     </div>

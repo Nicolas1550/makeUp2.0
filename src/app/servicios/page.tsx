@@ -7,7 +7,7 @@ import Footer from "../components/footer/footer";
 import HeroSlider from "../components/services&Calendar/slider/slider";
 
 const ServicesPage: React.FC = () => {
-  const [hasMounted, setHasMounted] = useState(false); // Estado para forzar el renderizado después de montar
+  const [hasMounted, setHasMounted] = useState(false); 
   const serviceListRef = useRef<HTMLDivElement | null>(null);
 
   // Función que se ejecutará al hacer clic en "Reservar Ahora"
@@ -29,13 +29,11 @@ const ServicesPage: React.FC = () => {
 
   return (
     <>
-      <Navbar />
       <Services onReserveClick={handleReserveClick} />
       <HeroSlider />
       <div ref={serviceListRef}>
         <ServiceList />
       </div>
-      <Footer />
     </>
   );
 };

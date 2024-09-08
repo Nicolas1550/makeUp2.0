@@ -16,9 +16,8 @@ interface Disponibilidad {
   fecha_fin: string;
   disponible: boolean;
   servicio: Servicio | null;
-  numOrders?: number; 
+  numOrders?: number;
 }
-
 
 interface Order {
   id: number;
@@ -43,14 +42,14 @@ interface OrdersState {
 
 const initialState: OrdersState = {
   orders: [],
-  adminOrders: [], 
+  adminOrders: [],
   status: "idle",
   error: null,
 };
 
 // Thunk para obtener todas las órdenes de un usuario
 export const fetchOrders = createAsyncThunk("orders/fetchOrders", async () => {
-  const response = await axios.get("https://backendiaecommerce.onrender.com/api/orders", {
+  const response = await axios.get("http://localhost:3001/api/orders", {
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -63,12 +62,15 @@ export const fetchOrders = createAsyncThunk("orders/fetchOrders", async () => {
 export const fetchAdminOrders = createAsyncThunk(
   "orders/fetchAdminOrders",
   async () => {
-    const response = await axios.get("https://backendiaecommerce.onrender.com/api/orders/admin/orders", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
+    const response = await axios.get(
+      "http://localhost:3001/api/orders/admin/orders",
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        }
+      }
+    );
     return response.data;
   }
 );
@@ -78,13 +80,13 @@ export const updateOrderStatus = createAsyncThunk(
   "orders/updateOrderStatus",
   async ({ orderId, status }: { orderId: number; status: string }) => {
     const response = await axios.put(
-      `https://backendiaecommerce.onrender.com/api/orders/admin/orders/${orderId}`,
+      `http://localhost:3001/api/orders/admin/orders/${orderId}`,
       { status },
       {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+        }
       }
     );
     return response.data;
@@ -96,12 +98,12 @@ export const fetchOrderById = createAsyncThunk(
   "orders/fetchOrderById",
   async (orderId: number) => {
     const response = await axios.get(
-      `https://backendiaecommerce.onrender.com/api/orders/${orderId}`,
+      `http://localhost:3001/api/orders/${orderId}`,
       {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
+        }
       }
     );
     return response.data;
@@ -159,17 +161,25 @@ const ordersSlice = createSlice({
         );
         if (index !== -1) {
           state.adminOrders[index] = action.payload;
+        } else {
+          state.adminOrders.push(action.payload);
         }
       })
       // Estado para fetchOrderById
       .addCase(fetchOrderById.fulfilled, (state, action) => {
+        const order = action.payload;
         const index = state.orders.findIndex(
           (order) => order.id === action.payload.id
         );
         if (index === -1) {
-          state.orders.push(action.payload);
+          state.orders.push(order);
         } else {
-          state.orders[index] = action.payload;
+          state.orders[index] = order;
+        }
+
+        // Verificar si todos los datos están presentes
+        if (!order.disponibilidad || !order.user) {
+        } else {
         }
       });
   },

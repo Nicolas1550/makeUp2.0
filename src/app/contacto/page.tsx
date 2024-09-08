@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import Navbar from "../components/navbar/navbar";
+import emailjs from 'emailjs-com';
 
 const ContenedorContacto = styled.div`
   background-color: #1c1c1c;
@@ -116,31 +116,21 @@ const PaginaContacto: React.FC = () => {
   const enviarCorreo = async (e: React.FormEvent) => {
     e.preventDefault();
     setCargando(true);
-
-    const datosFormulario = new FormData(formulario.current!);
-    const datos = {
-      nombre_usuario: datosFormulario.get("user_name"),
-      correo_usuario: datosFormulario.get("user_email"),
-      mensaje: datosFormulario.get("message"),
-    };
-
+    
     try {
-      const respuesta = await fetch("https://backendiaecommerce.onrender.com/api/email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(datos),
-      });
-
-      if (respuesta.ok) {
-        alert("¡Mensaje enviado con éxito!");
-      } else {
-        alert("Error al enviar el mensaje. Inténtalo de nuevo.");
+      if (formulario.current) {
+        await emailjs.sendForm(
+          'service_mwmmqvd',  
+          'template_n3xuwgd',  
+          formulario.current,
+          'R93T5B0hw-lOz08xE' 
+        );
+        alert('¡Mensaje enviado con éxito!');
+        formulario.current.reset(); 
       }
     } catch (error) {
-      console.error("Error al enviar el correo:", error);
-      alert("Ocurrió un error. Inténtalo de nuevo.");
+      console.error('Error al enviar el correo:', error);
+      alert('Ocurrió un error. Inténtalo de nuevo.');
     } finally {
       setCargando(false);
     }
@@ -151,44 +141,40 @@ const PaginaContacto: React.FC = () => {
   }
 
   return (
-    <>
-      <Navbar />
+    <ContenedorContacto>
+      <ContenidoContacto>
+        <EncabezadoContacto>Contáctanos</EncabezadoContacto>
+        <ParrafoContacto>
+          ¡Estamos aquí para ayudarte! Llena el formulario a continuación y un
+          miembro de nuestro equipo se pondrá en contacto contigo lo antes
+          posible.
+        </ParrafoContacto>
 
-      <ContenedorContacto>
-        <ContenidoContacto>
-          <EncabezadoContacto>Contáctanos</EncabezadoContacto>
-          <ParrafoContacto>
-            ¡Estamos aquí para ayudarte! Llena el formulario a continuación y un
-            miembro de nuestro equipo se pondrá en contacto contigo lo antes
-            posible.
-          </ParrafoContacto>
-
-          <FormularioContacto ref={formulario} onSubmit={enviarCorreo}>
-            <InputFormulario
-              type="text"
-              name="user_name"
-              placeholder="Tu Nombre"
-              required
-            />
-            <InputFormulario
-              type="email"
-              name="user_email"
-              placeholder="Tu Correo Electrónico"
-              required
-            />
-            <TextAreaFormulario
-              name="message"
-              placeholder="Tu Mensaje"
-              rows={6}
-              required
-            />
-            <BotonEnviar type="submit" disabled={cargando}>
-              {cargando ? "Enviando..." : "Enviar Mensaje"}
-            </BotonEnviar>
-          </FormularioContacto>
-        </ContenidoContacto>
-      </ContenedorContacto>
-    </>
+        <FormularioContacto ref={formulario} onSubmit={enviarCorreo}>
+          <InputFormulario
+            type="text"
+            name="from_name"  
+            placeholder="Tu Nombre"
+            required
+          />
+          <InputFormulario
+            type="email"
+            name="user_email" 
+            placeholder="Tu Correo Electrónico"
+            required
+          />
+          <TextAreaFormulario
+            name="message" 
+            placeholder="Tu Mensaje"
+            rows={6}
+            required
+          />
+          <BotonEnviar type="submit" disabled={cargando}>
+            {cargando ? 'Enviando...' : 'Enviar Mensaje'}
+          </BotonEnviar>
+        </FormularioContacto>
+      </ContenidoContacto>
+    </ContenedorContacto>
   );
 };
 

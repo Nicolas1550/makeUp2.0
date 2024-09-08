@@ -1,17 +1,21 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
 
+// Interfaz Product actualizada según tu definición
 export interface Product {
-  id: string;
+  id: number;
   name: string;
   price: number;
+  imageFileName?: string;
   quantity: number;
-  imageUrl?: string; 
-  imageFileName?: string; 
+  description?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
+// Extender la interfaz Product para incluir CartProduct
 export interface CartProduct extends Product {
-  imageUrl: string; 
+  imageUrl: string;
 }
 
 interface CartState {
@@ -36,18 +40,20 @@ export const cartSlice = createSlice({
       );
       const cartProduct: CartProduct = {
         ...action.payload,
-        imageUrl: action.payload.imageUrl || "", 
+        imageUrl: `http://localhost:3001/uploads/images/${
+          action.payload.imageFileName || ""
+        }`,
       };
       if (index !== -1) {
-        state.cartItems[index].quantity += 1; 
+        state.cartItems[index].quantity += 1;
       } else {
-        state.cartItems.push({ ...cartProduct, quantity: 1 }); 
+        state.cartItems.push({ ...cartProduct, quantity: 1 });
       }
       if (isClient) {
         localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
       }
     },
-    removeFromCart: (state, action: PayloadAction<string>) => {
+    removeFromCart: (state, action: PayloadAction<number>) => {
       state.cartItems = state.cartItems.filter(
         (item) => item.id !== action.payload
       );
@@ -55,15 +61,18 @@ export const cartSlice = createSlice({
         localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
       }
     },
-    incrementQuantity: (state, action: PayloadAction<string>) => {
+    incrementQuantity: (state, action: PayloadAction<number>) => {
       const index = state.cartItems.findIndex(
         (item) => item.id === action.payload
       );
       if (index !== -1) {
         state.cartItems[index].quantity += 1;
       }
+      if (isClient) {
+        localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
+      }
     },
-    decrementQuantity: (state, action: PayloadAction<string>) => {
+    decrementQuantity: (state, action: PayloadAction<number>) => {
       const index = state.cartItems.findIndex(
         (item) => item.id === action.payload
       );
@@ -71,6 +80,15 @@ export const cartSlice = createSlice({
         if (state.cartItems[index].quantity > 1) {
           state.cartItems[index].quantity -= 1;
         }
+      }
+      if (isClient) {
+        localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
+      }
+    },
+    clearCart: (state) => {
+      state.cartItems = [];
+      if (isClient) {
+        localStorage.removeItem("cartItems");
       }
     },
   },
@@ -81,6 +99,9 @@ export const {
   removeFromCart,
   incrementQuantity,
   decrementQuantity,
+  clearCart, 
 } = cartSlice.actions;
+
 export const selectCartItems = (state: RootState) => state.cart.cartItems;
+
 export default cartSlice.reducer;

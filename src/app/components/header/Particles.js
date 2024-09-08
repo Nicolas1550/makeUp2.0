@@ -7,13 +7,13 @@ const Particles = () => {
   const materialRef = useRef();
 
   useEffect(() => {
-    const particlesCount = 500; // Reducir el número de partículas
+    const particlesCount = 500; 
     const positions = new Float32Array(particlesCount * 3);
 
     for (let i = 0; i < particlesCount; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 20; // Mayor dispersión
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 20; // Mayor dispersión
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 20; // Mayor dispersión
+      positions[i * 3] = (Math.random() - 0.5) * 20; 
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 20; 
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 20; 
     }
 
     if (particlesRef.current) {
@@ -27,11 +27,11 @@ const Particles = () => {
 
   useFrame((state) => {
     if (particlesRef.current) {
-      particlesRef.current.rotation.y += 0.001; // Rotación lenta
+      particlesRef.current.rotation.y += 0.001; 
     }
     if (materialRef.current) {
       const time = state.clock.getElapsedTime();
-      materialRef.current.opacity = 0.5 + 0.5 * Math.sin(time * 2); // Efecto de encendido y apagado
+      materialRef.current.opacity = 0.5 + 0.5 * Math.sin(time * 2); 
     }
   });
 
@@ -42,7 +42,7 @@ const Particles = () => {
         ref={materialRef}
         attach="material"
         color={0xffd700}
-        size={0.15} // Aumentar el tamaño de las partículas
+        size={0.15} 
         sizeAttenuation
         transparent
         opacity={0.75}

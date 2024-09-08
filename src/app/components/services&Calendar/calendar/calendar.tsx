@@ -20,7 +20,7 @@ import {
 import { Disponibilidad } from "@/app/types/types";
 import { RootState } from "@/redux/store";
 import ReserveModal from "../../reservas/ReservationModal";
-import Modal from "../../modal/modal"; // Modal para administradores
+import Modal from "../../modal/modal"; 
 
 moment.tz.setDefault("America/Argentina/Buenos_Aires");
 const localizer = momentLocalizer(moment);
@@ -62,14 +62,19 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
   const [selectedDisponibilidad, setSelectedDisponibilidad] =
     useState<Disponibilidad | null>(null);
   const [isReserveModalOpen, setIsReserveModalOpen] = useState<boolean>(false);
-  const [isAdminModalOpen, setIsAdminModalOpen] = useState<boolean>(false); // Para el modal del administrador
+  const [isAdminModalOpen, setIsAdminModalOpen] = useState<boolean>(false); 
 
   useEffect(() => {
     dispatch(fetchDisponibilidadesByService(servicioId));
   }, [dispatch, servicioId, currentDate]);
 
   const handleSelectSlot = (slotInfo: SlotInfo) => {
-    if (user?.role === "admin" && currentView === "day") {
+    if (
+      user?.roles.some(
+        (role) => typeof role === "object" && role.nombre === "admin"
+      ) &&
+      currentView === "day"
+    ) {
       const start = moment(slotInfo.start).toISOString();
       const end = moment(slotInfo.end).toISOString();
 
@@ -79,8 +84,9 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
         fecha_fin: end,
         disponible: true,
         servicio_nombre: "Nombre del servicio",
-        servicio_precio: 100, // Rellenar con el precio correcto
+        servicio_precio: 100, 
       };
+
 
       dispatch(addDisponibilidad(disponibilidadToSave)).then(() => {
         dispatch(fetchDisponibilidadesByService(servicioId));
@@ -89,7 +95,12 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
   };
 
   const handleSelectEvent = (event: Disponibilidad) => {
-    if (user?.role === "admin") {
+    if (
+      user?.roles.some(
+        (role) => typeof role === "object" && role.nombre === "admin"
+      ) &&
+      currentView === "day"
+    ) {
       // Ajustamos el tiempo sumando 3 horas para corregir el desfase también en el modal de admin
       const adjustedEvent = {
         ...event,
@@ -121,10 +132,13 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
 
   const handleReserveDisponibilidad = () => {
     if (selectedDisponibilidad && selectedDisponibilidad.id) {
-      const updatedDisponibilidad = {
+      const updatedDisponibilidad: Disponibilidad = {
         ...selectedDisponibilidad,
+        servicio_id: selectedDisponibilidad.servicio_id || servicioId, // Asegura que servicio_id esté presente
         disponible: false, // Cambiamos a false para marcar como reservada
       };
+
+   
 
       dispatch(updateDisponibilidad(updatedDisponibilidad))
         .then(() => {
@@ -172,7 +186,13 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
           endAccessor="end"
           titleAccessor="title"
           style={{ height: "100%" }}
-          selectable={user?.role === "admin"}
+          selectable={user?.roles?.some((role) => {
+            if (typeof role === "string") {
+              return role === "admin";
+            } else {
+              return role.nombre === "admin";
+            }
+          })}
           onSelectSlot={handleSelectSlot}
           onSelectEvent={handleSelectEvent}
           view={currentView}
@@ -184,35 +204,51 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
       </CalendarContainer>
 
       {/* Modal para confirmar reserva solo visible para usuarios no admin */}
-      {selectedDisponibilidad && user?.role !== "admin" && (
-        <ReserveModal
-          disponibilidad={selectedDisponibilidad}
-          isOpen={isReserveModalOpen}
-          onClose={handleCloseReserveModal}
-          closeParentModal={closeParentModal}
-        />
-      )}
+      {selectedDisponibilidad &&
+        user?.roles?.some((role) => {
+          if (typeof role === "string") {
+            return role === "admin";
+          } else {
+            return role.nombre === "admin";
+          }
+        }) && (
+          <ReserveModal
+            disponibilidad={selectedDisponibilidad}
+            isOpen={isReserveModalOpen}
+            onClose={handleCloseReserveModal}
+            closeParentModal={closeParentModal}
+          />
+        )}
 
       {/* Modal para opciones de admin: Eliminar o Reservar */}
-      {selectedDisponibilidad && user?.role === "admin" && (
-        <Modal
-          title="Opciones de Disponibilidad"
-          isOpen={isAdminModalOpen}
-          onClose={handleCloseAdminModal}
-          actions={[
-            { label: "Eliminar", handler: handleDeleteDisponibilidad },
-            { label: "Reservar", handler: handleReserveDisponibilidad }, // Mismo flujo de reserva que los usuarios
-            { label: "Cerrar", handler: handleCloseAdminModal },
-          ]}
-        >
-          <p>¿Qué te gustaría hacer con esta disponibilidad?</p>
-          <p>Servicio: {selectedDisponibilidad.servicio_nombre}</p>
-          <p>
-            Desde: {moment(selectedDisponibilidad.fecha_inicio).format("LLL")}
-          </p>
-          <p>Hasta: {moment(selectedDisponibilidad.fecha_fin).format("LLL")}</p>
-        </Modal>
-      )}
+      {selectedDisponibilidad &&
+        user?.roles?.some((role) => {
+          if (typeof role === "string") {
+            return role === "admin";
+          } else {
+            return role.nombre === "admin";
+          }
+        }) && (
+          <Modal
+            title="Opciones de Disponibilidad"
+            isOpen={isAdminModalOpen}
+            onClose={handleCloseAdminModal}
+            actions={[
+              { label: "Eliminar", handler: handleDeleteDisponibilidad },
+              { label: "Reservar", handler: handleReserveDisponibilidad }, // Mismo flujo de reserva que los usuarios
+              { label: "Cerrar", handler: handleCloseAdminModal },
+            ]}
+          >
+            <p>¿Qué te gustaría hacer con esta disponibilidad?</p>
+            <p>Servicio: {selectedDisponibilidad.servicio_nombre}</p>
+            <p>
+              Desde: {moment(selectedDisponibilidad.fecha_inicio).format("LLL")}
+            </p>
+            <p>
+              Hasta: {moment(selectedDisponibilidad.fecha_fin).format("LLL")}
+            </p>
+          </Modal>
+        )}
     </div>
   );
 };

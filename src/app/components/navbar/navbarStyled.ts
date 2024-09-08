@@ -82,12 +82,13 @@ export const Logo = styled.a`
 export const NavLinks = styled.div`
   display: flex;
   gap: 2rem;
+  align-items: center;
+  justify-content: center;  /* Alinear horizontalmente los links */
 
   @media (max-width: 1000px) {
     display: none;
   }
 `;
-
 export const NavLink = styled.div`
   color: #f8f9fa;
   text-decoration: none;
@@ -148,12 +149,14 @@ export const MobileMenu = styled.div<{ $isOpen: boolean }>`
 
 export const AuthButtons = styled.div`
   display: flex;
+  align-items: center; /* Alinea verticalmente los elementos dentro de AuthButtons */
   gap: 1rem;
 
   @media (max-width: 1000px) {
     display: none;
   }
 `;
+
 
 export const AuthButton = styled.a`
   background-color: #ffd700;
@@ -192,4 +195,113 @@ export const LoadingSpinner = styled.div`
   width: 20px;
   height: 20px;
   animation: ${spin} 1s linear infinite;
+`;
+
+export const DropdownButton = styled.button`
+  background-color: #ffd700;
+  color: #1c1c1c;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  position: relative;  /* Añadir posición relativa al botón */
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+
+  &:hover {
+    background-color: #e5c200;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  }
+`;
+
+export const DropdownMenu = styled.div`
+  position: absolute;
+  top: 110%;  /* Posicionar justo debajo del botón */
+  left: 0;  /* Alinearlo con el botón */
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  z-index: 10;
+  min-width: 160px;  /* Tamaño adecuado para las palabras "Nosotros" y "Contacto" */
+`;
+
+export const DropdownItem = styled.button`
+  background-color: transparent;
+  color: #f8f9fa;
+  padding: 0.8rem 1.2rem;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #333;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+`;
+
+
+
+export const DropdownButtonContainer = styled.div`
+  position: relative;  /* Contenedor relativo para que el menú siga al botón */
+  display: inline-block;
+`;
+
+export const ProfileIcon = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  svg {
+    font-size: 40px;
+    color: #fff;
+  }
+`;
+
+export const ProfileDropdown = styled.div`
+  position: absolute;
+  top: 110%;  /* Posicionarlo justo debajo del icono */
+  right: 0;  /* Mantener el comportamiento de apertura hacia la izquierda */
+  background-color: #1a1a1a;  /* Color de fondo igual que el de "Más" */
+  border-radius: 8px;  /* Bordes redondeados */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);  /* Sombra consistente */
+  overflow: hidden;
+  z-index: 10;
+  min-width: 160px;  /* Mismo tamaño que el menú de "Más" */
+`;
+
+export const ProfileDropdownItem = styled.button`
+  background-color: transparent;
+  color: #f8f9fa;  /* Color de texto claro */
+  padding: 0.8rem 1.2rem;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #333;  /* Color de fondo en hover */
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
 `;

@@ -20,6 +20,7 @@ import {
   Input,
   Button,
   Error,
+  FormRow,
 } from "./AuthModalStyled";
 
 const AuthModal: React.FC = () => {
@@ -39,18 +40,44 @@ const AuthModal: React.FC = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(""); 
   const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
+  const [telefono, setTelefono] = useState("");
+  const [foto, setFoto] = useState<File | null>(null);
+  const [passwordError, setPasswordError] = useState("");
+  const [isRegistering, setIsRegistering] = useState(false);  
+  const [isLoggingIn, setIsLoggingIn] = useState(false);  
 
-  const isLogin = modalMode === "login";
+  const isLogin = modalMode === "login";  
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoggingIn(true);  
     dispatch(loginUser({ email, password }));
   };
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(registerUser({ nombre, email, password }));
+    setIsRegistering(true);  
+
+    if (password !== confirmPassword) {
+      setPasswordError("Las contraseñas no coinciden");
+      return;
+    }
+    setPasswordError("");
+
+    const formData = new FormData();
+    formData.append("nombre", nombre);
+    formData.append("apellido", apellido);
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("telefono", telefono);
+    if (foto) {
+      formData.append("foto", foto);
+    }
+
+    dispatch(registerUser(formData));
   };
 
   useEffect(() => {
@@ -76,33 +103,52 @@ const AuthModal: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (status === "succeeded") {
-      dispatch(hideAuthModal());
+
+    // Solo cambiar a "login" después de un registro exitoso, no al cambiar manualmente entre modos
+    if (status === "succeeded" && isRegistering) {
+      dispatch(setAuthModalMode("login"));  
+      setIsRegistering(false);  
     } else if (status === "failed" && error) {
       setTimeout(() => {
         dispatch(clearError());
       }, 3000);
     }
-  }, [status, dispatch, error]);
+
+    if (status === "succeeded" && isLogin && isLoggingIn) {
+      dispatch(hideAuthModal());
+      setIsLoggingIn(false);  
+    }
+  }, [status, dispatch, error, modalMode, isRegistering, isLoggingIn, isLogin]);
 
   useEffect(() => {
     if (!showModal) {
       setEmail("");
       setPassword("");
+      setConfirmPassword(""); 
       setNombre("");
+      setApellido("");
+      setTelefono("");
+      setFoto(null);
       dispatch(clearError());
     }
   }, [showModal, dispatch]);
 
+  // Alternar entre el modo de login y registro
   const toggleAuthMode = () => {
-    // Cambia solo el modo sin cerrar el modal
-    dispatch(setAuthModalMode(isLogin ? "register" : "login"));
+    setIsLoggingIn(false);  
+    if (modalMode === "login") {
+      dispatch(setAuthModalMode("register"));
+    } else {
+      dispatch(setAuthModalMode("login"));
+    }
   };
 
   return (
     <Modal $show={showModal}>
       <ModalContent $show={showModal}>
-        <ModalClose onClick={() => dispatch(hideAuthModal())}>
+        <ModalClose onClick={() => {
+          dispatch(hideAuthModal());
+        }}>
           &times;
         </ModalClose>
         <h1>{isLogin ? "Iniciar Sesión" : "Registrarse"}</h1>
@@ -114,31 +160,93 @@ const AuthModal: React.FC = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder=" "
               autoComplete="email"
+              required
             />
             <Label className={email ? "filled" : ""}>Correo Electrónico</Label>
           </Field>
+
           <Field>
             <Input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder=" "
-              autoComplete="current-password"
+              autoComplete="new-password"
+              required
             />
             <Label className={password ? "filled" : ""}>Contraseña</Label>
           </Field>
-          {!isLogin && (
-            <Field>
-              <Input
-                type="text"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-                placeholder=" "
-                autoComplete="name"
-              />
-              <Label className={nombre ? "filled" : ""}>Nombre</Label>
-            </Field>
+
+          {!isLogin && ( // Mostrar estos campos solo en el modo de registro
+            <>
+              <Field>
+                <Input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder=" "
+                  autoComplete="new-password"
+                  required
+                />
+                <Label className={confirmPassword ? "filled" : ""}>
+                  Confirmar Contraseña
+                </Label>
+              </Field>
+              <Error>{passwordError}</Error>
+
+              <FormRow>
+                <Field>
+                  <Input
+                    type="text"
+                    value={nombre}
+                    onChange={(e) => setNombre(e.target.value)}
+                    placeholder=" "
+                    autoComplete="name"
+                    required
+                  />
+                  <Label className={nombre ? "filled" : ""}>Nombre</Label>
+                </Field>
+
+                <Field>
+                  <Input
+                    type="text"
+                    value={apellido}
+                    onChange={(e) => setApellido(e.target.value)}
+                    placeholder=" "
+                    autoComplete="family-name"
+                    required
+                  />
+                  <Label className={apellido ? "filled" : ""}>Apellido</Label>
+                </Field>
+              </FormRow>
+
+              <Field>
+                <Input
+                  type="tel"
+                  value={telefono}
+                  onChange={(e) => setTelefono(e.target.value)}
+                  placeholder=" "
+                  autoComplete="tel"
+                  required
+                />
+                <Label className={telefono ? "filled" : ""}>Teléfono</Label>
+              </Field>
+
+              <Field>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) =>
+                    setFoto(e.target.files ? e.target.files[0] : null)
+                  }
+                />
+                <Label className={foto ? "filled" : ""}>
+                  Foto de Perfil (opcional)
+                </Label>
+              </Field>
+            </>
           )}
+
           {error && (
             <Error>
               {typeof error === "object"
@@ -146,11 +254,13 @@ const AuthModal: React.FC = () => {
                 : error}
             </Error>
           )}
+
           <div className="mt-4">
             <Button type="submit" disabled={isLoading}>
               {isLogin ? "Iniciar Sesión" : "Registrarse"}
             </Button>
           </div>
+
           <div className="mt-4">
             <Button type="button" onClick={toggleAuthMode}>
               {isLogin ? "Ir a Registrarse" : "Ir a Iniciar Sesión"}

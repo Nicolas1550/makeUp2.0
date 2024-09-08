@@ -121,3 +121,10 @@ export const Error = styled.p`
   margin-top: 1rem;
   text-align: center;
 `;
+
+/* Nuevo estilo para organizar campos horizontalmente */
+export const FormRow = styled.div`
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+`;
