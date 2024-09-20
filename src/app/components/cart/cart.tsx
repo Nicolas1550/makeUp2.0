@@ -27,6 +27,7 @@ import {
   RemoveButton,
   CheckoutButton,
 } from "./cartStyles";
+import { selectAllProducts } from "@/redux/features/product/productSlice";
 
 const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   isOpen,
@@ -34,6 +35,7 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
 }) => {
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector(selectCartItems);
+  const products = useAppSelector(selectAllProducts); // Obtener los productos del estado global
   const isAuthenticated = useAppSelector(selectIsAuthenticated); // Verificar autenticación
   const isAuthModalVisible = useAppSelector(
     (state: RootState) => state.ui.isAuthModalVisible
@@ -56,8 +58,18 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
     }
   }, [isAuthenticated, isCheckoutOpen, dispatch]);
 
+  // Función para verificar el stock antes de incrementar la cantidad
   const handleIncrement = (id: number) => {
-    dispatch(incrementQuantity(id));
+    const productInStore = products.find((product) => product.id === id);
+    const cartItem = cartItems.find((item) => item.id === id);
+
+    if (productInStore && cartItem) {
+      if (cartItem.quantity < productInStore.quantity) {
+        dispatch(incrementQuantity(id));
+      } else {
+        alert("No hay suficiente stock disponible para este producto.");
+      }
+    }
   };
 
   const handleDecrement = (id: number) => {

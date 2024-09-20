@@ -3,7 +3,8 @@ import axios from "axios";
 import { RootState } from "../../store";
 
 // Definición de la interfaz Product
-interface Product {
+// Interfaz Product
+export interface Product {
   id: number;
   name: string;
   price: number;
@@ -12,8 +13,9 @@ interface Product {
   description?: string;
   createdAt: string;
   updatedAt: string;
-  isFeatured: boolean;  
+  isFeatured?: boolean; // Hacer que sea opcional
 }
+
 
 // Estado inicial para los productos
 interface ProductState {

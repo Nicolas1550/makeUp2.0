@@ -1,17 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
-
-// Interfaz Product actualizada según tu definición
-export interface Product {
-  id: number;
-  name: string;
-  price: number;
-  imageFileName?: string;
-  quantity: number;
-  description?: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Product } from "../product/productSlice";
 
 // Extender la interfaz Product para incluir CartProduct
 export interface CartProduct extends Product {
@@ -44,11 +33,25 @@ export const cartSlice = createSlice({
           action.payload.imageFileName || ""
         }`,
       };
+
+      // Verificar si ya existe el producto en el carrito y si el stock lo permite
       if (index !== -1) {
-        state.cartItems[index].quantity += 1;
+        // Verificar si la cantidad en el carrito más una sigue siendo menor o igual al stock disponible
+        if (state.cartItems[index].quantity < action.payload.quantity) {
+          state.cartItems[index].quantity += 1;
+        } else {
+          // Si se intenta agregar más del stock disponible, no se hace nada
+          console.warn("Stock insuficiente para agregar más unidades de este producto.");
+        }
       } else {
-        state.cartItems.push({ ...cartProduct, quantity: 1 });
+        // Si no está en el carrito, verificar que el stock sea al menos 1
+        if (action.payload.quantity > 0) {
+          state.cartItems.push({ ...cartProduct, quantity: 1 });
+        } else {
+          console.warn("Stock insuficiente para agregar este producto.");
+        }
       }
+
       if (isClient) {
         localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
       }
@@ -66,8 +69,14 @@ export const cartSlice = createSlice({
         (item) => item.id === action.payload
       );
       if (index !== -1) {
-        state.cartItems[index].quantity += 1;
+        // Verificar si aún hay stock disponible para incrementar
+        if (state.cartItems[index].quantity < state.cartItems[index].quantity) {
+          state.cartItems[index].quantity += 1;
+        } else {
+          console.warn("No hay suficiente stock disponible para este producto.");
+        }
       }
+
       if (isClient) {
         localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
       }
@@ -99,7 +108,7 @@ export const {
   removeFromCart,
   incrementQuantity,
   decrementQuantity,
-  clearCart, 
+  clearCart,
 } = cartSlice.actions;
 
 export const selectCartItems = (state: RootState) => state.cart.cartItems;
