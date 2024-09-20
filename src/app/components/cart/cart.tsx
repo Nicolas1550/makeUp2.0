@@ -75,6 +75,31 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
     }
   };
 
+  // Función para manejar la respuesta del backend en el webhook
+  const handlePaymentSuccess = async () => {
+    try {
+      const response = await fetch("/api/productOrders/webhook", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.message === "Orden creada con éxito, limpiar carrito") {
+        // Solo limpiamos el carrito si el backend indica que el pago fue exitoso
+        dispatch(clearCart());
+        setIsCheckoutOpen(false);
+        onClose(); // Cerrar el modal del carrito
+      } else {
+        console.error("Error en el proceso de pago", data);
+      }
+    } catch (error) {
+      console.error("Error en el pago:", error);
+    }
+  };
+
   // Calcular el total del carrito
   const totalPrice = cartItems.reduce((total, item) => {
     return total + item.quantity * parseFloat(item.price.toString());
