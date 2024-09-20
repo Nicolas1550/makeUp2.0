@@ -40,7 +40,6 @@ export const cartSlice = createSlice({
         if (state.cartItems[index].quantity < action.payload.quantity) {
           state.cartItems[index].quantity += 1;
         } else {
-          // Si se intenta agregar más del stock disponible, no se hace nada
           console.warn("Stock insuficiente para agregar más unidades de este producto.");
         }
       } else {
@@ -69,11 +68,12 @@ export const cartSlice = createSlice({
         (item) => item.id === action.payload
       );
       if (index !== -1) {
-        // Verificar si aún hay stock disponible para incrementar
-        if (state.cartItems[index].quantity < state.cartItems[index].quantity) {
-          state.cartItems[index].quantity += 1;
-        } else {
+        const cartItem = state.cartItems[index];
+        // Aquí verificas si la cantidad en el carrito es menor al stock del producto
+        if (cartItem.quantity < cartItem.quantity) {
           console.warn("No hay suficiente stock disponible para este producto.");
+        } else {
+          cartItem.quantity += 1;
         }
       }
 
