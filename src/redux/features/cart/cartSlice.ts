@@ -1,10 +1,20 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
-import { Product } from "../product/productSlice";
 
 // Extender la interfaz Product para incluir CartProduct
 export interface CartProduct extends Product {
   imageUrl: string;
+}
+export interface Product {
+  id: number;
+  name: string;
+  price: number;
+  imageFileName?: string;
+  quantity: number;
+  description?: string;
+  createdAt: string;
+  updatedAt: string;
+  isFeatured?: boolean; // Hacer que sea opcional
 }
 
 interface CartState {

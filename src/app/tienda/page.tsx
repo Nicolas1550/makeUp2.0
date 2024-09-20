@@ -109,7 +109,12 @@ const EcommercePage: React.FC = () => {
         <HighlightedSection ref={carouselRef}>
           <SectionTitle>Ofertas Destacadas</SectionTitle>
           {productStatus === "succeeded" && products.length > 0 && (
-            <ProductCarousel products={products} />
+            <ProductCarousel
+              products={products.map((product) => ({
+                ...product,
+                isFeatured: product.isFeatured ?? false, // Asegura que isFeatured esté definido
+              }))}
+            />
           )}
         </HighlightedSection>
 
