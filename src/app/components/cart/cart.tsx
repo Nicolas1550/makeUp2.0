@@ -70,7 +70,7 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
         alert("No hay suficiente stock disponible para este producto.");
       }
     }
-  };
+  }; 
 
   const handleDecrement = (id: number) => {
     dispatch(decrementQuantity(id));
