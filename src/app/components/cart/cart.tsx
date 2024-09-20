@@ -27,7 +27,7 @@ import {
   RemoveButton,
   CheckoutButton,
 } from "./cartStyles";
-import axios from 'axios'; // Usamos axios para las peticiones HTTP
+import axios from "axios"; // Usamos axios para las peticiones HTTP
 
 const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   isOpen,
@@ -40,6 +40,7 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
     (state: RootState) => state.ui.isAuthModalVisible
   );
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [paymentApproved, setPaymentApproved] = useState(false);
 
   // Cerrar el modal del carrito si se abre el modal de autenticación
   useEffect(() => {
@@ -76,12 +77,13 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
     }
   };
 
-  // Función para manejar la respuesta del webhook
-  const handlePaymentSuccess = async () => {
+  // Verificar el estado del pago llamando al backend
+  const checkPaymentStatus = async () => {
     try {
       const response = await axios.get(
-        "https://backendiaecommerce.onrender.com/api/productOrders/webhook", // URL completa de tu backend
+        "https://backendiaecommerce.onrender.com/api/productOrders/check-payment-status",
         {
+          params: { payment_id: "your-payment-id" }, // Pasa el payment_id aquí
           headers: {
             "Content-Type": "application/json",
           },
@@ -90,16 +92,14 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
 
       const data = response.data;
 
-      if (response.status === 201 && data.message === "Orden creada con éxito, limpiar carrito") {
-        // Solo limpiamos el carrito si el backend indica que el pago fue exitoso
-        dispatch(clearCart());
+      if (response.status === 200 && data.paymentApproved) {
+        setPaymentApproved(true);
+        dispatch(clearCart()); // Limpiar el carrito si el pago fue aprobado
         setIsCheckoutOpen(false);
         onClose(); // Cerrar el modal del carrito
-      } else {
-        console.error("Error en el proceso de pago", data);
       }
     } catch (error) {
-      console.error("Error en el pago:", error);
+      console.error("Error al verificar el estado del pago:", error);
     }
   };
 
@@ -130,7 +130,9 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
                   <ItemPrice>
                     {item.quantity} x $
                     {parseFloat(item.price.toString()).toFixed(2)} = $
-                    {(item.quantity * parseFloat(item.price.toString())).toFixed(2)}
+                    {(
+                      item.quantity * parseFloat(item.price.toString())
+                    ).toFixed(2)}
                   </ItemPrice>
                   <ItemControls>
                     <QuantityButton onClick={() => handleIncrement(item.id)}>
@@ -165,9 +167,9 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
         }}
       />
 
-      {/* Aquí llamamos a la función para manejar el pago */}
+      {/* Verificar el estado del pago */}
       {isCheckoutOpen && isAuthenticated && (
-        <button onClick={handlePaymentSuccess}>Confirmar Pago</button>
+        <button onClick={checkPaymentStatus}>Verificar Estado de Pago</button>
       )}
     </>
   );
