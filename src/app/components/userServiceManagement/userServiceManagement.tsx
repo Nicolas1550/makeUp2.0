@@ -68,13 +68,19 @@ const UserServiceManagement: React.FC = () => {
 
     // Configurar WebSocket para escuchar asignaciones y desasignaciones
     socket.on("empleadoAsignado", (data) => {
-
-      // Agregar el empleado a selectedServiceUsers y al servicio correspondiente
-      dispatch(
-        employeeAssigned({ user: data.user, serviceId: data.servicio.id })
-      );
+      if (data && data.user && data.servicio && data.user.id && data.servicio.id) {
+        console.log("Datos válidos recibidos en el evento 'empleadoAsignado':", data);
+    
+        // Agregar el empleado a selectedServiceUsers y al servicio correspondiente
+        dispatch(
+          employeeAssigned({ user: data.user, serviceId: data.servicio.id })
+        );
+      } else {
+        console.error("Datos inválidos recibidos en el evento 'empleadoAsignado':", data);
+      }
     });
-
+    
+    
     socket.on("empleadoDesasignado", (data) => {
 
       // Eliminar el empleado de selectedServiceUsers y del servicio correspondiente

@@ -25,7 +25,7 @@ interface Product {
 interface ProductOrder {
   id: number;
   user_id: number;
-  user?: User; 
+  user?: User;
   phone_number: string;
   total: number;
   shipping_method: string;
@@ -75,10 +75,14 @@ function isAxiosError(error: unknown): error is AxiosError {
 // Thunks
 
 // Obtener todas las órdenes de compra de productos
+// Obtener todas las órdenes de compra de productos
+// Obtener todas las órdenes de compra de productos
 export const fetchProductOrders = createAsyncThunk(
   "productOrders/fetchProductOrders",
   async (_, { rejectWithValue }) => {
     try {
+      console.log("Iniciando solicitud para obtener órdenes de productos...");
+
       const response = await axios.get(
         "https://backendiaecommerce.onrender.com/api/productOrders",
         {
@@ -89,24 +93,58 @@ export const fetchProductOrders = createAsyncThunk(
         }
       );
 
-      // Mapeo para asegurar que `orderProductsAssociation` se convierte en `products`
-      const mappedOrders = response.data.map((order: any) => ({
-        ...order,
-        user: order.userOrderAssociation, 
-        products: order.orderProductsAssociation.map((product: any) => ({
-          ...product,
-          quantity: product.OrderProducts.quantity, 
-        })),
-      }));
+      console.log("Respuesta recibida de la API:", response.data);
 
+      // Mapeo de las órdenes, incluyendo la verificación de la existencia del usuario y los productos
+      const mappedOrders = response.data.map((order: any) => {
+        // Verifica si el comprobante ya contiene '/uploads/' para evitar duplicados
+        const paymentProof = order.payment_proof?.includes("/uploads/")
+          ? order.payment_proof.replace("/uploads/", "")
+          : order.payment_proof;
+
+        return {
+          ...order,
+          // Verifica si los datos del usuario están presentes, si no, asigna valores predeterminados
+          user: order.user_name
+            ? {
+                id: order.user_id,
+                nombre: order.user_name || "Nombre no disponible",
+                email: order.user_email || "Email no disponible",
+              }
+            : null, // Si no hay usuario, asigna null
+
+          // Verifica si existen productos y si la estructura es correcta
+          products: Array.isArray(order.products)
+            ? order.products.map((product: any) => ({
+                ...product,
+                // Asegúrate de que la cantidad exista, si no, establece 0
+                quantity:
+                  product?.OrderProducts?.quantity || product.quantity || 0,
+              }))
+            : [], // Si no hay productos, devuelve un array vacío
+
+          // Mapea el comprobante de pago (si existe) y construye la URL completa con la carpeta correcta
+          payment_proof_url: paymentProof
+            ? `https://backendiaecommerce.onrender.com/uploads/images/${paymentProof}` // Asegura la ruta correcta
+            : null, // Si no existe comprobante, asigna null
+        };
+      });
+
+      console.log("Órdenes mapeadas:", mappedOrders);
       return mappedOrders;
     } catch (error: unknown) {
+      console.error("Error en la solicitud de órdenes:", error);
+
       if (isAxiosError(error) && error.response?.status === 404) {
+        console.warn("No se encontraron órdenes");
         return rejectWithValue("No se encontraron órdenes.");
       }
-      return rejectWithValue(
-        isAxiosError(error) ? error.message : "Error desconocido"
-      );
+
+      const errorMessage = isAxiosError(error)
+        ? error.message
+        : "Error desconocido";
+      console.error("Mensaje de error:", errorMessage);
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -126,7 +164,7 @@ export const createProductOrder = createAsyncThunk(
           },
         }
       );
-      return response.data.order; 
+      return response.data.order;
     } catch (error: unknown) {
       return rejectWithValue(
         isAxiosError(error) ? error.message : "Error desconocido"
@@ -150,7 +188,7 @@ export const createProductOrderMercadoPago = createAsyncThunk(
           },
         }
       );
-      return response.data.init_point; 
+      return response.data.init_point;
     } catch (error: unknown) {
       console.error("Error en la solicitud de Mercado Pago:", error);
       return rejectWithValue(
@@ -178,7 +216,13 @@ export const updateOrderStatus = createAsyncThunk(
           },
         }
       );
-      return response.data.order; 
+
+      // Asegúrate de que la respuesta contenga el objeto 'order'
+      if (!response.data || !response.data.order) {
+        throw new Error("La respuesta no contiene una orden actualizada");
+      }
+
+      return response.data.order; // Devolver la orden actualizada
     } catch (error: unknown) {
       return rejectWithValue(
         isAxiosError(error) ? error.message : "Error desconocido"
@@ -215,7 +259,7 @@ const productOrderSlice = createSlice({
         createProductOrder.fulfilled,
         (state, action: PayloadAction<ProductOrder>) => {
           state.status = "succeeded";
-          state.orders.push(action.payload); 
+          state.orders.push(action.payload);
         }
       )
       .addCase(createProductOrder.rejected, (state, action) => {
@@ -246,7 +290,7 @@ const productOrderSlice = createSlice({
             (order) => order.id === action.payload.id
           );
           if (index !== -1) {
-            state.orders[index] = action.payload; 
+            state.orders[index] = action.payload;
           }
         }
       )

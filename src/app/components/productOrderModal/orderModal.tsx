@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   fetchProductOrders,
-  createProductOrder,
-  createProductOrderMercadoPago, 
+  updateOrderStatus,
   selectAllProductOrders,
   getProductOrderStatus,
   getProductOrderError,
-  updateOrderStatus,
 } from "@/redux/features/productOrder/productOrderSlice";
 import { selectIsAdmin } from "@/redux/authSelectors";
 import Modal from "@mui/material/Modal";
@@ -44,50 +42,37 @@ const OrderModal: React.FC<OrderModalProps> = ({ open, onClose }) => {
   const isAdmin = useAppSelector(selectIsAdmin);
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string>("pendiente");
-  const [paymentMethod, setPaymentMethod] = useState<string>("deposito"); 
-  const [formData, setFormData] = useState<FormData | null>(null); 
 
   useEffect(() => {
     if (open) {
+      console.log("Modal abierto. Solicitando órdenes...");
       dispatch(fetchProductOrders());
     }
   }, [dispatch, open]);
+
+  useEffect(() => {
+    console.log("Estado de las órdenes:", orders);
+    console.log("Estado de la solicitud:", orderStatus);
+    console.log("Error (si existe):", orderError);
+  }, [orders, orderStatus, orderError]);
 
   const handleToggle = (orderId: number) => {
     setExpandedOrderId(expandedOrderId === orderId ? null : orderId);
   };
 
   const handleStatusChange = (orderId: number) => {
+    console.log(
+      `Cambiando el estado de la orden ${orderId} a ${selectedStatus}`
+    );
     dispatch(updateOrderStatus({ id: orderId, status: selectedStatus }));
   };
 
-  const handleCreateOrder = () => {
-    if (paymentMethod === "deposito" && formData) {
-      dispatch(createProductOrder(formData)); 
-    } else {
-      // Para Mercado Pago, crea un objeto con los datos necesarios
-      const orderData = {
-        user_id: 1, 
-        phone_number: "123456789",
-        total: 100,
-        products: [], 
-        shipping_method: "delivery",
-        address: "Calle Falsa 123",
-        city: "Ciudad Falsa",
-        payment_method: "mercadopago",
-        status: "pendiente", 
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-      dispatch(createProductOrderMercadoPago(orderData));
-    }
-  };
-
   const handleDownload = (url: string) => {
+    console.log(`Descargando comprobante de pago desde ${url}`);
     const link = document.createElement("a");
     link.href = url;
-    link.target = "_blank"; 
-    link.rel = "noopener noreferrer"; 
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
     link.click();
   };
 
@@ -165,8 +150,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ open, onClose }) => {
                         {order.products?.length > 0 ? (
                           order.products.map((product) => (
                             <li key={product.id}>
-                              {product.name} - {product.OrderProducts.quantity}{" "}
-                              unidades
+                              {product.name} - {product.quantity} unidades
                             </li>
                           ))
                         ) : (
@@ -187,6 +171,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ open, onClose }) => {
                         </Button>
                       </OrderItem>
                     )}
+
                     {isAdmin && (
                       <StatusSelectContainer>
                         <label htmlFor="status-select">Cambiar estado:</label>

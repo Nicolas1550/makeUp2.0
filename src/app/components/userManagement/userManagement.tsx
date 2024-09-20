@@ -53,15 +53,17 @@ const UserManagement: React.FC = () => {
   };
 
   // Filtrar usuarios basados en la búsqueda y establecer el número de usuarios visibles
-  useEffect(() => {
-    const filteredUsers = users.filter(
-      (user) =>
-        user.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.apellido.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        user.email.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setDisplayedUsers(filteredUsers.slice(0, visibleCount));
-  }, [users, searchTerm, visibleCount, userRoles]);
+// Filtrar usuarios basados en la búsqueda y establecer el número de usuarios visibles
+useEffect(() => {
+  const filteredUsers = users.filter(
+    (user) =>
+      (user.nombre?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+      (user.apellido?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+      (user.email?.toLowerCase() || '').includes(searchTerm.toLowerCase())
+  );
+  setDisplayedUsers(filteredUsers.slice(0, visibleCount));
+}, [users, searchTerm, visibleCount, userRoles]);
+
 
   // Asignar rol de empleado
   const handleAssignRole = async (userId: string) => {
