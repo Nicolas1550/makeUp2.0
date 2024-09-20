@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import { RootState } from "../../store";
+import { clearCart } from "../cart/cartSlice"; // Importamos la acción clearCart
 
 // Definición de la interfaz User
 interface User {
@@ -75,8 +76,6 @@ function isAxiosError(error: unknown): error is AxiosError {
 // Thunks
 
 // Obtener todas las órdenes de compra de productos
-// Obtener todas las órdenes de compra de productos
-// Obtener todas las órdenes de compra de productos
 export const fetchProductOrders = createAsyncThunk(
   "productOrders/fetchProductOrders",
   async (_, { rejectWithValue }) => {
@@ -95,38 +94,30 @@ export const fetchProductOrders = createAsyncThunk(
 
       console.log("Respuesta recibida de la API:", response.data);
 
-      // Mapeo de las órdenes, incluyendo la verificación de la existencia del usuario y los productos
       const mappedOrders = response.data.map((order: any) => {
-        // Verifica si el comprobante ya contiene '/uploads/' para evitar duplicados
         const paymentProof = order.payment_proof?.includes("/uploads/")
           ? order.payment_proof.replace("/uploads/", "")
           : order.payment_proof;
 
         return {
           ...order,
-          // Verifica si los datos del usuario están presentes, si no, asigna valores predeterminados
           user: order.user_name
             ? {
                 id: order.user_id,
                 nombre: order.user_name || "Nombre no disponible",
                 email: order.user_email || "Email no disponible",
               }
-            : null, // Si no hay usuario, asigna null
-
-          // Verifica si existen productos y si la estructura es correcta
+            : null,
           products: Array.isArray(order.products)
             ? order.products.map((product: any) => ({
                 ...product,
-                // Asegúrate de que la cantidad exista, si no, establece 0
                 quantity:
                   product?.OrderProducts?.quantity || product.quantity || 0,
               }))
-            : [], // Si no hay productos, devuelve un array vacío
-
-          // Mapea el comprobante de pago (si existe) y construye la URL completa con la carpeta correcta
+            : [],
           payment_proof_url: paymentProof
-            ? `https://backendiaecommerce.onrender.com/uploads/images/${paymentProof}` // Asegura la ruta correcta
-            : null, // Si no existe comprobante, asigna null
+            ? `https://backendiaecommerce.onrender.com/uploads/images/${paymentProof}`
+            : null,
         };
       });
 
@@ -152,7 +143,7 @@ export const fetchProductOrders = createAsyncThunk(
 // Crear una nueva orden de compra de productos con comprobante de pago
 export const createProductOrder = createAsyncThunk(
   "productOrders/createProductOrder",
-  async (formData: FormData, { rejectWithValue }) => {
+  async (formData: FormData, { rejectWithValue, dispatch }) => {
     try {
       const response = await axios.post(
         "https://backendiaecommerce.onrender.com/api/productOrders/add",
@@ -164,6 +155,8 @@ export const createProductOrder = createAsyncThunk(
           },
         }
       );
+
+      dispatch(clearCart()); // Limpiar carrito tras la creación exitosa de la orden con comprobante
       return response.data.order;
     } catch (error: unknown) {
       return rejectWithValue(
@@ -176,7 +169,7 @@ export const createProductOrder = createAsyncThunk(
 // Crear una nueva orden de compra de productos con Mercado Pago
 export const createProductOrderMercadoPago = createAsyncThunk(
   "productOrders/createProductOrderMercadoPago",
-  async (orderData: OrderCreationPayload, { rejectWithValue }) => {
+  async (orderData: OrderCreationPayload, { rejectWithValue, dispatch }) => {
     try {
       const response = await axios.post(
         "https://backendiaecommerce.onrender.com/api/productOrders/mercadopago",
@@ -188,6 +181,8 @@ export const createProductOrderMercadoPago = createAsyncThunk(
           },
         }
       );
+
+      dispatch(clearCart()); // Limpiar carrito tras la creación exitosa de la orden con Mercado Pago
       return response.data.init_point;
     } catch (error: unknown) {
       console.error("Error en la solicitud de Mercado Pago:", error);
@@ -217,12 +212,11 @@ export const updateOrderStatus = createAsyncThunk(
         }
       );
 
-      // Asegúrate de que la respuesta contenga el objeto 'order'
       if (!response.data || !response.data.order) {
         throw new Error("La respuesta no contiene una orden actualizada");
       }
 
-      return response.data.order; // Devolver la orden actualizada
+      return response.data.order;
     } catch (error: unknown) {
       return rejectWithValue(
         isAxiosError(error) ? error.message : "Error desconocido"
@@ -269,12 +263,9 @@ const productOrderSlice = createSlice({
       .addCase(createProductOrderMercadoPago.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(
-        createProductOrderMercadoPago.fulfilled,
-        (state, action: PayloadAction<string>) => {
-          state.status = "succeeded";
-        }
-      )
+      .addCase(createProductOrderMercadoPago.fulfilled, (state) => {
+        state.status = "succeeded";
+      })
       .addCase(createProductOrderMercadoPago.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload as string;
@@ -301,7 +292,6 @@ const productOrderSlice = createSlice({
   },
 });
 
-// Exportar el reducer por defecto
 export default productOrderSlice.reducer;
 
 // Selectores para acceder al estado desde los componentes

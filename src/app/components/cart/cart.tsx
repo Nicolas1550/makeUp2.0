@@ -8,9 +8,9 @@ import {
   clearCart,
 } from "@/redux/features/cart/cartSlice";
 import CheckoutModal from "../checkoutModal/checkoutModal";
-import { showAuthModal } from "@/redux/features/ui/uiSlice";
-import { selectIsAuthenticated } from "@/redux/authSelectors";
-import { RootState } from "@/redux/store";
+import { showAuthModal } from "@/redux/features/ui/uiSlice"; // Para mostrar el modal de autenticación
+import { selectIsAuthenticated } from "@/redux/authSelectors"; // Para verificar si está autenticado
+import { RootState } from "@/redux/store"; // Importar RootState para acceder al estado global
 import {
   CartContainer,
   CartHeader,
@@ -27,7 +27,6 @@ import {
   RemoveButton,
   CheckoutButton,
 } from "./cartStyles";
-import axios from "axios"; // Usamos axios para las peticiones HTTP
 
 const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   isOpen,
@@ -35,12 +34,11 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
 }) => {
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector(selectCartItems);
-  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated); // Verificar autenticación
   const isAuthModalVisible = useAppSelector(
     (state: RootState) => state.ui.isAuthModalVisible
-  );
+  ); // Verificar si el modal de autenticación está visible
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-  const [paymentApproved, setPaymentApproved] = useState(false);
 
   // Cerrar el modal del carrito si se abre el modal de autenticación
   useEffect(() => {
@@ -52,8 +50,9 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   // Actualiza el estado de checkout basado en autenticación
   useEffect(() => {
     if (!isAuthenticated && isCheckoutOpen) {
+      // Si el usuario no está autenticado y se intenta abrir el checkout, mostrar el modal de login
       dispatch(showAuthModal("login"));
-      setIsCheckoutOpen(false);
+      setIsCheckoutOpen(false); // Cierra el modal de checkout
     }
   }, [isAuthenticated, isCheckoutOpen, dispatch]);
 
@@ -71,35 +70,9 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
 
   const handleCheckout = () => {
     if (isAuthenticated) {
-      setIsCheckoutOpen(true);
+      setIsCheckoutOpen(true); // Solo abre el checkout si el usuario está autenticado
     } else {
-      dispatch(showAuthModal("login"));
-    }
-  };
-
-  // Verificar el estado del pago llamando al backend
-  const checkPaymentStatus = async () => {
-    try {
-      const response = await axios.get(
-        "https://backendiaecommerce.onrender.com/api/productOrders/check-payment-status",
-        {
-          params: { payment_id: "your-payment-id" }, // Pasa el payment_id aquí
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      const data = response.data;
-
-      if (response.status === 200 && data.paymentApproved) {
-        setPaymentApproved(true);
-        dispatch(clearCart()); // Limpiar el carrito si el pago fue aprobado
-        setIsCheckoutOpen(false);
-        onClose(); // Cerrar el modal del carrito
-      }
-    } catch (error) {
-      console.error("Error al verificar el estado del pago:", error);
+      dispatch(showAuthModal("login")); // Mostrar modal de inicio de sesión si no está autenticado
     }
   };
 
@@ -160,17 +133,13 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
 
       {/* Modal de Checkout */}
       <CheckoutModal
-        open={isCheckoutOpen && isAuthenticated}
+        open={isCheckoutOpen && isAuthenticated} // Solo abre si el usuario está autenticado
         onClose={() => {
           setIsCheckoutOpen(false);
+          dispatch(clearCart());
           onClose();
         }}
       />
-
-      {/* Verificar el estado del pago */}
-      {isCheckoutOpen && isAuthenticated && (
-        <button onClick={checkPaymentStatus}>Verificar Estado de Pago</button>
-      )}
     </>
   );
 };
