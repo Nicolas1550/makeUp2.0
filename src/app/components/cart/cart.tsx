@@ -8,9 +8,9 @@ import {
   clearCart,
 } from "@/redux/features/cart/cartSlice";
 import CheckoutModal from "../checkoutModal/checkoutModal";
-import { showAuthModal } from "@/redux/features/ui/uiSlice"; // Para mostrar el modal de autenticación
-import { selectIsAuthenticated } from "@/redux/authSelectors"; // Para verificar si está autenticado
-import { RootState } from "@/redux/store"; // Importar RootState para acceder al estado global
+import { showAuthModal } from "@/redux/features/ui/uiSlice";
+import { selectIsAuthenticated } from "@/redux/authSelectors";
+import { RootState } from "@/redux/store";
 import {
   CartContainer,
   CartHeader,
@@ -34,10 +34,10 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
 }) => {
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector(selectCartItems);
-  const isAuthenticated = useAppSelector(selectIsAuthenticated); // Verificar autenticación
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const isAuthModalVisible = useAppSelector(
     (state: RootState) => state.ui.isAuthModalVisible
-  ); // Verificar si el modal de autenticación está visible
+  );
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
 
   // Cerrar el modal del carrito si se abre el modal de autenticación
@@ -50,9 +50,8 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   // Actualiza el estado de checkout basado en autenticación
   useEffect(() => {
     if (!isAuthenticated && isCheckoutOpen) {
-      // Si el usuario no está autenticado y se intenta abrir el checkout, mostrar el modal de login
       dispatch(showAuthModal("login"));
-      setIsCheckoutOpen(false); // Cierra el modal de checkout
+      setIsCheckoutOpen(false);
     }
   }, [isAuthenticated, isCheckoutOpen, dispatch]);
 
@@ -70,40 +69,9 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
 
   const handleCheckout = () => {
     if (isAuthenticated) {
-      setIsCheckoutOpen(true); // Solo abre el checkout si el usuario está autenticado
+      setIsCheckoutOpen(true);
     } else {
-      dispatch(showAuthModal("login")); // Mostrar modal de inicio de sesión si no está autenticado
-    }
-  };
-
-  // Función para manejar la respuesta del pago del backend
-  const handlePaymentSuccess = async () => {
-    try {
-      const response = await fetch("/api/productOrders/webhook", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          // Aquí deberías incluir los datos relevantes del pago si es necesario
-        }),
-      });
-
-      const data = await response.json();
-
-      if (
-        response.ok &&
-        data.message === "Orden creada con éxito, limpiar carrito"
-      ) {
-        // Solo limpiamos el carrito si el backend indica que el pago fue exitoso
-        dispatch(clearCart());
-        setIsCheckoutOpen(false);
-        onClose(); // Cerrar el modal del carrito
-      } else {
-        console.error("Error en el proceso de pago", data);
-      }
-    } catch (error) {
-      console.error("Error en el pago:", error);
+      dispatch(showAuthModal("login"));
     }
   };
 
@@ -126,7 +94,7 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
             {cartItems.map((item) => (
               <CartItem key={item.id}>
                 <ItemImage
-                  src={`https://backendiaecommerce.onrender.com/uploads/images/${item.imageFileName}`}
+                  src={`http://localhost:3001/uploads/images/${item.imageFileName}`}
                   alt={item.name}
                 />
                 <ItemDetails>
@@ -134,9 +102,7 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
                   <ItemPrice>
                     {item.quantity} x $
                     {parseFloat(item.price.toString()).toFixed(2)} = $
-                    {(
-                      item.quantity * parseFloat(item.price.toString())
-                    ).toFixed(2)}
+                    {(item.quantity * parseFloat(item.price.toString())).toFixed(2)}
                   </ItemPrice>
                   <ItemControls>
                     <QuantityButton onClick={() => handleIncrement(item.id)}>
@@ -164,17 +130,13 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
 
       {/* Modal de Checkout */}
       <CheckoutModal
-        open={isCheckoutOpen && isAuthenticated} // Solo abre si el usuario está autenticado
+        open={isCheckoutOpen && isAuthenticated}
         onClose={() => {
           setIsCheckoutOpen(false);
+          dispatch(clearCart()); // Limpiar carrito tras cerrar checkout manualmente
           onClose();
         }}
       />
-
-      {/* Aquí llamamos a la función de éxito de pago cuando sea necesario */}
-      {isCheckoutOpen && isAuthenticated && (
-        <button onClick={handlePaymentSuccess}>Confirmar Pago</button> // Simulación de confirmación de pago
-      )}
     </>
   );
 };
