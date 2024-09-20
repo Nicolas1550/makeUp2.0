@@ -119,7 +119,7 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
             {cartItems.map((item) => (
               <CartItem key={item.id}>
                 <ItemImage
-                  src={`http://localhost:3001/uploads/images/${item.imageFileName}`}
+                  src={`https://backendiaecommerce.onrender.com/uploads/images/${item.imageFileName}`}
                   alt={item.name}
                 />
                 <ItemDetails>
