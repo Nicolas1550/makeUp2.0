@@ -27,6 +27,7 @@ import {
   RemoveButton,
   CheckoutButton,
 } from "./cartStyles";
+import axios from 'axios'; // Usamos axios para las peticiones HTTP
 
 const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
   isOpen,
@@ -75,19 +76,21 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
     }
   };
 
-  // Función para manejar la respuesta del backend en el webhook
+  // Función para manejar la respuesta del webhook
   const handlePaymentSuccess = async () => {
     try {
-      const response = await fetch("/api/productOrders/webhook", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.get(
+        "https://backendiaecommerce.onrender.com/api/productOrders/webhook", // URL completa de tu backend
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      const data = await response.json();
+      const data = response.data;
 
-      if (response.ok && data.message === "Orden creada con éxito, limpiar carrito") {
+      if (response.status === 201 && data.message === "Orden creada con éxito, limpiar carrito") {
         // Solo limpiamos el carrito si el backend indica que el pago fue exitoso
         dispatch(clearCart());
         setIsCheckoutOpen(false);
@@ -158,10 +161,14 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
         open={isCheckoutOpen && isAuthenticated}
         onClose={() => {
           setIsCheckoutOpen(false);
-          dispatch(clearCart()); // Limpiar carrito tras cerrar checkout manualmente
           onClose();
         }}
       />
+
+      {/* Aquí llamamos a la función para manejar el pago */}
+      {isCheckoutOpen && isAuthenticated && (
+        <button onClick={handlePaymentSuccess}>Confirmar Pago</button>
+      )}
     </>
   );
 };
