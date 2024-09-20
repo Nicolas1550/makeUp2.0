@@ -76,6 +76,34 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
     }
   };
 
+  // Función para manejar la respuesta del pago del backend
+  const handlePaymentSuccess = async () => {
+    try {
+      const response = await fetch("/api/productOrders/webhook", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          // Aquí deberías incluir los datos relevantes del pago si es necesario
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.message === "Orden creada con éxito, limpiar carrito") {
+        // Solo limpiamos el carrito si el backend indica que el pago fue exitoso
+        dispatch(clearCart());
+        setIsCheckoutOpen(false);
+        onClose(); // Cerrar el modal del carrito
+      } else {
+        console.error("Error en el proceso de pago", data);
+      }
+    } catch (error) {
+      console.error("Error en el pago:", error);
+    }
+  };
+
   // Calcular el total del carrito
   const totalPrice = cartItems.reduce((total, item) => {
     return total + item.quantity * parseFloat(item.price.toString());
@@ -101,22 +129,13 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
                 <ItemDetails>
                   <ItemName>{item.name}</ItemName>
                   <ItemPrice>
-                    {item.quantity} x $
-                    {parseFloat(item.price.toString()).toFixed(2)} = $
-                    {(
-                      item.quantity * parseFloat(item.price.toString())
-                    ).toFixed(2)}
+                    {item.quantity} x ${parseFloat(item.price.toString()).toFixed(2)} = $
+                    {(item.quantity * parseFloat(item.price.toString())).toFixed(2)}
                   </ItemPrice>
                   <ItemControls>
-                    <QuantityButton onClick={() => handleIncrement(item.id)}>
-                      +
-                    </QuantityButton>
-                    <QuantityButton onClick={() => handleDecrement(item.id)}>
-                      -
-                    </QuantityButton>
-                    <RemoveButton onClick={() => handleRemove(item.id)}>
-                      Eliminar
-                    </RemoveButton>
+                    <QuantityButton onClick={() => handleIncrement(item.id)}>+</QuantityButton>
+                    <QuantityButton onClick={() => handleDecrement(item.id)}>-</QuantityButton>
+                    <RemoveButton onClick={() => handleRemove(item.id)}>Eliminar</RemoveButton>
                   </ItemControls>
                 </ItemDetails>
               </CartItem>
@@ -126,7 +145,7 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
         {cartItems.length > 0 && (
           <>
             <p>Total: ${totalPrice.toFixed(2)}</p>
-            <CheckoutButton onClick={handleCheckout}>Comprar</CheckoutButton>
+            <CheckoutButton onClick={handlePaymentSuccess}>Comprar</CheckoutButton>
           </>
         )}
       </CartContainer>
@@ -136,7 +155,6 @@ const Cart: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
         open={isCheckoutOpen && isAuthenticated} // Solo abre si el usuario está autenticado
         onClose={() => {
           setIsCheckoutOpen(false);
-          dispatch(clearCart());
           onClose();
         }}
       />
