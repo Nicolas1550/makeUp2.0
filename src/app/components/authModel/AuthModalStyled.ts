@@ -93,7 +93,21 @@ export const Input = styled.input`
     padding: 0 0.25rem;
   }
 `;
-
+export const ForgotPasswordLink = styled.a`
+  color: #ffd700; /* Color amarillo */
+  font-size: 0.9rem;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-block;
+  transition: color 0.3s ease;
+  position: absolute; /* Para posicionarlo en la parte inferior derecha */
+  right: 10;
+  bottom: 0;
+  padding: 10px;
+  &:hover {
+    color: #999; /* Cambia a gris oscuro al pasar el cursor */
+  }
+`;
 export const Button = styled.button`
   width: 100%;
   padding: 0.75rem;

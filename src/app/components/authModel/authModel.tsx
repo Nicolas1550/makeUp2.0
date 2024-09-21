@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation"; // Importar para redireccionar
 import { RootState } from "@/redux/store";
 import {
   loginUser,
@@ -21,10 +22,12 @@ import {
   Button,
   Error,
   FormRow,
+  ForgotPasswordLink,
 } from "./AuthModalStyled";
 
 const AuthModal: React.FC = () => {
   const dispatch = useAppDispatch();
+  const router = useRouter(); // Para redireccionar
   const showModal = useAppSelector(
     (state: RootState) => state.ui.isAuthModalVisible
   );
@@ -40,26 +43,26 @@ const AuthModal: React.FC = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState(""); 
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [telefono, setTelefono] = useState("");
   const [foto, setFoto] = useState<File | null>(null);
   const [passwordError, setPasswordError] = useState("");
-  const [isRegistering, setIsRegistering] = useState(false);  
-  const [isLoggingIn, setIsLoggingIn] = useState(false);  
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  const isLogin = modalMode === "login";  
+  const isLogin = modalMode === "login";
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoggingIn(true);  
+    setIsLoggingIn(true);
     dispatch(loginUser({ email, password }));
   };
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsRegistering(true);  
+    setIsRegistering(true);
 
     if (password !== confirmPassword) {
       setPasswordError("Las contraseñas no coinciden");
@@ -106,18 +109,18 @@ const AuthModal: React.FC = () => {
   useEffect(() => {
     // Solo cambiar a "login" después de un registro exitoso
     if (status === "succeeded" && isRegistering) {
-      dispatch(setAuthModalMode("login"));  
-      setIsRegistering(false);  
+      dispatch(setAuthModalMode("login"));
+      setIsRegistering(false);
     } else if (status === "failed" && error) {
       setTimeout(() => {
         dispatch(clearError());
-        setIsRegistering(false);  // Resetear estado de registro si falla
+        setIsRegistering(false); // Resetear estado de registro si falla
       }, 3000);
     }
 
     if (status === "succeeded" && isLogin && isLoggingIn) {
       dispatch(hideAuthModal());
-      setIsLoggingIn(false);  
+      setIsLoggingIn(false);
     }
   }, [status, dispatch, error, modalMode, isRegistering, isLoggingIn, isLogin]);
 
@@ -125,7 +128,7 @@ const AuthModal: React.FC = () => {
     if (!showModal) {
       setEmail("");
       setPassword("");
-      setConfirmPassword(""); 
+      setConfirmPassword("");
       setNombre("");
       setApellido("");
       setTelefono("");
@@ -136,7 +139,7 @@ const AuthModal: React.FC = () => {
 
   // Alternar entre el modo de login y registro
   const toggleAuthMode = () => {
-    setIsLoggingIn(false);  
+    setIsLoggingIn(false);
     if (modalMode === "login") {
       dispatch(setAuthModalMode("register"));
     } else {
@@ -144,12 +147,20 @@ const AuthModal: React.FC = () => {
     }
   };
 
+  // Redirigir a la página de recuperación de contraseña y cerrar el modal
+  const handleForgotPassword = () => {
+    dispatch(hideAuthModal()); // Cerrar el modal
+    router.push("/reset-password/request"); // Redirigir a la página de solicitud de restablecimiento de contraseña
+  };
+
   return (
     <Modal $show={showModal}>
       <ModalContent $show={showModal}>
-        <ModalClose onClick={() => {
-          dispatch(hideAuthModal());
-        }}>
+        <ModalClose
+          onClick={() => {
+            dispatch(hideAuthModal());
+          }}
+        >
           &times;
         </ModalClose>
         <h1>{isLogin ? "Iniciar Sesión" : "Registrarse"}</h1>
@@ -254,6 +265,15 @@ const AuthModal: React.FC = () => {
                 ? Object.values(error).join(", ")
                 : error}
             </Error>
+          )}
+          {isLogin && (
+            <div style={{ position: "relative", height: "2rem" }}>
+              {" "}
+              {/* Contenedor para el link */}
+              <ForgotPasswordLink onClick={handleForgotPassword}>
+                ¿Olvidaste tu contraseña?
+              </ForgotPasswordLink>
+            </div>
           )}
 
           <div className="mt-4">

@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import emailjs from 'emailjs-com';
+import axios from "axios";
 
 const ContenedorContacto = styled.div`
   background-color: #1c1c1c;
@@ -116,21 +116,28 @@ const PaginaContacto: React.FC = () => {
   const enviarCorreo = async (e: React.FormEvent) => {
     e.preventDefault();
     setCargando(true);
-    
+
     try {
       if (formulario.current) {
-        await emailjs.sendForm(
-          'service_mwmmqvd',  
-          'template_n3xuwgd',  
-          formulario.current,
-          'R93T5B0hw-lOz08xE' 
+        const formData = new FormData(formulario.current);
+
+        const data = {
+          from_name: formData.get("from_name"),
+          user_email: formData.get("user_email"),
+          message: formData.get("message"),
+        };
+
+        // Llamar a tu backend Express con la URL completa
+        await axios.post(
+          "https://backendiaecommerce.onrender.com/api/email/send-email",
+          data
         );
-        alert('¡Mensaje enviado con éxito!');
-        formulario.current.reset(); 
+        alert("¡Mensaje enviado con éxito!");
+        formulario.current.reset();
       }
     } catch (error) {
-      console.error('Error al enviar el correo:', error);
-      alert('Ocurrió un error. Inténtalo de nuevo.');
+      console.error("Error al enviar el correo:", error);
+      alert("Ocurrió un error. Inténtalo de nuevo.");
     } finally {
       setCargando(false);
     }
@@ -153,24 +160,24 @@ const PaginaContacto: React.FC = () => {
         <FormularioContacto ref={formulario} onSubmit={enviarCorreo}>
           <InputFormulario
             type="text"
-            name="from_name"  
+            name="from_name"
             placeholder="Tu Nombre"
             required
           />
           <InputFormulario
             type="email"
-            name="user_email" 
+            name="user_email"
             placeholder="Tu Correo Electrónico"
             required
           />
           <TextAreaFormulario
-            name="message" 
+            name="message"
             placeholder="Tu Mensaje"
             rows={6}
             required
           />
           <BotonEnviar type="submit" disabled={cargando}>
-            {cargando ? 'Enviando...' : 'Enviar Mensaje'}
+            {cargando ? "Enviando..." : "Enviar Mensaje"}
           </BotonEnviar>
         </FormularioContacto>
       </ContenidoContacto>
