@@ -26,7 +26,7 @@ const RequestResetPassword: React.FC = () => {
     setMessage("");
 
     try {
-      await axios.post("http://localhost:3001/api/password/request-reset-password", {
+      await axios.post("https://makeupbackend2-0.onrender.com/api/password/request-reset-password", {
         email,
       });
 

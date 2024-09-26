@@ -34,7 +34,7 @@ const ProductFlow: React.FC<ProductFlowProps> = ({ products }) => {
           <StyledProductImage
             src={
               product.imageFileName // Usa imageFileName como propiedad de imagen
-                ? `http://localhost:3001/uploads/images/${product.imageFileName}`
+                ? `https://makeupbackend2-0.onrender.com/uploads/images/${product.imageFileName}`
                 : "/path/to/default/image.png"
             }
             alt={product.name}

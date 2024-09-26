@@ -34,7 +34,7 @@ interface Employee {
 }
 
 // Configuración del socket.io
-const socket = io("http://localhost:3001", { transports: ["websocket"] });
+const socket = io("https://makeupbackend2-0.onrender.com", { transports: ["websocket"] });
 
 const UserServiceManagement: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -54,7 +54,7 @@ const UserServiceManagement: React.FC = () => {
 
         // Fetch available employees
         const employeesResponse = await axios.get(
-          `http://localhost:3001/api/users/empleados/disponibles/general`,
+          `https://makeupbackend2-0.onrender.com/api/users/empleados/disponibles/general`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

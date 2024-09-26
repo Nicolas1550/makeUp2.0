@@ -68,7 +68,7 @@ const ReserveModal: React.FC<ReserveModalProps> = ({
 
       // Realiza la reserva, ya no guardamos el response ya que no lo usamos
       await axios.post(
-        "http://localhost:3001/api/orders",
+        "https://makeupbackend2-0.onrender.com/api/orders",
         {
           user_id: user.id,
           disponibilidad_id: disponibilidad.id,

@@ -75,7 +75,7 @@ const ResetPassword = () => {
 
     try {
       // Llamar a la API de backend para restablecer la contraseña
-      await axios.post("http://localhost:3001/api/password/reset-password", {
+      await axios.post("https://makeupbackend2-0.onrender.com/api/password/reset-password", {
         token, // Utilizamos el token desde params
         newPassword,
       });

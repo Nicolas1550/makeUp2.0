@@ -76,8 +76,8 @@ const getToken = (): string | null =>
 
 const API_BASE_URL =
   process.env.NODE_ENV === "development"
-    ? "http://localhost:3001/auth"
-    : "http://localhost:3001/auth";
+    ? "https://makeupbackend2-0.onrender.com/auth"
+    : "https://makeupbackend2-0.onrender.com/auth";
 
 // Thunk para verificar la autenticación, usando la ruta /verify
 export const checkAuthentication = createAsyncThunk<
@@ -97,7 +97,7 @@ export const checkAuthentication = createAsyncThunk<
   }
 
   try {
-    const response = await axios.get("http://localhost:3001/api/jwt/verify", {
+    const response = await axios.get("https://makeupbackend2-0.onrender.com/api/jwt/verify", {
       headers: { Authorization: `Bearer ${token}` },
     });
 

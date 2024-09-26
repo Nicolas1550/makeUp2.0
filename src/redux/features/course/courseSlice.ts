@@ -56,7 +56,7 @@ export const updateCoursePrice = createAsyncThunk(
     const token = localStorage.getItem("token");
     try {
       const response = await axios.put(
-        `http://localhost:3001/api/courses/cursos/${id}/precio`,
+        `https://makeupbackend2-0.onrender.com/api/courses/cursos/${id}/precio`,
         { precio },
         {
           headers: {
@@ -78,7 +78,7 @@ export const fetchCourses = createAsyncThunk(
   "courses/fetchCourses",
   async () => {
     const response = await axios.get(
-      "http://localhost:3001/api/courses/cursos",
+      "https://makeupbackend2-0.onrender.com/api/courses/cursos",
       {
         headers: {
           "Content-Type": "application/json",
@@ -95,7 +95,7 @@ export const fetchCourseById = createAsyncThunk(
   "courses/fetchCourseById",
   async (id: number) => {
     const response = await axios.get(
-      `http://localhost:3001/api/courses/cursos/${id}`,
+      `https://makeupbackend2-0.onrender.com/api/courses/cursos/${id}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -114,7 +114,7 @@ export const addCourseFecha = createAsyncThunk(
     const token = localStorage.getItem("token");
     try {
       const response = await axios.post(
-        `http://localhost:3001/api/courses/cursos/${id}/fechas`,
+        `https://makeupbackend2-0.onrender.com/api/courses/cursos/${id}/fechas`,
         newFecha,
         {
           headers: {
@@ -146,7 +146,7 @@ export const updateCourseFecha = createAsyncThunk(
     const token = localStorage.getItem("token");
     try {
       const response = await axios.put(
-        `http://localhost:3001/api/courses/cursos/${cursoId}/fechas/${fechaId}`,
+        `https://makeupbackend2-0.onrender.com/api/courses/cursos/${cursoId}/fechas/${fechaId}`,
         updatedFecha,
         {
           headers: {
@@ -170,7 +170,7 @@ export const deleteCourseFecha = createAsyncThunk(
     const token = localStorage.getItem("token");
     try {
       const response = await axios.delete(
-        `http://localhost:3001/api/courses/cursos/${cursoId}/fechas/${fechaId}`,
+        `https://makeupbackend2-0.onrender.com/api/courses/cursos/${cursoId}/fechas/${fechaId}`,
         {
           headers: {
             "Content-Type": "application/json",

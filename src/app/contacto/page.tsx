@@ -127,7 +127,7 @@ const PaginaContacto: React.FC = () => {
 
         // Llamar a tu backend Express con la URL completa
         await axios.post(
-          "http://localhost:3001/api/email/send-email",
+          "https://makeupbackend2-0.onrender.com/api/email/send-email",
           data
         );
         alert("¡Mensaje enviado con éxito!");

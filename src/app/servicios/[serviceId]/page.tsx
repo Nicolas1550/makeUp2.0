@@ -35,7 +35,7 @@ const ServicePage: React.FC = () => {
     const fetchServicio = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/api/servicios/${serviceIdString}`
+          `https://makeupbackend2-0.onrender.com/api/servicios/${serviceIdString}`
         );
         setServicio(response.data);
         setLoading(false);

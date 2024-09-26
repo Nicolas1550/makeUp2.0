@@ -38,8 +38,8 @@ const initialState: ServiceState = {
 
 const API_BASE_URL =
   process.env.NODE_ENV === "development"
-    ? "http://localhost:3001"
-    : "http://localhost:3001";
+    ? "https://makeupbackend2-0.onrender.com"
+    : "https://makeupbackend2-0.onrender.com";
 
 // Thunk para obtener todos los servicios
 // Thunk para obtener todos los servicios

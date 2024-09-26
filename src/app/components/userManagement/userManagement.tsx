@@ -21,8 +21,8 @@ import { User, Role } from "@/redux/features/auth/authSlice";
 
 const API_BASE_URL =
   process.env.NODE_ENV === "development"
-    ? "http://localhost:3001"
-    : "http://localhost:3001";
+    ? "https://makeupbackend2-0.onrender.com"
+    : "https://makeupbackend2-0.onrender.com";
 
 const UserManagement: React.FC = () => {
   const dispatch = useAppDispatch();

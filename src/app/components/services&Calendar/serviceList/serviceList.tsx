@@ -14,7 +14,7 @@ const ServiceList: React.FC = () => {
   useEffect(() => {
     const fetchServicios = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/api/servicios");
+        const response = await axios.get("https://makeupbackend2-0.onrender.com/api/servicios");
         setServicios(response.data);
       } catch (error) {
         console.error("Error fetching servicios:", error);

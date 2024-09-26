@@ -83,7 +83,7 @@ export const fetchProductOrders = createAsyncThunk(
       console.log("Iniciando solicitud para obtener órdenes de productos...");
 
       const response = await axios.get(
-        "http://localhost:3001/api/productOrders",
+        "https://makeupbackend2-0.onrender.com/api/productOrders",
         {
           headers: {
             "Content-Type": "application/json",
@@ -116,7 +116,7 @@ export const fetchProductOrders = createAsyncThunk(
               }))
             : [],
           payment_proof_url: paymentProof
-            ? `http://localhost:3001/uploads/images/${paymentProof}`
+            ? `https://makeupbackend2-0.onrender.com/uploads/images/${paymentProof}`
             : null,
         };
       });
@@ -145,7 +145,7 @@ export const createProductOrder = createAsyncThunk(
   async (formData: FormData, { rejectWithValue, dispatch }) => {
     try {
       const response = await axios.post(
-        "http://localhost:3001/api/productOrders/add",
+        "https://makeupbackend2-0.onrender.com/api/productOrders/add",
         formData,
         {
           headers: {
@@ -171,7 +171,7 @@ export const createProductOrderMercadoPago = createAsyncThunk(
   async (orderData: OrderCreationPayload, { rejectWithValue, dispatch }) => {
     try {
       const response = await axios.post(
-        "http://localhost:3001/api/productOrders/mercadopago",
+        "https://makeupbackend2-0.onrender.com/api/productOrders/mercadopago",
         orderData,
         {
           headers: {
@@ -201,7 +201,7 @@ export const updateOrderStatus = createAsyncThunk(
   ) => {
     try {
       const response = await axios.patch(
-        `http://localhost:3001/api/productOrders/${id}/status`,
+        `https://makeupbackend2-0.onrender.com/api/productOrders/${id}/status`,
         { status },
         {
           headers: {
