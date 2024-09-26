@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Calendar as BigCalendar } from "react-big-calendar";
 
 export const CalendarContainer = styled.div`
   width: 100%;

@@ -14,7 +14,9 @@ import {
   EmployeeGrid,
   EmployeeImage,
   WhatsAppButton,
-  WhatsAppIcon
+  WhatsAppIcon,
+  MailButton,
+  MailIcon, // Nuevo icono y botón para email
 } from "./serviceEmployeesModalStyled";
 
 interface ServiceEmployeesModalProps {
@@ -32,7 +34,7 @@ const ServiceEmployeesModal: React.FC<ServiceEmployeesModalProps> = ({
   );
 
   const baseURL =
-    process.env.NEXT_PUBLIC_API_BASE_URL || "https://backendiaecommerce.onrender.com";
+    process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001";
 
   useEffect(() => {
     if (serviceId) {
@@ -71,7 +73,15 @@ const ServiceEmployeesModal: React.FC<ServiceEmployeesModalProps> = ({
                   <EmployeeName>
                     {employee.nombre} {employee.apellido}
                   </EmployeeName>
-                  <EmployeeInfo>Email: {employee.email}</EmployeeInfo>
+                  <EmployeeInfo>
+                    <MailButton
+                      href={`mailto:${employee.email}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <MailIcon /> Enviar correo
+                    </MailButton>
+                  </EmployeeInfo>
                   <EmployeeInfo>
                     <WhatsAppButton
                       href={`https://wa.me/${employee.telefono}`}

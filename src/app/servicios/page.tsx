@@ -1,9 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import Navbar from "../components/navbar/navbar";
 import ServiceList from "../components/services&Calendar/serviceList/serviceList";
 import Services from "../components/services&Calendar/services";
-import Footer from "../components/footer/footer";
 import HeroSlider from "../components/services&Calendar/slider/slider";
 
 const ServicesPage: React.FC = () => {

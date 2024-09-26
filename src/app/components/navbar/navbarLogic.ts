@@ -38,7 +38,7 @@ export const useNavbarLogic = () => {
   const cartItems = useAppSelector(selectCartItems);
   const { logout } = useAuthToken();
 
-  const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://backendiaecommerce.onrender.com";
+  const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001";
 
   // Estado para la URL de la imagen de perfil
   const [profileImageUrl, setProfileImageUrl] = useState<string>("");
@@ -104,7 +104,10 @@ export const useNavbarLogic = () => {
   useOutsideClick(dropdownMenuRef, () => setIsDropdownOpen(false)); 
   useOutsideClick(moreDropdownRef, () => setIsMoreDropdownOpen(false)); 
   useOutsideClick(servicesDropdownRef, () => setIsServicesDropdownOpen(false)); 
-
+  const closeDropdowns = () => {
+    setIsMoreDropdownOpen(false);
+    setIsServicesDropdownOpen(false);
+  };
   return {
     isOpen,
     toggleMenu,
@@ -122,6 +125,7 @@ export const useNavbarLogic = () => {
     toggleMoreDropdown,
     isServicesDropdownOpen,
     toggleServicesDropdown,
+    closeDropdowns, // Devuelve la función para que se pueda usar en el componente Navbar
     dropdownMenuRef,
     moreDropdownRef,
     servicesDropdownRef,
@@ -132,7 +136,7 @@ export const useNavbarLogic = () => {
     cartItems,
     handleAuthButtonClick,
     handleLogoutClick,
-    profileImageUrl, 
+    profileImageUrl,
     servicios,
   };
 };

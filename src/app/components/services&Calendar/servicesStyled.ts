@@ -6,8 +6,8 @@ export const ReservationContainer = styled(motion.div)`
   flex-direction: row;
   width: 100%;
   height: 60vh;
-  background-color: #1c1c1c;
-  color: #f8f9fa;
+  background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco suave */
+  color: #6e5e4e; /* Marrón claro */
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -17,18 +17,17 @@ export const ReservationContainer = styled(motion.div)`
 export const ImageSection = styled(motion.div)`
   flex: 1;
   background: url("/zzzzz .webp") center center/cover no-repeat;
-  border-right: 1px solid rgba(255, 215, 0, 0.3);
+  border-right: 1px solid rgba(240, 240, 240, 0.6); /* Borde claro */
   position: relative;
   transition: height 0.3s ease, opacity 0.3s ease;
 
   @media (max-width: 768px) {
     border-right: none;
-    border-bottom: 1px solid rgba(255, 215, 0, 0.3);
-    height: 60vh; /* Aumenta la altura en dispositivos móviles */
-    opacity: 0.7; /* Aumenta la opacidad para resaltar el contenido */
+    border-bottom: 1px solid rgba(240, 240, 240, 0.6); /* Borde claro */
+    height: 60vh;
+    opacity: 0.7;
   }
 
-  /* Agregamos un pseudo-elemento para controlar la opacidad de la imagen */
   &::before {
     content: "";
     position: absolute;
@@ -37,12 +36,12 @@ export const ImageSection = styled(motion.div)`
     width: 100%;
     height: 100%;
     background: inherit;
-    opacity: 0.8; /* Opacidad predeterminada */
+    opacity: 0.8;
     z-index: -1;
     transition: opacity 0.3s ease;
 
     @media (max-width: 768px) {
-      opacity: 0.3; /* Más opaco en pantallas pequeñas */
+      opacity: 0.3;
     }
   }
 `;
@@ -53,24 +52,24 @@ export const TextSection = styled(motion.div)`
   flex-direction: column;
   justify-content: center;
   padding: 2rem 3rem;
-  background: rgba(28, 28, 28, 0.9);
-  border-left: 1px solid rgba(255, 215, 0, 0.3);
+  background: rgba(255, 255, 255, 0.9); /* Fondo blanco suave */
+  border-left: 1px solid rgba(240, 240, 240, 0.6); /* Borde claro */
   backdrop-filter: blur(15px);
   transition: all 0.3s ease;
 
   @media (max-width: 768px) {
     border-left: none;
-    border-top: 1px solid rgba(255, 215, 0, 0.3);
+    border-top: 1px solid rgba(240, 240, 240, 0.6); /* Borde claro */
     height: auto;
   }
 `;
 
 export const Title = styled.h1`
-  color: #ffd700;
+  color: #d9b3a8; /* Beige suave rosado */
   font-size: 3rem;
   font-weight: bold;
   margin-bottom: 1rem;
-  text-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700;
+  text-shadow: 0 0 10px #d9b3a8, 0 0 20px #d9b3a8;
 
   @media (max-width: 768px) {
     font-size: 2.5rem;
@@ -80,7 +79,7 @@ export const Title = styled.h1`
 export const Description = styled.p`
   font-size: 1.5rem;
   line-height: 1.8;
-  color: #f8f9fa;
+  color: #6e5e4e; /* Marrón claro */
   margin-bottom: 2rem;
 
   @media (max-width: 768px) {
@@ -89,8 +88,8 @@ export const Description = styled.p`
 `;
 
 export const ReserveButton = styled(motion.button)`
-  background-color: #ffd700;
-  color: #1c1c1c;
+  background-color: #f4c2c2; /* Rosado suave */
+  color: #fff;
   border: none;
   padding: 1rem 2rem;
   border-radius: 8px;
@@ -105,7 +104,7 @@ export const ReserveButton = styled(motion.button)`
 
   &:hover {
     background-color: #1c1c1c;
-    color: #ffd700;
+    color: #f4c2c2; /* Hover rosado suave */
   }
 
   @media (max-width: 768px) {

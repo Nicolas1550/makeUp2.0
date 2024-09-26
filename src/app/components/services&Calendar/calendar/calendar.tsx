@@ -4,7 +4,6 @@ import {
   momentLocalizer,
   SlotInfo,
   View,
-  NavigateAction,
 } from "react-big-calendar";
 import moment from "moment";
 import "moment-timezone";
@@ -48,7 +47,6 @@ interface MyCalendarProps {
 }
 
 const MyCalendar: React.FC<MyCalendarProps> = ({
-  isAdmin,
   servicioId,
   closeParentModal,
 }) => {
@@ -172,7 +170,7 @@ const MyCalendar: React.FC<MyCalendarProps> = ({
       end: moment(disp.fecha_fin).add(3, "hours").toDate(),
     }));
 
-  const handleNavigate = (date: Date, view: View, action: NavigateAction) => {
+  const handleNavigate = (date: Date) => {
     setCurrentDate(date);
   };
 

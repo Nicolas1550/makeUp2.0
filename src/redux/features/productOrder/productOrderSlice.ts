@@ -83,7 +83,7 @@ export const fetchProductOrders = createAsyncThunk(
       console.log("Iniciando solicitud para obtener órdenes de productos...");
 
       const response = await axios.get(
-        "https://backendiaecommerce.onrender.com/api/productOrders",
+        "http://localhost:3001/api/productOrders",
         {
           headers: {
             "Content-Type": "application/json",
@@ -94,29 +94,29 @@ export const fetchProductOrders = createAsyncThunk(
 
       console.log("Respuesta recibida de la API:", response.data);
 
-      const mappedOrders = response.data.map((order: any) => {
-        const paymentProof = order.payment_proof?.includes("/uploads/")
-          ? order.payment_proof.replace("/uploads/", "")
-          : order.payment_proof;
+      const mappedOrders = response.data.map((order: ProductOrder) => {
+        const paymentProof = order.payment_proof_url?.includes("/uploads/")
+          ? order.payment_proof_url.replace("/uploads/", "")
+          : order.payment_proof_url;
 
         return {
           ...order,
-          user: order.user_name
+          user: order.user
             ? {
-                id: order.user_id,
-                nombre: order.user_name || "Nombre no disponible",
-                email: order.user_email || "Email no disponible",
+                id: order.user.id,
+                nombre: order.user.nombre || "Nombre no disponible",
+                email: order.user.email || "Email no disponible",
               }
             : null,
           products: Array.isArray(order.products)
-            ? order.products.map((product: any) => ({
+            ? order.products.map((product: Product) => ({
                 ...product,
                 quantity:
                   product?.OrderProducts?.quantity || product.quantity || 0,
               }))
             : [],
           payment_proof_url: paymentProof
-            ? `https://backendiaecommerce.onrender.com/uploads/images/${paymentProof}`
+            ? `http://localhost:3001/uploads/images/${paymentProof}`
             : null,
         };
       });
@@ -139,14 +139,13 @@ export const fetchProductOrders = createAsyncThunk(
     }
   }
 );
-
 // Crear una nueva orden de compra de productos con comprobante de pago
 export const createProductOrder = createAsyncThunk(
   "productOrders/createProductOrder",
   async (formData: FormData, { rejectWithValue, dispatch }) => {
     try {
       const response = await axios.post(
-        "https://backendiaecommerce.onrender.com/api/productOrders/add",
+        "http://localhost:3001/api/productOrders/add",
         formData,
         {
           headers: {
@@ -157,7 +156,7 @@ export const createProductOrder = createAsyncThunk(
       );
 
       dispatch(clearCart()); // Limpiar carrito tras la creación exitosa de la orden con comprobante
-      return response.data.order;
+      return response.data.order as ProductOrder;
     } catch (error: unknown) {
       return rejectWithValue(
         isAxiosError(error) ? error.message : "Error desconocido"
@@ -172,7 +171,7 @@ export const createProductOrderMercadoPago = createAsyncThunk(
   async (orderData: OrderCreationPayload, { rejectWithValue, dispatch }) => {
     try {
       const response = await axios.post(
-        "https://backendiaecommerce.onrender.com/api/productOrders/mercadopago",
+        "http://localhost:3001/api/productOrders/mercadopago",
         orderData,
         {
           headers: {
@@ -202,7 +201,7 @@ export const updateOrderStatus = createAsyncThunk(
   ) => {
     try {
       const response = await axios.patch(
-        `https://backendiaecommerce.onrender.com/api/productOrders/${id}/status`,
+        `http://localhost:3001/api/productOrders/${id}/status`,
         { status },
         {
           headers: {

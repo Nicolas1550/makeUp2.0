@@ -15,112 +15,9 @@ import {
   Testimonial,
   TestimonialSection,
 } from "@/app/components/ecommerce/styles/ecommerceStyles";
+import { InfoSection, PaymentIcon, PaymentList, ServiceCardContainer, ServiceTitle } from "@/app/components/ecommerce/styles/stylesServices";
 
-// Animación de fade-in para la entrada suave
-const fadeIn = keyframes`
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
 
-// Animación de slide-up para la tarjeta
-const slideUp = keyframes`
-  0% {
-    opacity: 0;
-    transform: translateY(100px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-`;
-
-// Estilos adaptados a los colores y diseño moderno del proyecto
-const InfoSection = styled.section`
-  background-color: #1c1c1c;
-  padding: 3rem;
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-  margin-bottom: 100px;
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  color: #ffffff;
-  margin-bottom: 150px;
-  animation: ${fadeIn} 1s ease-out; /* Añadir animación */
-`;
-
-// Contenedor moderno y atractivo para la tarjeta del servicio
-const ServiceCardContainer = styled.div`
-  background-color: #1f1f1f;
-  padding: 2rem;
-  border-radius: 20px;
-  border: 2px solid #ffd700;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 6px 20px rgba(255, 215, 0, 0.1);
-  margin: -80px auto 100px auto;
-  max-width: 900px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  animation: ${slideUp} 1s ease-out; /* Añadir animación */
-  
-  &:hover {
-    transform: translateY(-15px);
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8),
-      0 10px 40px rgba(255, 215, 0, 0.2);
-  }
-`;
-
-const PaymentList = styled.ul`
-  list-style: none;
-  padding: 0;
-  margin: 2rem 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-
-  li {
-    background-color: #ffd700;
-    padding: 1rem 1.5rem;
-    border-radius: 8px;
-    font-weight: bold;
-    color: #1c1c1c;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    font-size: 1.2rem;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-
-    &:hover {
-      background-color: #e5c200;
-      transform: translateY(-5px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-    }
-  }
-`;
-
-const PaymentIcon = styled.span`
-  font-size: 1.5rem;
-  display: inline-block;
-  color: #1c1c1c;
-`;
-
-const ServiceTitle = styled.h2`
-  font-size: 2.5rem;
-  color: #ffd700;
-  margin-bottom: 1.5rem;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.7);
-`;
 
 // Componente principal
 const ServicePage: React.FC = () => {
@@ -138,7 +35,7 @@ const ServicePage: React.FC = () => {
     const fetchServicio = async () => {
       try {
         const response = await axios.get(
-          `https://backendiaecommerce.onrender.com/api/servicios/${serviceIdString}`
+          `http://localhost:3001/api/servicios/${serviceIdString}`
         );
         setServicio(response.data);
         setLoading(false);

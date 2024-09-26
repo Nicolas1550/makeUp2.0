@@ -6,11 +6,13 @@ import {
   OrderCreationPayload,
 } from "@/redux/features/productOrder/productOrderSlice";
 import { clearCart } from "@/redux/features/cart/cartSlice";
-import emailjs from "emailjs-com"; 
+import emailjs from "emailjs-com";
 import Modal from "@mui/material/Modal";
 import MenuItem from "@mui/material/MenuItem";
-import CircularProgress from "@mui/material/CircularProgress"; 
+import CircularProgress from "@mui/material/CircularProgress";
 import {
+  BankDetailsContainer,
+  BankDetailText,
   ButtonGroup,
   ModalHeader,
   StyledButton,
@@ -22,11 +24,14 @@ interface CheckoutModalProps {
   open: boolean;
   onClose: () => void;
 }
-
+interface OrderData {
+  id: string | number;
+  total: number;
+}
 const CheckoutModal: React.FC<CheckoutModalProps> = ({ open, onClose }) => {
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector((state) => state.cart.cartItems);
-  const user = useAppSelector((state) => state.auth.user); 
+  const user = useAppSelector((state) => state.auth.user);
   const [step, setStep] = useState(1);
   const [shippingMethod, setShippingMethod] = useState("local_pickup");
   const [address, setAddress] = useState("");
@@ -34,7 +39,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ open, onClose }) => {
   const [paymentMethod, setPaymentMethod] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [paymentProof, setPaymentProof] = useState<File | null>(null);
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
 
   const [errors, setErrors] = useState({
     phoneNumber: "",
@@ -91,33 +96,32 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ open, onClose }) => {
     setStep(step - 1);
   };
 
-  const sendConfirmationEmail = (orderData: any) => {
-    if (!user) return; 
+  const sendConfirmationEmail = (orderData: OrderData) => {
+    if (!user) return;
 
     const userTemplateParams = {
       from_name: "Tu Tienda",
-      to_name: user.nombre, 
+      to_name: user.nombre,
       message: `Gracias por tu compra. Número de orden: ${orderData.id}, Total: ${orderData.total}`,
-      user_email: user.email, 
+      user_email: user.email,
     };
 
     const seoTemplateParams = {
       from_name: "Tu Tienda",
       to_name: "SEO Empresa",
       message: `Nueva compra realizada por ${user.nombre}. Número de orden: ${orderData.id}, Total: ${orderData.total}`,
-      user_email: "luciuknicolas15@gmail.com", 
+      user_email: "luciuknicolas15@gmail.com",
     };
 
     // Enviar el email al usuario
     emailjs
       .send(
-        "service_mwmmqvd", 
-        "template_n3xuwgd", 
+        "service_mwmmqvd",
+        "template_n3xuwgd",
         userTemplateParams,
-        "R93T5B0hw-lOz08xE" 
+        "R93T5B0hw-lOz08xE"
       )
-      .then(() => {
-      })
+      .then(() => {})
       .catch((error) => {
         console.error("Error al enviar el correo al usuario:", error);
       });
@@ -125,13 +129,12 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ open, onClose }) => {
     // Enviar el email al SEO
     emailjs
       .send(
-        "service_mwmmqvd", 
-        "template_n3xuwgd", 
+        "service_mwmmqvd",
+        "template_n3xuwgd",
         seoTemplateParams,
-        "R93T5B0hw-lOz08xE" 
+        "R93T5B0hw-lOz08xE"
       )
-      .then(() => {
-      })
+      .then(() => {})
       .catch((error) => {
         console.error("Error al enviar el correo al SEO:", error);
       });
@@ -140,13 +143,13 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ open, onClose }) => {
   const handlePlaceOrder = () => {
     // Verificar que el usuario esté definido
     if (!user) return;
-  
+
     const phoneError = validatePhoneNumber(phoneNumber);
     if (phoneError) {
       setErrors({ ...errors, phoneNumber: phoneError });
       return;
     }
-  
+
     if (paymentMethod === "deposito" && !paymentProof) {
       setErrors({
         ...errors,
@@ -154,13 +157,13 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ open, onClose }) => {
       });
       return;
     }
-  
-    setIsLoading(true); 
-  
+
+    setIsLoading(true);
+
     // Si el método de pago es "mercadopago"
     if (paymentMethod === "mercadopago") {
       const orderData: OrderCreationPayload = {
-        user_id: Number(user.id), 
+        user_id: Number(user.id),
         phone_number: phoneNumber,
         total: total,
         products: cartItems.map((item) => ({
@@ -175,9 +178,9 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ open, onClose }) => {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
-  
+
       dispatch(createProductOrderMercadoPago(orderData)).then((result) => {
-        setIsLoading(false); 
+        setIsLoading(false);
         if (createProductOrderMercadoPago.fulfilled.match(result)) {
           const redirectUrl = result.payload as string;
           window.location.href = redirectUrl;
@@ -189,11 +192,11 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ open, onClose }) => {
         }
       });
     }
-  
+
     // Si el método de pago es "deposito"
     else if (paymentMethod === "deposito") {
       const orderData = new FormData();
-      orderData.append("user_id", user.id.toString()); 
+      orderData.append("user_id", user.id.toString());
       orderData.append("phone_number", phoneNumber);
       orderData.append("total", total.toString());
       orderData.append("shipping_method", shippingMethod);
@@ -203,7 +206,7 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ open, onClose }) => {
       orderData.append("status", "pendiente");
       orderData.append("createdAt", new Date().toISOString());
       orderData.append("updatedAt", new Date().toISOString());
-  
+
       cartItems.forEach((item, index) => {
         orderData.append(`products[${index}][id]`, item.id.toString());
         orderData.append(
@@ -211,28 +214,28 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ open, onClose }) => {
           item.quantity.toString()
         );
       });
-  
+
       if (paymentProof) {
         orderData.append("payment_proof", paymentProof);
       }
-  
+
       dispatch(createProductOrder(orderData)).then((result) => {
-        setIsLoading(false); 
+        setIsLoading(false);
         if (createProductOrder.fulfilled.match(result)) {
-          dispatch(clearCart()); 
-          onClose(); 
-          sendConfirmationEmail(result.payload); 
+          dispatch(clearCart());
+          onClose();
+          sendConfirmationEmail(result.payload);
         } else {
           console.error("Error al confirmar la orden:", result.payload);
         }
       });
     }
   };
-  
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setPaymentProof(e.target.files[0]);
-      setErrors({ ...errors, paymentProof: "" }); 
+      setErrors({ ...errors, paymentProof: "" });
     }
   };
 
@@ -319,10 +322,16 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({ open, onClose }) => {
 
                 {paymentMethod === "deposito" && (
                   <>
-                    <p>Datos bancarios para transferencia:</p>
-                    <p>Banco: Banco Ejemplo</p>
-                    <p>CBU: 1234567890123456789012</p>
-                    <p>Alias: alias.ejemplo</p>
+                    <BankDetailsContainer>
+                      <BankDetailText>
+                        Datos bancarios para transferencia:
+                      </BankDetailText>
+                      <BankDetailText>Banco: Banco Ejemplo</BankDetailText>
+                      <BankDetailText>
+                        CBU: 1234567890123456789012
+                      </BankDetailText>
+                      <BankDetailText>Alias: alias.ejemplo</BankDetailText>
+                    </BankDetailsContainer>
                     <StyledTextField
                       type="file"
                       onChange={handleFileChange}

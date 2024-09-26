@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import AdminProductManager from "./adminProductManager";
 import ProductTableComponent from "./productTableComponent";
-import FeaturedProductsPanel from "./featuredProductsPanel"; 
+import FeaturedProductsPanel from "./featuredProductsPanel";
 import { useAppSelector, useAppDispatch } from "@/redux/hooks";
 import {
   selectAllProducts,
@@ -32,10 +32,12 @@ const EcommerceWithAdmin: React.FC<EcommerceWithAdminProps> = ({ onClose }) => {
   const [showAddProductForm, setShowAddProductForm] = useState<boolean>(false);
   const [showOrdersChart, setShowOrdersChart] = useState<boolean>(false);
   const [showUserManagement, setShowUserManagement] = useState<boolean>(false);
-  const [showUserServiceManagement, setShowUserServiceManagement] = useState<boolean>(false);
-  const [showFeaturedProductsPanel, setShowFeaturedProductsPanel] = useState<boolean>(false); 
+  const [showUserServiceManagement, setShowUserServiceManagement] =
+    useState<boolean>(false);
+  const [showFeaturedProductsPanel, setShowFeaturedProductsPanel] =
+    useState<boolean>(false);
 
-  const products = useAppSelector(selectAllProducts);
+  const products = useAppSelector(selectAllProducts); // Selector correcto para obtener los productos
   const productStatus = useAppSelector(getProductStatus);
   const productError = useAppSelector(getProductError);
   const [editedProduct, setEditedProduct] = useState<Partial<Product>>({});
@@ -46,17 +48,13 @@ const EcommerceWithAdmin: React.FC<EcommerceWithAdminProps> = ({ onClose }) => {
     }
   }, [productStatus, dispatch]);
 
-  useEffect(() => {
-    setShowOrdersChart(true);
-  }, []);
-
   const handleShowTable = () => {
     setEditingProductId(null);
     setShowAddProductForm(false);
     setShowOrdersChart(false);
     setShowUserManagement(false);
     setShowUserServiceManagement(false);
-    setShowFeaturedProductsPanel(false); 
+    setShowFeaturedProductsPanel(false);
   };
 
   const handleShowAddProductForm = () => {
@@ -65,7 +63,7 @@ const EcommerceWithAdmin: React.FC<EcommerceWithAdminProps> = ({ onClose }) => {
     setShowOrdersChart(false);
     setShowUserManagement(false);
     setShowUserServiceManagement(false);
-    setShowFeaturedProductsPanel(false); 
+    setShowFeaturedProductsPanel(false);
   };
 
   const handleShowOrdersChart = () => {
@@ -83,7 +81,7 @@ const EcommerceWithAdmin: React.FC<EcommerceWithAdminProps> = ({ onClose }) => {
     setShowOrdersChart(false);
     setShowUserManagement(true);
     setShowUserServiceManagement(false);
-    setShowFeaturedProductsPanel(false); 
+    setShowFeaturedProductsPanel(false);
   };
 
   const handleShowUserServiceManagement = () => {
@@ -92,7 +90,7 @@ const EcommerceWithAdmin: React.FC<EcommerceWithAdminProps> = ({ onClose }) => {
     setShowOrdersChart(false);
     setShowUserManagement(false);
     setShowUserServiceManagement(true);
-    setShowFeaturedProductsPanel(false); 
+    setShowFeaturedProductsPanel(false);
   };
 
   const handleShowFeaturedProductsPanel = () => {
@@ -101,7 +99,7 @@ const EcommerceWithAdmin: React.FC<EcommerceWithAdminProps> = ({ onClose }) => {
     setShowOrdersChart(false);
     setShowUserManagement(false);
     setShowUserServiceManagement(false);
-    setShowFeaturedProductsPanel(true); 
+    setShowFeaturedProductsPanel(true);
   };
 
   const handleSaveProduct = async (formData: FormData) => {
@@ -139,34 +137,48 @@ const EcommerceWithAdmin: React.FC<EcommerceWithAdminProps> = ({ onClose }) => {
       {productStatus === "loading" && <p>Cargando productos...</p>}
       {productStatus === "failed" && <p>Error: {productError}</p>}
 
-      {!showAddProductForm && !showOrdersChart && !showUserManagement && !showUserServiceManagement && !showFeaturedProductsPanel && productStatus === "succeeded" && (
-        <ProductTableComponent
-          products={products}
-          editingProductId={editingProductId}
-          editedProduct={editedProduct}
-          onEditProduct={(product) => {
-            setEditingProductId(product.id);
-            setEditedProduct(product);
-            setShowAddProductForm(false);
-            setShowOrdersChart(false);
-          }}
-          onDeleteProduct={(id) => dispatch(deleteProduct(id))}
-          onSaveProduct={handleSaveProduct}
-          onCancelEdit={() => {
-            setEditingProductId(null);
-            setShowAddProductForm(false);
-          }}
-          onInputChange={(e) => {
-            const { name, value } = e.target;
-            setEditedProduct({ ...editedProduct, [name]: value });
-          }}
-          onFileChange={(e) => {
-            if (e.target.files && e.target.files.length > 0) {
-              setEditedProduct({ ...editedProduct, imageFileName: e.target.files[0].name });
-            }
-          }}
-        />
-      )}
+      {!showAddProductForm &&
+        !showOrdersChart &&
+        !showUserManagement &&
+        !showUserServiceManagement &&
+        !showFeaturedProductsPanel &&
+        productStatus === "succeeded" && (
+          <ProductTableComponent
+            products={products} // La propiedad products se pasa correctamente aquí
+            editingProductId={editingProductId}
+            editedProduct={editedProduct}
+            onEditProduct={(product) => {
+              setEditingProductId(product.id);
+              setEditedProduct(product);
+              setShowAddProductForm(false);
+              setShowOrdersChart(false);
+            }}
+            onDeleteProduct={(id) => dispatch(deleteProduct(id))}
+            onSaveProduct={handleSaveProduct}
+            onCancelEdit={() => {
+              setEditingProductId(null);
+              setShowAddProductForm(false);
+            }}
+            onInputChange={(
+              e: React.ChangeEvent<
+                HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+              >
+            ) => {
+              // Se maneja correctamente el cambio en diferentes tipos de inputs
+              const { name, value } = e.target;
+              setEditedProduct({ ...editedProduct, [name]: value });
+            }}
+            onFileChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              // Se maneja correctamente el cambio en input de archivos
+              if (e.target.files && e.target.files.length > 0) {
+                setEditedProduct({
+                  ...editedProduct,
+                  imageFileName: e.target.files[0].name,
+                });
+              }
+            }}
+          />
+        )}
 
       {showAddProductForm && <AdminProductManager />}
 
@@ -176,7 +188,7 @@ const EcommerceWithAdmin: React.FC<EcommerceWithAdminProps> = ({ onClose }) => {
 
       {showUserServiceManagement && <UserServiceManagement />}
 
-      {showFeaturedProductsPanel && <FeaturedProductsPanel />} 
+      {showFeaturedProductsPanel && <FeaturedProductsPanel />}
     </ModalContainer>
   );
 };

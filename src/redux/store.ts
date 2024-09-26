@@ -6,9 +6,12 @@ import authReducer from "../redux/features/auth/authSlice";
 import uiReducer from "./features/ui/uiSlice";
 import disponibilidadReducer from "./features/disponibilidad/disponibilidadSlice";
 import ordersReducer from "./features/orders/ordersSlice";
-import productOrderReducer from './features/productOrder/productOrderSlice';
+import productOrderReducer from "./features/productOrder/productOrderSlice";
 import userReducer from "./features/user/userSlice";
 import serviceReducer from "./features/services/serviceSlice";
+import filterReducer from "./features/productsFilterSlice/FilterSlice";
+import uiiReducer from "./features/uiSlice/uiSlice";
+import courseReducer from "./features/course/courseSlice"; // Importa el courseReducer
 
 export const store = configureStore({
   reducer: {
@@ -21,7 +24,10 @@ export const store = configureStore({
     orders: ordersReducer,
     productOrders: productOrderReducer,
     users: userReducer,
-    services: serviceReducer, 
+    services: serviceReducer,
+    filter: filterReducer,
+    uii: uiiReducer,
+    courses: courseReducer, 
   },
 });
 

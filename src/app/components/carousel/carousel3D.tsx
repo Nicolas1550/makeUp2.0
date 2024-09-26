@@ -1,210 +1,215 @@
-"use client";
-import React, { useRef } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/effect-coverflow";
-import { EffectCoverflow, Autoplay } from "swiper/modules";
+// External Libraries
+import React from "react";
+import Slider from "react-slick";
 import styled from "styled-components";
-import { motion } from "framer-motion";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Environment, Points } from "@react-three/drei";
-import * as THREE from "three";
+import { Typography, Grid } from "@mui/material";
+import Link from "next/link";
+import Image from "next/image";
 
-const FullWidthBackground = styled.div`
-  width: 100%;
-  background: linear-gradient(135deg, #1c1c1c 30%, #2a2a2a 100%);
-  position: relative;
-  padding: 3rem 0;
-  overflow: hidden;
-  color: #f5f5f5;
+// Styles & Assets
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import "@/app/globals.css";
+const StyledTypography = styled(Typography)`
+  &.MuiTypography-h2 {
+    font-size: 2.5em; /* Tamaño más adaptable */
+    color: #d9b3a8; /* Beige suave rosado, igual al del logo del navbar */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Sombra suave para mejorar la legibilidad */
+
+    @media (max-width: 768px) {
+      font-size: 2em;
+    }
+  }
+
+  &.MuiTypography-h6 {
+    font-size: 1.4em;
+    color: #6e5e4e; /* Marrón claro, alineado con los enlaces del navbar */
+  }
+
+  &.MuiTypography-body1 {
+    color: #808080; /* Gris oscuro, para un estilo más suave */
+    line-height: 1.7;
+  }
+`;
+const PinkButton = styled.button`
+  background-color: #f4c2c2; /* Rosado suave */
+  color: white;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  margin-top: 2.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease;
+
+  &:hover {
+    background-color: #f08080; /* Rosado más oscuro en hover */
+    transform: translateY(-4px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+  }
+
+  &:active {
+    transform: translateY(2px); /* Efecto de clic */
+  }
+
+  @media (max-width: 768px) {
+    font-size: 0.9rem;
+    padding: 10px 20px;
+  }
+`;
+// Constants
+const COLORS = {
+  NEUTRAL_LIGHT: "#FAF3E0",
+  DARKER_GRAY: "#808080",
+  PINK_LIGHT: "#FFD1DC",
+  PINK_DARK: "#FF69B4",
+  PURPLE_LIGHT: "#D8BFD8",
+  GOLD: "#FFD700",
+};
+
+const SLIDER_SETTINGS = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 3,
+  slidesToScroll: 1,
+  autoplay: true,
+  autoplaySpeed: 2000,
+  arrows: false, // Oculta las flechas
+
+  responsive: [
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 2,
+        slidesToScroll: 1,
+      },
+    },
+    {
+      breakpoint: 768,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1,
+      },
+    },
+  ],
+};
+
+const ITEM_DATA = [
+  { img: "/trabajosMaquillaje/1.webp", title: "Título 1" },
+  { img: "/trabajosMaquillaje/2.webp", title: "Título 2" },
+  { img: "/trabajosMaquillaje/3.webp", title: "Título 3" },
+  { img: "/trabajosMaquillaje/4.webp", title: "Título 4" },
+  { img: "/trabajosMaquillaje/5.webp", title: "Título 5" },
+  { img: "/trabajosMaquillaje/2.webp", title: "Título 6" },
+];
+
+// Styled Components
+const Section = styled.section`
+  background-color: ${COLORS.NEUTRAL_LIGHT};
+  padding: 4rem 0;
+
+  @media (max-width: 768px) {
+    padding: 2rem 0;
+  }
+`;
+const ContentWrapper = styled.div`
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.08);
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 `;
 
-const PatternOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("/background.webp");
-  opacity: 0.1; /* Más sutil */
-  z-index: 0;
-  pointer-events: none;
+const HighlightedText = styled.span`
+  color: #d9b3a8; /* Beige suave rosado, igual al del logo del navbar */
+  font-weight: 600;
 `;
 
 const CarouselContainer = styled.div`
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 2rem 0;
-  background: rgba(40, 40, 40, 0.3); /* Fondo más oscuro y menos transparente */
-  border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2); /* Sombras más suaves */
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
+  .slick-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
-const SlideContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+const CarouselImageWrapper = styled.div`
+  display: inline-flex; // Cambio a inline-flex para centrar la imagen
+  justify-content: center;
   align-items: center;
-  padding: 1rem;
-  position: relative;
-  z-index: 2;
-`;
-
-const Image = styled(motion.img)`
+  max-width: 100%;
   width: 100%;
-  max-width: 70%; /* Imagen un poco más pequeña */
-  height: auto;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Sombras más sutiles */
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border 0.3s ease;
-  border: 3px solid transparent;
+  height: 361px; // Establecer una altura base
+  overflow: hidden; // Esconder cualquier exceso de la imagen
+  border-radius: 20px;
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.12);
+  transition: transform 0.4s, box-shadow 0.4s;
+  padding: 0 10px;
 
   &:hover {
-    transform: scale(1.05); /* Menos zoom en hover */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
-    border: 3px solid #d4af37; /* Un dorado más sutil */
-  }
-`;
-
-const Caption = styled(motion.div)`
-  margin-top: 1rem;
-  font-size: 1rem;
-  color: #d4af37; /* Dorado más suave */
-  text-align: center;
-  font-weight: 600;
-  text-transform: uppercase;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); /* Menos intensidad en la sombra del texto */
-`;
-
-const BackgroundScene = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  pointer-events: none;
-`;
-
-const CustomParticles = () => {
-  const particlesRef = useRef<THREE.Points>(null);
-
-  useFrame(({ clock }) => {
-    if (particlesRef.current) {
-      particlesRef.current.rotation.x =
-        clock.getElapsedTime() * 0.01; /* Rotación más lenta */
-      particlesRef.current.rotation.y = clock.getElapsedTime() * 0.01;
-    }
-  });
-
-  const geometry = new THREE.BufferGeometry();
-  const vertices = [];
-  const particleCount = 1500; /* Menos partículas para un efecto más limpio */
-
-  for (let i = 0; i < particleCount; i++) {
-    const x = THREE.MathUtils.randFloatSpread(150);
-    const y = THREE.MathUtils.randFloatSpread(150);
-    const z = THREE.MathUtils.randFloatSpread(150);
-    vertices.push(x, y, z);
+    transform: scale(1.08);
+    box-shadow: 0 8px 14px rgba(0, 0, 0, 0.15);
   }
 
-  geometry.setAttribute(
-    "position",
-    new THREE.Float32BufferAttribute(vertices, 3)
-  );
+  // Ajustes para tablets y laptops pequeñas
+  @media (max-width: 1024px) {
+    height: 280px;
+  }
 
-  return (
-    <points ref={particlesRef}>
-      <bufferGeometry attach="geometry" {...geometry} />
-      <pointsMaterial
-        attach="material"
-        color="#c0c0c0" /* Un gris metálico para las partículas */
-        size={1.2}
-        sizeAttenuation
-        transparent
-        opacity={0.6}
-      />
-    </points>
-  );
-};
+  // Ajustes para tablets en modo retrato y móviles en modo paisaje
+  @media (max-width: 768px) {
+    padding: 0;
+    height: 200px;
+  }
+`;
+const AcercaDe: React.FC = () => (
+  <Section>
+    <Grid container spacing={6}>
+      <Grid item xs={12} md={6}>
+        <ContentWrapper>
+          <StyledTypography variant="h2" gutterBottom>
+            Acerca de <HighlightedText>Sofia Luciuk</HighlightedText>
+          </StyledTypography>
+          <StyledTypography variant="h6" gutterBottom>
+            Transformando la belleza, un rostro a la vez.
+          </StyledTypography>
+          <StyledTypography variant="body1" paragraph>
+            Makeup Magic ha sido líder en la industria del maquillaje desde
+            2020. Nuestro equipo de artistas talentosos trabaja incansablemente
+            para proporcionar a nuestros clientes los servicios y productos de
+            la más alta calidad.
+          </StyledTypography>
+          <Link href="/acercaDe" passHref>
+            <PinkButton>Más sobre nosotros</PinkButton>
+          </Link>
+        </ContentWrapper>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <CarouselContainer>
+          <Slider {...SLIDER_SETTINGS}>
+            {ITEM_DATA.map((item) => (
+              <div key={item.img}>
+                <CarouselImageWrapper>
+                  <Image
+                    src={item.img}
+                    width={361}
+                    height={361}
+                    alt={item.title}
+                  />
+                </CarouselImageWrapper>
+              </div>
+            ))}
+          </Slider>
+        </CarouselContainer>
+      </Grid>
+    </Grid>
+  </Section>
+);
 
-const Carousel3D: React.FC = () => {
-  const images = [
-    { src: "corteClasico.webp", caption: "Corte Clásico" },
-    { src: "a22.webp", caption: "Estilo Moderno" },
-    { src: "barbaCompleta.webp", caption: "Barba Completa" },
-    { src: "a44.webp", caption: "Corte Desvanecido" },
-    { src: "coloracion.webp", caption: "Coloración" },
-  ];
-
-  return (
-    <FullWidthBackground>
-      <PatternOverlay />
-      <CarouselContainer>
-        <BackgroundScene>
-          <Canvas>
-            <OrbitControls
-              enableZoom={false}
-              enablePan={false}
-              enableRotate={false}
-            />
-            <ambientLight intensity={0.4} /> {/* Luz ambiente más suave */}
-            <directionalLight position={[5, 5, 5]} intensity={0.4} />
-            <Environment preset="city" /> {/* Ambiente urbano */}
-            <CustomParticles />
-          </Canvas>
-        </BackgroundScene>
-        <Swiper
-          effect="coverflow"
-          grabCursor={true}
-          centeredSlides={true}
-          slidesPerView="auto"
-          coverflowEffect={{
-            rotate: 40,
-            stretch: 0,
-            depth: 90,
-            modifier: 1,
-            slideShadows: true,
-          }}
-          loop={true}
-          autoplay={{
-            delay: 3000,
-            disableOnInteraction: false,
-          }}
-          modules={[EffectCoverflow, Autoplay]}
-          navigation={false}
-          pagination={false}
-        >
-          {images.map((image, index) => (
-            <SwiperSlide
-              key={index}
-              style={{ maxWidth: "80%", height: "auto" }}
-            >
-              <SlideContainer>
-                <Image
-                  src={image.src}
-                  alt={`Slide ${index + 1}`}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-                />
-                <Caption
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                >
-                  {image.caption}
-                </Caption>
-              </SlideContainer>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </CarouselContainer>
-    </FullWidthBackground>
-  );
-};
-
-export default Carousel3D;
+export default AcercaDe;

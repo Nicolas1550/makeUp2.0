@@ -37,7 +37,7 @@ const getInitialAuthState = (): AuthState => {
 
         // Asegurarse de que los roles estén bien formateados
         if (parsedUser && Array.isArray(parsedUser.roles)) {
-          parsedUser.roles = parsedUser.roles.map((role: any) => {
+          parsedUser.roles = parsedUser.roles.map((role: Role | string) => {
             if (typeof role === "string") {
               return { id: role, nombre: role };
             }
@@ -68,6 +68,7 @@ const getInitialAuthState = (): AuthState => {
   };
 };
 
+
 const initialState: AuthState = getInitialAuthState();
 
 const getToken = (): string | null =>
@@ -75,8 +76,8 @@ const getToken = (): string | null =>
 
 const API_BASE_URL =
   process.env.NODE_ENV === "development"
-    ? "https://backendiaecommerce.onrender.com/auth"
-    : "https://backendiaecommerce.onrender.com/auth";
+    ? "http://localhost:3001/auth"
+    : "http://localhost:3001/auth";
 
 // Thunk para verificar la autenticación, usando la ruta /verify
 export const checkAuthentication = createAsyncThunk<
@@ -96,7 +97,7 @@ export const checkAuthentication = createAsyncThunk<
   }
 
   try {
-    const response = await axios.get("https://backendiaecommerce.onrender.com/api/jwt/verify", {
+    const response = await axios.get("http://localhost:3001/api/jwt/verify", {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -107,7 +108,7 @@ export const checkAuthentication = createAsyncThunk<
       isAuthenticated: true,
       user: response.data.user,
     };
-  } catch (error) {
+  } catch {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     return rejectWithValue({
@@ -128,19 +129,16 @@ export const loginUser = createAsyncThunk<
       password,
     });
 
-    // Verifica que los roles están presentes y en el formato correcto
-
     localStorage.setItem("token", response.data.token);
     localStorage.setItem("user", JSON.stringify(response.data.user));
     return {
       isAuthenticated: true,
       user: response.data.user as User,
     };
-  } catch (error: any) {
+  } catch {
     return rejectWithValue({ general: "Credenciales inválidas" });
   }
 });
-
 // Thunk para registrar un usuario, ahora con la foto opcional
 export const registerUser = createAsyncThunk<
   { isAuthenticated: boolean; user: User | null },
@@ -161,8 +159,8 @@ export const registerUser = createAsyncThunk<
       isAuthenticated: true,
       user: response.data.user as User,
     };
-  } catch (error: any) {
-    if (error.response) {
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && error.response) {
       const { status, data } = error.response;
 
       if (status === 400 && data.errors) {
@@ -180,16 +178,11 @@ export const registerUser = createAsyncThunk<
         );
       } else if (status === 409) {
         return rejectWithValue({ email: "El usuario ya existe" });
-      } else {
-        return rejectWithValue({
-          general: "El usuario ya existe",
-        });
       }
-    } else {
-      return rejectWithValue({
-        general: "No se pudo conectar con el servidor",
-      });
     }
+    return rejectWithValue({
+      general: "No se pudo conectar con el servidor",
+    });
   }
 });
 

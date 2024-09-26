@@ -11,16 +11,18 @@ export interface Product {
   imageFileName?: string;
   quantity: number;
   description?: string;
+  brand: string; // Nueva propiedad
+  color: string; // Nueva propiedad
+  category: string; // Nueva propiedad
   createdAt: string;
   updatedAt: string;
   isFeatured?: boolean; // Hacer que sea opcional
 }
 
-
 // Estado inicial para los productos
 interface ProductState {
   products: Product[];
-  featuredProducts: Product[]; 
+  featuredProducts: Product[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
 }
@@ -35,25 +37,31 @@ const initialState: ProductState = {
 // Thunks
 
 // Obtener todos los productos
-export const fetchProducts = createAsyncThunk("products/fetchProducts", async () => {
-  const response = await axios.get("https://backendiaecommerce.onrender.com/api/products", {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  });
-  return response.data;
-});
+export const fetchProducts = createAsyncThunk(
+  "products/fetchProducts",
+  async () => {
+    const response = await axios.get("http://localhost:3001/api/products", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    return response.data;
+  }
+);
 
 // Obtener productos destacados
 export const fetchFeaturedProducts = createAsyncThunk(
   "products/fetchFeaturedProducts",
   async () => {
-    const response = await axios.get("https://backendiaecommerce.onrender.com/api/products/featured", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const response = await axios.get(
+      "http://localhost:3001/api/products/featured",
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
     return response.data;
   }
 );
@@ -63,7 +71,7 @@ export const featureProduct = createAsyncThunk(
   "products/featureProduct",
   async (id: number) => {
     const response = await axios.put(
-      `https://backendiaecommerce.onrender.com/api/products/featured/${id}`,
+      `http://localhost:3001/api/products/featured/${id}`,
       { isFeatured: true },
       {
         headers: {
@@ -81,7 +89,7 @@ export const unfeatureProduct = createAsyncThunk(
   "products/unfeatureProduct",
   async (id: number) => {
     const response = await axios.put(
-      `https://backendiaecommerce.onrender.com/api/products/unfeature/${id}`,
+      `http://localhost:3001/api/products/unfeature/${id}`,
       {},
       {
         headers: {
@@ -98,12 +106,16 @@ export const unfeatureProduct = createAsyncThunk(
 export const addProduct = createAsyncThunk(
   "products/addProduct",
   async (newProduct: FormData) => {
-    const response = await axios.post("https://backendiaecommerce.onrender.com/api/products/add", newProduct, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
+    const response = await axios.post(
+      "http://localhost:3001/api/products/add",
+      newProduct,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    );
     return response.data.product;
   }
 );
@@ -113,7 +125,7 @@ export const updateProduct = createAsyncThunk(
   "products/updateProduct",
   async ({ id, updatedProduct }: { id: number; updatedProduct: FormData }) => {
     const response = await axios.put(
-      `https://backendiaecommerce.onrender.com/api/products/update/${id}`,
+      `http://localhost:3001/api/products/update/${id}`,
       updatedProduct,
       {
         headers: {
@@ -127,16 +139,20 @@ export const updateProduct = createAsyncThunk(
 );
 
 // Eliminar un producto
-export const deleteProduct = createAsyncThunk("products/deleteProduct", async (id: number) => {
-  await axios.delete(`https://backendiaecommerce.onrender.com/api/products/delete/${id}`, {
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
-  });
-  return id;
-});
+export const deleteProduct = createAsyncThunk(
+  "products/deleteProduct",
+  async (id: number) => {
+    await axios.delete(`http://localhost:3001/api/products/delete/${id}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    return id;
+  }
+);
 
+// Slice para manejar el estado de productos
 // Slice para manejar el estado de productos
 const productSlice = createSlice({
   name: "products",
@@ -162,23 +178,32 @@ const productSlice = createSlice({
         state.products.push(action.payload);
       })
       .addCase(updateProduct.fulfilled, (state, action) => {
-        const index = state.products.findIndex((product) => product.id === action.payload.id);
+        const index = state.products.findIndex(
+          (product) => product.id === action.payload.id
+        );
         if (index !== -1) {
-          state.products[index] = action.payload;
+          state.products[index] = action.payload; // Aquí debe actualizarse el producto completo, incluida la descripción
         }
       })
+
       .addCase(deleteProduct.fulfilled, (state, action) => {
-        state.products = state.products.filter((product) => product.id !== action.payload);
+        state.products = state.products.filter(
+          (product) => product.id !== action.payload
+        );
       })
       .addCase(featureProduct.fulfilled, (state, action) => {
-        const index = state.products.findIndex((product) => product.id === action.payload.id);
+        const index = state.products.findIndex(
+          (product) => product.id === action.payload.id
+        );
         if (index !== -1) {
           state.products[index] = action.payload;
         }
         state.featuredProducts.push(action.payload);
       })
       .addCase(unfeatureProduct.fulfilled, (state, action) => {
-        const index = state.products.findIndex((product) => product.id === action.payload.id);
+        const index = state.products.findIndex(
+          (product) => product.id === action.payload.id
+        );
         if (index !== -1) {
           state.products[index] = action.payload;
         }
@@ -194,6 +219,7 @@ export default productSlice.reducer;
 
 // Selectores para acceder al estado desde los componentes
 export const selectAllProducts = (state: RootState) => state.product.products;
-export const selectFeaturedProducts = (state: RootState) => state.product.featuredProducts;
+export const selectFeaturedProducts = (state: RootState) =>
+  state.product.featuredProducts;
 export const getProductStatus = (state: RootState) => state.product.status;
 export const getProductError = (state: RootState) => state.product.error;

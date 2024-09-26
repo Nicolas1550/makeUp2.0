@@ -3,18 +3,18 @@ import styled from "styled-components";
 export const CartContainer = styled.div<{ isOpen: boolean }>`
   position: fixed;
   top: 0;
-  left: ${({ isOpen }) =>
-    isOpen ? "0" : "-100%"}; /* Despliegue desde la izquierda */
+  right: ${({ isOpen }) => (isOpen ? "0" : "-100%")}; /* Despliegue desde la derecha */
   width: 300px;
   height: 100%;
-  background-color: #1c1c1c;
-  color: #ffffff;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
-  transition: left 0.3s ease;
+  background: rgba(255, 255, 255, 0.9); /* Fondo blanco suave */
+  color: #6e5e4e; /* Marrón claro */
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.05); /* Sombra suave */
+  transition: right 0.3s ease; /* Transición de derecha */
   z-index: 1000;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
+  border-left: 1px solid rgba(240, 240, 240, 0.6); /* Borde claro */
 `;
 
 export const CartHeader = styled.div`
@@ -22,26 +22,34 @@ export const CartHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid rgba(240, 240, 240, 0.6); /* Borde claro */
   padding-bottom: 0.5rem;
 `;
 
 export const CartTitle = styled.h2`
   font-size: 1.5rem;
   font-weight: bold;
-  color: #ffd700;
+  color: #d9b3a8; /* Beige suave rosado */
+  text-transform: uppercase;
 `;
 
 export const CloseButton = styled.button`
   background: none;
   border: none;
-  color: #ffd700;
-  font-size: 1.5rem;
+  color: #f4c2c2; /* Rosado suave */
+  font-size: 2.5rem; /* Aumentar el tamaño del botón */
   cursor: pointer;
+  position: absolute;
+  top: 1rem; /* Posición en la esquina superior derecha */
+  right: 1rem;
   transition: color 0.3s ease;
 
   &:hover {
-    color: #ffdd44;
+    color: #f08080; /* Hover rosado más oscuro */
+  }
+
+  @media (max-width: 768px) {
+    font-size: 2rem; /* Ajustar tamaño en pantallas más pequeñas */
   }
 `;
 
@@ -58,7 +66,7 @@ export const CartItem = styled.li`
   align-items: center;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid rgba(240, 240, 240, 0.6); /* Borde claro */
 `;
 
 export const ItemImage = styled.img`
@@ -76,13 +84,13 @@ export const ItemDetails = styled.div`
 export const ItemName = styled.p`
   font-size: 1.1rem;
   margin: 0;
-  color: #ffffff;
+  color: #6e5e4e; /* Marrón claro */
 `;
 
 export const ItemPrice = styled.p`
   font-size: 1rem;
   margin: 0;
-  color: #ffd700;
+  color: #d9b3a8; /* Beige suave rosado */
 `;
 
 export const ItemControls = styled.div`
@@ -92,8 +100,8 @@ export const ItemControls = styled.div`
 `;
 
 export const QuantityButton = styled.button`
-  background-color: #ffd700;
-  color: #1c1c1c;
+  background-color: #f4c2c2; /* Rosado suave */
+  color: #fff;
   border: none;
   padding: 0.3rem 0.6rem;
   border-radius: 4px;
@@ -101,7 +109,7 @@ export const QuantityButton = styled.button`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #ffdd44;
+    background-color: #f08080; /* Hover rosado más oscuro */
   }
 `;
 
@@ -120,21 +128,20 @@ export const RemoveButton = styled.button`
 `;
 
 export const CheckoutButton = styled.button`
-  background-color: #ffd700;
-  color: #1c1c1c;
+  background-color: #f4c2c2; /* Rosado suave */
+  color: #fff;
   padding: 0.6rem 1.2rem;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.3s ease,
-    box-shadow 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave */
   margin-top: 1rem;
 
   &:hover {
-    background-color: #e5c200;
+    background-color: #f08080; /* Hover rosado más oscuro */
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Sombra más intensa */
   }
 `;

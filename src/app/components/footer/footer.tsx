@@ -47,13 +47,13 @@ const Footer: React.FC = () => {
 
         {/* Sección de ubicación con icono */}
         <LocationContainer>
-          <FaMapMarkerAlt size={24} color="#FFD700" />
+          <FaMapMarkerAlt size={24} color="#f4c2c2" />
           <LocationText>Av. Siempre Viva 123, Springfield</LocationText>
         </LocationContainer>
 
         {/* Texto del footer con el nombre y enlace a LinkedIn */}
         <FooterText>
-          © {new Date().getFullYear()} <a href="https://www.linkedin.com/in/sofia-luciuk/" target="_blank" rel="noopener noreferrer" style={{ color: '#FFD700', textDecoration: 'none' }}>Nicolás Luciuk</a>. Todos los derechos reservados.
+        © {new Date().getFullYear()} <a href="https://www.linkedin.com/in/nicolas-luciuk/" target="_blank" rel="noopener noreferrer" style={{ color: '#d9b3a8', textDecoration: 'none' }}>Nicolás Luciuk</a>. Todos los derechos reservados.
         </FooterText>
       </FooterWrapper>
     </FooterContainer>

@@ -17,6 +17,67 @@ import {
 } from "chart.js";
 import CircularProgress from "@mui/material/CircularProgress";
 import { TextField, Button } from "@mui/material";
+import styled from "styled-components";
+
+// Estilos personalizados
+
+const FormContainer = styled.div`
+  margin-top: 20px;
+`;
+
+const InputWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 20px;
+`;
+
+const StyledButton = styled(Button)`
+  background-color: #f4c2c2 !important; /* Botón rosado */
+  color: #1c1c1c !important;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #f08080 !important; /* Hover en rosado oscuro */
+  }
+`;
+
+const ChartContainer = styled.div`
+  margin-top: 20px;
+`;
+
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+`;
+
+// Estilos personalizados para TextFields
+const textFieldStyles = {
+  "& .MuiInputBase-root": {
+    color: "black", // Cambia el color del texto a negro
+    fontWeight: "bold",
+  },
+  "& .MuiInputLabel-root": {
+    color: "white", // Mantén la etiqueta en blanco
+    fontWeight: "bold",
+  },
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "white", // Borde blanco
+    },
+    "&:hover fieldset": {
+      borderColor: "white", // Borde blanco en hover
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "#f4c2c2", // Borde rosado suave en foco
+    },
+  },
+  input: { color: "black" }, // Cambia el color del texto dentro de los inputs a negro
+};
+
 
 // Registrar los componentes de Chart.js
 ChartJS.register(
@@ -29,29 +90,38 @@ ChartJS.register(
   Legend
 );
 
+// Define el tipo de datos para el gráfico
+interface ChartData {
+  labels: string[];
+  datasets: {
+    label: string;
+    data: number[];
+    fill: boolean;
+    borderColor: string;
+    tension: number;
+  }[];
+}
+
 const OrdersChart: React.FC<{ showChart: boolean }> = ({ showChart }) => {
   const dispatch = useAppDispatch();
   const orders = useAppSelector(selectAllProductOrders);
-  const [chartData, setChartData] = useState<any>(null);
+  const [chartData, setChartData] = useState<ChartData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [startDate, setStartDate] = useState<string>(""); 
-  const [endDate, setEndDate] = useState<string>(""); 
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
 
-  // Crear handleFetchOrders con useCallback para evitar que cambie entre renderizados
   const handleFetchOrders = useCallback(async () => {
     setLoading(true);
     await dispatch(fetchProductOrders());
     setLoading(false);
-  }, [dispatch]); 
+  }, [dispatch]);
 
-  // Solo llama a fetch cuando el componente es mostrado (showChart es true)
   useEffect(() => {
     if (showChart) {
       handleFetchOrders();
     }
-  }, [showChart, handleFetchOrders]); 
+  }, [showChart, handleFetchOrders]);
 
-  // Esta función se encarga de generar los datos del gráfico
   const generateChartData = useCallback(() => {
     const ordersByDate: { [key: string]: number } = {};
 
@@ -59,7 +129,6 @@ const OrdersChart: React.FC<{ showChart: boolean }> = ({ showChart }) => {
       const orderDate = new Date(order.createdAt);
       const date = orderDate.toLocaleDateString();
 
-      // Filtrar por rango de fechas
       if (
         (!startDate || orderDate >= new Date(startDate)) &&
         (!endDate || orderDate <= new Date(endDate))
@@ -89,7 +158,6 @@ const OrdersChart: React.FC<{ showChart: boolean }> = ({ showChart }) => {
     });
   }, [orders, startDate, endDate]);
 
-  // Regenerar el gráfico cada vez que las órdenes cambian o se aplica un filtro
   useEffect(() => {
     if (orders.length > 0) {
       generateChartData();
@@ -97,62 +165,27 @@ const OrdersChart: React.FC<{ showChart: boolean }> = ({ showChart }) => {
   }, [orders, startDate, endDate, generateChartData]);
 
   const handleFilter = () => {
-    generateChartData(); 
+    generateChartData();
   };
 
   if (loading) {
     return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100px",
-        }}
-      >
+      <LoadingContainer>
         <CircularProgress />
-      </div>
+      </LoadingContainer>
     );
   }
 
   return (
-    <div style={{ marginTop: "20px" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: "20px",
-        }}
-      >
+    <FormContainer>
+      <InputWrapper>
         <TextField
           label="Fecha de Inicio"
           type="date"
           InputLabelProps={{ shrink: true }}
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
-          sx={{
-            "& .MuiInputBase-root": {
-              color: "white",
-              fontWeight: "bold",
-              borderColor: "white",
-            },
-            "& .MuiInputLabel-root": {
-              color: "white",
-              fontWeight: "bold",
-            },
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "white",
-              },
-              "&:hover fieldset": {
-                borderColor: "white",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "white",
-              },
-            },
-            input: { color: "white" },
-          }}
+          sx={textFieldStyles}
         />
         <TextField
           label="Fecha de Fin"
@@ -160,36 +193,18 @@ const OrdersChart: React.FC<{ showChart: boolean }> = ({ showChart }) => {
           InputLabelProps={{ shrink: true }}
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
-          sx={{
-            "& .MuiInputBase-root": {
-              color: "white",
-              fontWeight: "bold",
-              borderColor: "white",
-            },
-            "& .MuiInputLabel-root": {
-              color: "white",
-              fontWeight: "bold",
-            },
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "white",
-              },
-              "&:hover fieldset": {
-                borderColor: "white",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "white",
-              },
-            },
-            input: { color: "white" },
-          }}
+          sx={textFieldStyles}
         />
-        <Button variant="contained" color="primary" onClick={handleFilter}>
+        <StyledButton variant="contained" onClick={handleFilter}>
           Filtrar
-        </Button>
-      </div>
-      {chartData && <Line data={chartData} />} {/* Renderiza el gráfico solo si hay datos */}
-    </div>
+        </StyledButton>
+      </InputWrapper>
+      {chartData && (
+        <ChartContainer>
+          <Line data={chartData} />
+        </ChartContainer>
+      )}
+    </FormContainer>
   );
 };
 

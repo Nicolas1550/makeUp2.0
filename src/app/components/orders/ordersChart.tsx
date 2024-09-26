@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
+import { ChartData } from "chart.js";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   fetchAdminOrders,
@@ -25,7 +26,7 @@ interface OrdersChartProps {
 const OrdersChart: React.FC<OrdersChartProps> = ({ startDate, endDate }) => {
   const dispatch = useAppDispatch();
   const adminOrders = useAppSelector(selectAdminOrders);
-  const [chartData, setChartData] = useState<any>(null);
+  const [chartData, setChartData] = useState<ChartData<'bar'> | null>(null);
 
   useEffect(() => {
     if (adminOrders.length === 0) {
@@ -35,11 +36,9 @@ const OrdersChart: React.FC<OrdersChartProps> = ({ startDate, endDate }) => {
 
   useEffect(() => {
     if (adminOrders.length > 0) {
-      // Convertir fechas en objetos Date
       const start = new Date(startDate);
       const end = new Date(endDate);
 
-      // Filtrar las órdenes por fecha y estado "pendiente" y "aprobado"
       const filteredOrders = adminOrders.filter((order) => {
         const orderDate = new Date(order.createdAt);
         return (
@@ -49,7 +48,6 @@ const OrdersChart: React.FC<OrdersChartProps> = ({ startDate, endDate }) => {
         );
       });
 
-      // Si no hay fechas seleccionadas, mostrar todas las órdenes
       const allOrders =
         startDate === endDate
           ? adminOrders.filter(
@@ -58,7 +56,6 @@ const OrdersChart: React.FC<OrdersChartProps> = ({ startDate, endDate }) => {
             )
           : filteredOrders;
 
-      // Agrupar las órdenes por estado
       const pendingOrders = allOrders.filter(
         (order) => order.status === "pendiente"
       );
@@ -66,12 +63,10 @@ const OrdersChart: React.FC<OrdersChartProps> = ({ startDate, endDate }) => {
         (order) => order.status === "aprobado"
       );
 
-      // Extraer las fechas de creación para el eje X
       const labels = allOrders.map((order) =>
         new Date(order.createdAt).toLocaleDateString()
       );
 
-      // Preparar los datos del gráfico
       setChartData({
         labels: labels,
         datasets: [

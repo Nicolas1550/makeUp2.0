@@ -7,8 +7,9 @@ export const InfoSection = styled.section`
   justify-content: center;
   align-items: center;
   padding: 4rem 0;
-  background-color: #1c1c1c;
-  color: #f8f9fa;
+  background-color: rgba(240, 230, 220, 0.9); /* Fondo beige suave, similar al resto de la página */
+  color: #6e5e4e; /* Marrón claro, acorde con el navbar y otros textos */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08); /* Sombras ligeras similares */
 `;
 
 export const InfoContainer = styled.div`
@@ -38,14 +39,16 @@ export const InfoText = styled.div`
     font-weight: 700;
     font-size: 2.5rem;
     margin-bottom: 1rem;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+    color: #d9b3a8; /* Beige suave rosado, alineado con el header */
+    text-shadow: 0 0 10px rgba(110, 94, 78, 0.5); /* Sombra suave marrón */
   }
 
   p {
     font-size: 1.1rem;
     line-height: 1.6;
     margin-bottom: 1rem;
-    text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    color: #6e5e4e; /* Marrón claro */
+    text-shadow: 0 0 5px rgba(110, 94, 78, 0.3); /* Sombra suave marrón claro */
   }
 
   ul {
@@ -56,6 +59,7 @@ export const InfoText = styled.div`
 
   li {
     margin-bottom: 0.5rem;
+    color: #808080; /* Gris oscuro, alineado con otros textos */
   }
 
   @media (max-width: 768px) {
@@ -76,20 +80,21 @@ export const InfoImageContainer = styled.div`
   position: relative;
   overflow: hidden;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Sombras ligeras coherentes */
 `;
 
 export const InfoImage = styled.img`
   width: 100%;
   height: 100%;
-  opacity: 0.8;
+  opacity: 0.85; /* Ligera opacidad */
   border-radius: 10px;
   background-size: cover;
   background-position: center;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease;
 
   &:hover {
     opacity: 1;
+    transform: scale(1.05); /* Pequeño zoom en hover */
   }
 `;
 
@@ -103,16 +108,15 @@ export const ContactOverlay = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: rgba(0, 0, 0, 0.5);
-  color: #ffd700;
+  background: rgba(255, 240, 245, 0.85); /* Fondo rosado suave alineado con el resto */
+  color: #d9b3a8; /* Beige suave */
   text-align: center;
-  opacity: 0.9;
   border-radius: 10px;
   padding: 1rem;
   transition: background 0.3s ease;
 
   &:hover {
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(255, 240, 245, 0.95); /* Fondo ligeramente más oscuro en hover */
   }
 `;
 
@@ -129,6 +133,7 @@ export const ContactInfo = styled.p`
 
   svg {
     font-size: 1.5rem;
+    color: #d9b3a8; /* Beige suave rosado para los iconos */
 
     @media (max-width: 768px) {
       font-size: 1.2rem;
@@ -137,9 +142,9 @@ export const ContactInfo = styled.p`
 `;
 
 export const PhoneIcon = styled(FaPhoneAlt)`
-  color: #ffd700;
+  color: #d9b3a8; /* Beige suave rosado */
 `;
 
 export const EmailIcon = styled(FaEnvelope)`
-  color: #ffd700;
+  color: #d9b3a8; /* Beige suave rosado */
 `;

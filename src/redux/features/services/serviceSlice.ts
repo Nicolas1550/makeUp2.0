@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from "axios"; // Importa AxiosError
 import { RootState } from "../../store";
 
 interface User {
@@ -7,7 +7,7 @@ interface User {
   nombre: string;
   apellido: string;
   email: string;
-  roles: string[]; 
+  roles: string[];
   telefono: string;
   foto?: string;
 }
@@ -22,7 +22,7 @@ interface Service {
 
 interface ServiceState {
   services: Service[];
-  selectedServiceUsers: User[]; 
+  selectedServiceUsers: User[];
   isLoading: boolean;
   error: Record<string, string> | null;
   status: "idle" | "loading" | "succeeded" | "failed";
@@ -36,10 +36,12 @@ const initialState: ServiceState = {
   status: "idle",
 };
 
-const API_BASE_URL = process.env.NODE_ENV === "development"
-  ? "https://backendiaecommerce.onrender.com"
-  : "https://backendiaecommerce.onrender.com";
+const API_BASE_URL =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3001"
+    : "http://localhost:3001";
 
+// Thunk para obtener todos los servicios
 // Thunk para obtener todos los servicios
 export const fetchServices = createAsyncThunk<
   Service[],
@@ -49,10 +51,10 @@ export const fetchServices = createAsyncThunk<
   try {
     const token = localStorage.getItem("token");
     const response = await axios.get(`${API_BASE_URL}/api/servicios`, {
-      headers: { Authorization: `Bearer ${token}` }, 
+      headers: { Authorization: `Bearer ${token}` },
     });
     return response.data as Service[];
-  } catch (error: any) {
+  } catch {
     return rejectWithValue({ general: "Error al obtener los servicios" });
   }
 });
@@ -72,7 +74,7 @@ export const fetchServiceUsers = createAsyncThunk<
       }
     );
     return response.data as User[];
-  } catch (error: any) {
+  } catch {
     return rejectWithValue({
       general: "Error al obtener los usuarios del servicio",
     });
@@ -94,7 +96,7 @@ export const assignEmployeeToService = createAsyncThunk<
       headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
-  } catch (error: any) {
+  } catch {
     return rejectWithValue({
       general: "Error al asignar el empleado al servicio",
     });
@@ -116,12 +118,13 @@ export const removeEmployeeFromService = createAsyncThunk<
       headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
-  } catch (error: any) {
+  } catch {
     return rejectWithValue({
       general: "Error al desasignar el empleado del servicio",
     });
   }
 });
+
 
 // Slice para manejar el estado de servicios
 const serviceSlice = createSlice({
@@ -142,7 +145,7 @@ const serviceSlice = createSlice({
       if (service && !service.empleados?.some((u) => u.id === user.id)) {
         service.empleados = [...(service.empleados || []), user];
       }
-      
+
       // Agregar el usuario a selectedServiceUsers si no está ya
       if (!state.selectedServiceUsers.some((u) => u.id === user.id)) {
         state.selectedServiceUsers.push(user);
@@ -199,7 +202,6 @@ const serviceSlice = createSlice({
       });
   },
 });
-
 
 export const { clearError, employeeAssigned, employeeRemoved } = serviceSlice.actions;
 export default serviceSlice.reducer;

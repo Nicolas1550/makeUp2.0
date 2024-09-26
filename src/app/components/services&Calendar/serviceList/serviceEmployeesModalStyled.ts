@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FaWhatsapp } from "react-icons/fa";
+import { FaWhatsapp, FaEnvelope } from "react-icons/fa"; // Añadimos el ícono de correo electrónico
 
 export const ModalOverlay = styled.div`
   position: fixed;
@@ -15,12 +15,12 @@ export const ModalOverlay = styled.div`
 `;
 
 export const ModalContent = styled.div`
-  background-color: rgba(28, 28, 28, 0.9);
+  background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco suave */
   border-radius: 10px;
   width: 90%;
   max-width: 1000px;
   padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Sombra suave */
   position: relative;
 `;
 
@@ -28,18 +28,19 @@ export const ModalHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid rgba(255, 215, 0, 0.3);
+  border-bottom: 1px solid rgba(240, 240, 240, 0.6); /* Borde claro */
   padding-bottom: 10px;
 `;
 
 export const CloseButton = styled.button`
   background: transparent;
   border: none;
-  color: #ffd700;
+  color: #d9b3a8; /* Beige suave rosado */
   font-size: 1.5rem;
   cursor: pointer;
+
   &:hover {
-    color: #fff;
+    color: #f08080; /* Hover rosado más oscuro */
   }
 `;
 
@@ -55,17 +56,17 @@ export const EmployeeGrid = styled.div`
 `;
 
 export const EmployeeCard = styled.div`
-  background-color: rgba(44, 44, 44, 0.85);
+  background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco claro */
   border-radius: 10px;
   width: 280px;
   padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Sombra suave */
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra más intensa */
   }
 `;
 
@@ -74,20 +75,21 @@ export const EmployeeImage = styled.img`
   width: 120px;
   height: 120px;
   object-fit: cover;
-  margin: 0 auto 15px; /* Centra la imagen */
+  margin: 0 auto 15px;
   display: block;
 `;
 
 export const EmployeeName = styled.h4`
-  color: #ffd700;
+  color: #d9b3a8; /* Beige suave rosado */
   margin-bottom: 10px;
 `;
 
 export const EmployeeInfo = styled.p`
-  color: #f8f9fa;
+  color: #6e5e4e; /* Marrón claro */
   margin: 5px 0;
 `;
 
+// Estilos del botón de WhatsApp
 export const WhatsAppButton = styled.a`
   display: inline-flex;
   align-items: center;
@@ -98,7 +100,7 @@ export const WhatsAppButton = styled.a`
   text-decoration: none;
   font-weight: bold;
   margin-top: 10px;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
 
   &:hover {
     background-color: #1ebc57;
@@ -106,6 +108,29 @@ export const WhatsAppButton = styled.a`
 `;
 
 export const WhatsAppIcon = styled(FaWhatsapp)`
+  margin-right: 10px;
+  font-size: 1.2rem;
+`;
+
+// Estilos del botón de correo electrónico
+export const MailButton = styled.a`
+  display: inline-flex;
+  align-items: center;
+  background-color: #007bff; /* Azul para el email */
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #0056b3; /* Hover azul más oscuro */
+  }
+`;
+
+export const MailIcon = styled(FaEnvelope)`
   margin-right: 10px;
   font-size: 1.2rem;
 `;

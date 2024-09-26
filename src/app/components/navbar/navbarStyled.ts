@@ -5,7 +5,7 @@ export const Nav = styled.nav`
   padding: 1rem 2rem;
   display: flex;
   justify-content: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   position: relative;
   z-index: 20;
   height: 100px;
@@ -26,11 +26,11 @@ export const NavContainer = styled.div`
   align-items: center;
   width: 100%;
   max-width: 1200px;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(8px);
   padding: 1rem;
   border-radius: 10px;
-  background: rgba(28, 28, 28, 0.8);
-  border: 1px solid rgba(255, 215, 0, 0.3);
+  background: rgba(255, 255, 255, 0.7); /* Fondo blanco suave */
+  border: 1px solid rgba(240, 240, 240, 0.6); /* Borde claro */
   transition: background 0.3s ease, border 0.3s ease;
   z-index: 20;
 
@@ -42,31 +42,31 @@ export const NavContainer = styled.div`
 `;
 
 export const Logo = styled.a`
-  color: #ffd700;
+  color: #d9b3a8; /* Beige suave rosado */
   font-size: 2rem;
   font-weight: bold;
   text-transform: uppercase;
   letter-spacing: 2px;
   position: relative;
   margin-left: 1rem;
+
   &::before {
     content: "";
     display: block;
     width: 100%;
     height: 3px;
-    background: #ffd700;
+    background: #d9b3a8; /* Subrayado en rosa suave */
     margin-bottom: 5px;
   }
+
   animation: glow 1.5s infinite alternate;
 
   @keyframes glow {
     from {
-      text-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700, 0 0 30px #ffd700,
-        0 0 40px #ffd700;
+      text-shadow: 0 0 10px #d9b3a8, 0 0 20px #d9b3a8;
     }
     to {
-      text-shadow: 0 0 20px #ffd700, 0 0 30px #ffd700, 0 0 40px #ffd700,
-        0 0 50px #ffd700;
+      text-shadow: 0 0 20px #d9b3a8, 0 0 30px #d9b3a8;
     }
   }
 
@@ -83,14 +83,15 @@ export const NavLinks = styled.div`
   display: flex;
   gap: 2rem;
   align-items: center;
-  justify-content: center;  /* Alinear horizontalmente los links */
+  justify-content: center;
 
   @media (max-width: 1000px) {
     display: none;
   }
 `;
+
 export const NavLink = styled.div`
-  color: #f8f9fa;
+  color: #6e5e4e; /* Marrón claro */
   text-decoration: none;
   font-weight: bold;
   font-size: 1.1rem;
@@ -98,9 +99,9 @@ export const NavLink = styled.div`
   transition: color 0.3s ease, transform 0.3s ease, text-shadow 0.3s ease;
 
   &:hover {
-    color: #ffd700;
+    color: #f4c2c2; /* Rosado suave */
     transform: translateY(-5px);
-    text-shadow: 0 0 5px #ffd700, 0 0 10px #ffd700;
+    text-shadow: 0 0 5px #f4c2c2, 0 0 10px #f4c2c2; /* Glow rosado */
   }
 
   @media (max-width: 500px) {
@@ -111,7 +112,7 @@ export const NavLink = styled.div`
 export const HamburgerIcon = styled.div`
   display: none;
   cursor: pointer;
-  color: #ffd700;
+  color: #f4c2c2; /* Rosado suave */
   font-size: 2rem;
   padding: 0.5rem;
   z-index: 21;
@@ -131,14 +132,13 @@ export const MobileMenu = styled.div<{ $isOpen: boolean }>`
   flex-direction: column;
   align-items: center;
   gap: 1rem;
-  background: rgba(28, 28, 28, 0.9);
+  background: rgba(255, 255, 255, 0.9); /* Fondo blanco claro */
   border-radius: 10px;
   padding: 1rem;
   position: absolute;
   top: 80px;
   left: 50%;
   transform: translateX(-50%);
-
   width: 90%;
   z-index: 20;
 
@@ -149,7 +149,7 @@ export const MobileMenu = styled.div<{ $isOpen: boolean }>`
 
 export const AuthButtons = styled.div`
   display: flex;
-  align-items: center; /* Alinea verticalmente los elementos dentro de AuthButtons */
+  align-items: center;
   gap: 1rem;
 
   @media (max-width: 1000px) {
@@ -157,10 +157,9 @@ export const AuthButtons = styled.div`
   }
 `;
 
-
 export const AuthButton = styled.a`
-  background-color: #ffd700;
-  color: #1c1c1c;
+  background-color: #f4c2c2; /* Rosado suave */
+  color: #fff; /* Texto blanco */
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 5px;
@@ -170,8 +169,8 @@ export const AuthButton = styled.a`
   text-decoration: none;
 
   &:hover {
-    background-color: #1c1c1c;
-    color: #ffd700;
+    background-color: #f08080; /* Hover en rosa más oscuro */
+    color: #fff;
   }
 
   @media (max-width: 500px) {
@@ -189,8 +188,8 @@ const spin = keyframes`
 `;
 
 export const LoadingSpinner = styled.div`
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top: 4px solid #fff;
+  border: 4px solid rgba(255, 182, 193, 0.3); /* Rosado claro */
+  border-top: 4px solid #f08080; /* Rosado más oscuro */
   border-radius: 50%;
   width: 20px;
   height: 20px;
@@ -198,39 +197,39 @@ export const LoadingSpinner = styled.div`
 `;
 
 export const DropdownButton = styled.button`
-  background-color: #ffd700;
-  color: #1c1c1c;
+  background-color: #f4c2c2; /* Rosado suave */
+  color: #fff;
   padding: 0.6rem 1.2rem;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-weight: bold;
-  position: relative;  /* Añadir posición relativa al botón */
+  position: relative;
   transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 
   &:hover {
-    background-color: #e5c200;
+    background-color: #f08080; /* Hover rosa más oscuro */
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
   }
 `;
 
 export const DropdownMenu = styled.div`
   position: absolute;
-  top: 110%;  /* Posicionar justo debajo del botón */
-  left: 0;  /* Alinearlo con el botón */
-  background-color: #1a1a1a;
+  top: 110%;
+  left: 0;
+  background-color: #fff; /* Fondo blanco */
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Sombras más suaves */
   overflow: hidden;
   z-index: 10;
-  min-width: 160px;  /* Tamaño adecuado para las palabras "Nosotros" y "Contacto" */
+  min-width: 160px;
 `;
 
 export const DropdownItem = styled.button`
   background-color: transparent;
-  color: #f8f9fa;
+  color: #6e5e4e; /* Marrón claro */
   padding: 0.8rem 1.2rem;
   border: none;
   cursor: pointer;
@@ -239,7 +238,7 @@ export const DropdownItem = styled.button`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #333;
+    background-color: #ffe4e1; /* Fondo rosado claro en hover */
   }
 
   a {
@@ -249,10 +248,8 @@ export const DropdownItem = styled.button`
   }
 `;
 
-
-
 export const DropdownButtonContainer = styled.div`
-  position: relative;  /* Contenedor relativo para que el menú siga al botón */
+  position: relative;
   display: inline-block;
 `;
 
@@ -269,25 +266,25 @@ export const ProfileIcon = styled.div`
 
   svg {
     font-size: 40px;
-    color: #fff;
+    color: #6e5e4e; /* Marrón claro */
   }
 `;
 
 export const ProfileDropdown = styled.div`
   position: absolute;
-  top: 110%;  /* Posicionarlo justo debajo del icono */
-  right: 0;  /* Mantener el comportamiento de apertura hacia la izquierda */
-  background-color: #1a1a1a;  /* Color de fondo igual que el de "Más" */
-  border-radius: 8px;  /* Bordes redondeados */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);  /* Sombra consistente */
+  top: 110%;
+  right: 0;
+  background-color: #fff; /* Fondo blanco */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   z-index: 10;
-  min-width: 160px;  /* Mismo tamaño que el menú de "Más" */
+  min-width: 160px;
 `;
 
 export const ProfileDropdownItem = styled.button`
   background-color: transparent;
-  color: #f8f9fa;  /* Color de texto claro */
+  color: #6e5e4e; /* Marrón claro */
   padding: 0.8rem 1.2rem;
   border: none;
   cursor: pointer;
@@ -296,7 +293,7 @@ export const ProfileDropdownItem = styled.button`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #333;  /* Color de fondo en hover */
+    background-color: #ffe4e1; /* Fondo rosado claro */
   }
 
   a {

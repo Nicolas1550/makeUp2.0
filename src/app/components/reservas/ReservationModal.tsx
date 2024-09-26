@@ -66,8 +66,9 @@ const ReserveModal: React.FC<ReserveModalProps> = ({
         return;
       }
 
-      const response = await axios.post(
-        "https://backendiaecommerce.onrender.com/api/orders",
+      // Realiza la reserva, ya no guardamos el response ya que no lo usamos
+      await axios.post(
+        "http://localhost:3001/api/orders",
         {
           user_id: user.id,
           disponibilidad_id: disponibilidad.id,
@@ -82,13 +83,13 @@ const ReserveModal: React.FC<ReserveModalProps> = ({
 
       alert("Reserva realizada con éxito.");
       onClose();
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error(
         "Error realizando la reserva:",
-        error.response || error.message
+        (error as Error).message || "Error desconocido"
       );
 
-      if (error.response && error.response.status === 400) {
+      if (axios.isAxiosError(error) && error.response?.status === 400) {
         alert(error.response.data.message);
       } else {
         alert(
@@ -101,7 +102,7 @@ const ReserveModal: React.FC<ReserveModalProps> = ({
     }
   };
 
-  const numOrders = disponibilidad.numOrders || 0; 
+  const numOrders = disponibilidad.numOrders || 0;
 
   return (
     <ModalOverlay isOpen={isOpen} onClick={onClose}>
@@ -109,7 +110,7 @@ const ReserveModal: React.FC<ReserveModalProps> = ({
         onClick={(e: React.MouseEvent<HTMLDivElement>) => e.stopPropagation()}
       >
         <ModalHeader>Confirmar Reserva</ModalHeader>
-        <ModalContent numOrders={numOrders}> 
+        <ModalContent numOrders={numOrders}>
           <p>Servicio: {disponibilidad.servicio_nombre}</p>
           <p>
             Fecha Inicio:{" "}
@@ -130,4 +131,3 @@ const ReserveModal: React.FC<ReserveModalProps> = ({
 };
 
 export default ReserveModal;
-

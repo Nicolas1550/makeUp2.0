@@ -4,11 +4,13 @@ import { motion } from "framer-motion";
 import { Canvas } from "@react-three/fiber";
 import Particles from "./Particles"; 
 
-const HeroContainer = styled.div`
+
+export const HeroContainer = styled.div`
   position: relative;
   width: 100%;
   height: 40vh;
   background: url("/background.webp") center center/cover no-repeat;
+  background-attachment: fixed; /* Activa el efecto parallax */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -16,11 +18,12 @@ const HeroContainer = styled.div`
   margin-top: 0.5rem;
 
   @media (max-width: 768px) {
-    height: 60vh; 
+    height: 60vh;
+    background-attachment: scroll; /* Desactiva parallax en móviles */
   }
 `;
 
-const HeroOverlay = styled.div`
+export const HeroOverlay = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -30,30 +33,30 @@ const HeroOverlay = styled.div`
   z-index: 1;
 `;
 
-const HeroTitle = styled(motion.h1)`
+export const HeroTitle = styled(motion.h1)`
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #ffd700;
+  color: #d9b3a8; /* Beige suave rosado */
   font-size: 2.5rem;
   text-align: center;
   z-index: 2;
   text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   font-weight: bold;
-  opacity: 1; 
+  opacity: 1;
 
   @media (max-width: 768px) {
     font-size: 2rem;
   }
 `;
 
-const HeroSubtitle = styled(motion.h2)`
+export const HeroSubtitle = styled(motion.h2)`
   position: absolute;
   top: 60%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #ffd700;
+  color: #d9b3a8; /* Beige suave rosado */
   font-size: 2rem;
   text-align: center;
   z-index: 2;
@@ -63,12 +66,12 @@ const HeroSubtitle = styled(motion.h2)`
   opacity: 0; /* Inicialmente oculto */
 
   @media (max-width: 768px) {
-    top: 70%; 
-    font-size: 1.5rem; 
+    top: 70%;
+    font-size: 1.5rem;
   }
 `;
 
-const CanvasContainer = styled.div`
+export const CanvasContainer = styled.div`
   position: absolute;
   top: 0;
   left: 0;
@@ -77,6 +80,7 @@ const CanvasContainer = styled.div`
   z-index: 0;
   pointer-events: none;
 `;
+
 
 const HeroSlider: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);

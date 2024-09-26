@@ -1,14 +1,15 @@
 import styled from "styled-components";
 
 export const FooterContainer = styled.footer`
-  background-color: #222;
-  color: #fff;
+  background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco suave */
+  color: #6e5e4e; /* Marrón claro */
   padding: 40px 0;
   text-align: center;
   position: relative;
   width: 100%;
   bottom: 0;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* Sombras ligeras */
+  border-top: 1px solid rgba(240, 240, 240, 0.6); /* Borde claro */
 `;
 
 export const FooterWrapper = styled.div`
@@ -29,14 +30,14 @@ export const FooterLinks = styled.div`
 `;
 
 export const FooterLink = styled.a`
-  color: #fff;
+  color: #6e5e4e; /* Marrón claro */
   margin: 0 15px;
   text-decoration: none;
   font-size: 1.1rem;
   transition: color 0.3s ease;
 
   &:hover {
-    color: #ffd700;
+    color: #f4c2c2; /* Rosado suave en hover */
     text-decoration: underline;
   }
 `;
@@ -44,6 +45,7 @@ export const FooterLink = styled.a`
 export const FooterText = styled.p`
   margin: 20px 0;
   font-size: 0.9rem;
+  color: #6e5e4e; /* Marrón claro */
 `;
 
 export const FooterIconContainer = styled.div`
@@ -53,13 +55,13 @@ export const FooterIconContainer = styled.div`
 `;
 
 export const FooterIcon = styled.a`
-  color: #fff;
+  color: #6e5e4e; /* Marrón claro */
   margin: 0 10px;
   font-size: 1.5em;
   transition: color 0.3s ease;
 
   &:hover {
-    color: #ffd700;
+    color: #f4c2c2; /* Rosado suave en hover */
   }
 `;
 
@@ -69,12 +71,13 @@ export const LocationContainer = styled.div`
   justify-content: center;
   margin-top: 20px;
   font-size: 1.2rem;
+  color: #6e5e4e; /* Marrón claro */
 `;
 
 export const LocationText = styled.p`
   margin-left: 10px;
   font-size: 1.2rem;
-  color: #ffd700;
+  color: #f4c2c2; /* Rosado suave */
 `;
 
 export const MapContainer = styled.div`
@@ -83,5 +86,5 @@ export const MapContainer = styled.div`
   margin-top: 20px;
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombras más ligeras */
 `;

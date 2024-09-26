@@ -8,6 +8,10 @@ import {
   getProductOrderError,
 } from "@/redux/features/productOrder/productOrderSlice";
 import { selectIsAdmin } from "@/redux/authSelectors";
+import {
+  selectAllProducts,
+  fetchProducts,
+} from "@/redux/features/product/productSlice";
 import Modal from "@mui/material/Modal";
 import CircularProgress from "@mui/material/CircularProgress";
 import {
@@ -20,6 +24,10 @@ import {
   StyledModalContainer,
   TableWrapper,
   ToggleButton,
+  ProductDetailsContainer,
+  ProductName,
+  ProductAttributes,
+  ProductAttribute,
 } from "./orderModelStyles";
 import {
   Button,
@@ -39,22 +47,19 @@ const OrderModal: React.FC<OrderModalProps> = ({ open, onClose }) => {
   const orders = useAppSelector(selectAllProductOrders);
   const orderStatus = useAppSelector(getProductOrderStatus);
   const orderError = useAppSelector(getProductOrderError);
+  const products = useAppSelector(selectAllProducts); // Productos del ProductSlice
   const isAdmin = useAppSelector(selectIsAdmin);
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string>("pendiente");
+  const [isAscending, setIsAscending] = useState(false); // Nuevo estado para controlar el orden
 
   useEffect(() => {
     if (open) {
       console.log("Modal abierto. Solicitando órdenes...");
       dispatch(fetchProductOrders());
+      dispatch(fetchProducts()); // Asegurarse de cargar todos los productos
     }
   }, [dispatch, open]);
-
-  useEffect(() => {
-    console.log("Estado de las órdenes:", orders);
-    console.log("Estado de la solicitud:", orderStatus);
-    console.log("Error (si existe):", orderError);
-  }, [orders, orderStatus, orderError]);
 
   const handleToggle = (orderId: number) => {
     setExpandedOrderId(expandedOrderId === orderId ? null : orderId);
@@ -76,15 +81,30 @@ const OrderModal: React.FC<OrderModalProps> = ({ open, onClose }) => {
     link.click();
   };
 
+  // Función para obtener detalles de un producto por su ID
+  const getProductDetailsById = (id: number) => {
+    return products.find((product) => product.id === id);
+  };
+
+  // Ordenar las órdenes por fecha
+  const sortedOrders = [...orders].sort((a, b) => {
+    const dateA = new Date(a.createdAt).getTime();
+    const dateB = new Date(b.createdAt).getTime();
+    return isAscending ? dateA - dateB : dateB - dateA;
+  });
+
   return (
     <Modal open={open} onClose={onClose}>
       <StyledModalContainer>
         <ModalHeader>Órdenes de Compra</ModalHeader>
+        <Button onClick={() => setIsAscending(!isAscending)}>
+          {isAscending ? "Más Antiguas Primero" : "Más Recientes Primero"}
+        </Button>
         {orderStatus === "loading" && <CircularProgress color="inherit" />}
         {orderStatus === "failed" && <p>Error: {orderError}</p>}
-        {orderStatus === "succeeded" && orders.length > 0 && (
+        {orderStatus === "succeeded" && sortedOrders.length > 0 && (
           <TableWrapper>
-            {orders.map((order) => (
+            {sortedOrders.map((order) => (
               <OrderContainer key={order.id}>
                 <OrderHeader onClick={() => handleToggle(order.id)}>
                   <span>
@@ -148,11 +168,37 @@ const OrderModal: React.FC<OrderModalProps> = ({ open, onClose }) => {
                       <strong>Productos:</strong>
                       <ul>
                         {order.products?.length > 0 ? (
-                          order.products.map((product) => (
-                            <li key={product.id}>
-                              {product.name} - {product.quantity} unidades
-                            </li>
-                          ))
+                          order.products.map((product) => {
+                            const productDetails = getProductDetailsById(
+                              product.id
+                            );
+
+                            return (
+                              <li key={product.id}>
+                                <ProductDetailsContainer>
+                                  <ProductName>
+                                    {product.name} - {product.quantity} unidades
+                                  </ProductName>
+                                  {productDetails && (
+                                    <ProductAttributes>
+                                      <ProductAttribute>
+                                        <span>Marca:</span>{" "}
+                                        {productDetails.brand}
+                                      </ProductAttribute>
+                                      <ProductAttribute>
+                                        <span>Color:</span>{" "}
+                                        {productDetails.color}
+                                      </ProductAttribute>
+                                      <ProductAttribute>
+                                        <span>Categoría:</span>{" "}
+                                        {productDetails.category}
+                                      </ProductAttribute>
+                                    </ProductAttributes>
+                                  )}
+                                </ProductDetailsContainer>
+                              </li>
+                            );
+                          })
                         ) : (
                           <li>No hay productos en esta orden.</li>
                         )}
@@ -199,7 +245,7 @@ const OrderModal: React.FC<OrderModalProps> = ({ open, onClose }) => {
             ))}
           </TableWrapper>
         )}
-        {orderStatus === "succeeded" && orders.length === 0 && (
+        {orderStatus === "succeeded" && sortedOrders.length === 0 && (
           <p>No se encontraron órdenes.</p>
         )}
         <CloseButton onClick={onClose}>Cerrar</CloseButton>

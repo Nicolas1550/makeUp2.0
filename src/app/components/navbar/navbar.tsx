@@ -1,8 +1,10 @@
+
+
 "use client";
 import React from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
-import Image from "next/image"; 
+import Image from "next/image";
 import { FaBars, FaTimes, FaShoppingCart, FaUserCircle } from "react-icons/fa";
 import Badge from "@mui/material/Badge";
 import { motion } from "framer-motion";
@@ -28,7 +30,10 @@ import {
 import { Modal } from "@mui/material";
 import Cart from "../cart/cart";
 import { useNavbarLogic } from "./navbarLogic";
-
+interface Servicio {
+  id: string;
+  nombre: string;
+}
 const AuthModal = dynamic(() => import("../authModel/authModel"), {
   ssr: false,
 });
@@ -59,18 +64,18 @@ const Navbar: React.FC = () => {
     toggleMoreDropdown,
     isServicesDropdownOpen,
     toggleServicesDropdown,
+    closeDropdowns,
     dropdownMenuRef,
     moreDropdownRef,
     servicesDropdownRef,
     isAuthenticated,
-    user,
     isLoading,
     isAdmin,
     cartItems,
     handleAuthButtonClick,
     handleLogoutClick,
     profileImageUrl,
-    servicios,
+    servicios, // Aquí se asume que servicios es de tipo Servicio[]
   } = useNavbarLogic();
 
   if (!isAuthChecked) return null;
@@ -81,7 +86,7 @@ const Navbar: React.FC = () => {
         <HamburgerIcon onClick={toggleMenu}>
           {isOpen ? <FaTimes /> : <FaBars />}
         </HamburgerIcon>
-        <Logo href="/">Salon Unisex</Logo>
+        <Logo href="/">Fabiana Giménez</Logo>
         <NavLinks>
           <motion.div
             whileHover={{ scale: 1.2, transition: { duration: 0.3 } }}
@@ -99,13 +104,15 @@ const Navbar: React.FC = () => {
               <DropdownMenu>
                 <DropdownItem>
                   <Link href="/servicios" passHref>
-                    <NavLink>Cualquiera</NavLink>
+                    <NavLink onClick={closeDropdowns}>Cualquiera</NavLink>
                   </Link>
                 </DropdownItem>
-                {servicios.map((servicio: any) => (
+                {servicios.map((servicio: Servicio) => (
                   <DropdownItem key={servicio.id}>
                     <Link href={`/servicios/${servicio.id}`} passHref>
-                      <NavLink>{servicio.nombre}</NavLink>
+                      <NavLink onClick={closeDropdowns}>
+                        {servicio.nombre}
+                      </NavLink>
                     </Link>
                   </DropdownItem>
                 ))}
@@ -117,7 +124,7 @@ const Navbar: React.FC = () => {
             whileHover={{ scale: 1.2, transition: { duration: 0.3 } }}
           >
             <Link href="/tienda" passHref>
-              <NavLink>Tienda</NavLink>
+              <NavLink onClick={closeDropdowns}>Tienda</NavLink>
             </Link>
           </motion.div>
 
@@ -127,12 +134,12 @@ const Navbar: React.FC = () => {
               <DropdownMenu>
                 <DropdownItem>
                   <Link href="/nosotros" passHref>
-                    <NavLink>Nosotros</NavLink>
+                    <NavLink onClick={closeDropdowns}>Nosotros</NavLink>
                   </Link>
                 </DropdownItem>
                 <DropdownItem>
                   <Link href="/contacto" passHref>
-                    <NavLink>Contacto</NavLink>
+                    <NavLink onClick={closeDropdowns}>Contacto</NavLink>
                   </Link>
                 </DropdownItem>
               </DropdownMenu>
@@ -143,11 +150,11 @@ const Navbar: React.FC = () => {
         <AuthButtons>
           <Badge
             badgeContent={cartItems.length}
-            color="primary"
+            color="secondary"
             style={{ cursor: "pointer" }}
             onClick={toggleCart}
           >
-            <FaShoppingCart />
+            <FaShoppingCart color="black" />
           </Badge>
 
           {isAdmin && (
@@ -182,7 +189,9 @@ const Navbar: React.FC = () => {
 
                     {isDropdownOpen && (
                       <ProfileDropdown>
-                        <ProfileDropdownItem onClick={toggleProductOrdersModal}>
+                        <ProfileDropdownItem
+                          onClick={toggleProductOrdersModal}
+                        >
                           Órdenes de Productos
                         </ProfileDropdownItem>
                         <ProfileDropdownItem onClick={handleLogoutClick}>
@@ -210,11 +219,11 @@ const Navbar: React.FC = () => {
           ))}
           <Badge
             badgeContent={cartItems.length}
-            color="primary"
+            color="secondary"
             style={{ cursor: "pointer", alignSelf: "center" }}
             onClick={toggleCart}
           >
-            <FaShoppingCart />
+            <FaShoppingCart color="black" />
           </Badge>
 
           {isAdmin && (
@@ -234,9 +243,7 @@ const Navbar: React.FC = () => {
                 </AuthButton>
               ) : (
                 <>
-                  <DropdownButton onClick={toggleDropdown}>
-                    Pedidos
-                  </DropdownButton>
+                  <DropdownButton onClick={toggleDropdown}>Pedidos</DropdownButton>
                   {isDropdownOpen && (
                     <DropdownMenu>
                       <DropdownItem onClick={toggleProductOrdersModal}>
@@ -271,11 +278,7 @@ const Navbar: React.FC = () => {
           <EcommerceWithAdmin onClose={toggleAdminPanel} />
         </div>
       </Modal>
-      <Modal
-        open={isCartOpen}
-        onClose={toggleCart}
-        aria-labelledby="cart-modal"
-      >
+      <Modal open={isCartOpen} onClose={toggleCart} aria-labelledby="cart-modal">
         <div>
           <Cart isOpen={isCartOpen} onClose={toggleCart} />
         </div>

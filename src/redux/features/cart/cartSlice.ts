@@ -12,11 +12,13 @@ export interface Product {
   imageFileName?: string;
   quantity: number;
   description?: string;
+  brand: string;      // Nueva propiedad
+  color: string;      // Nueva propiedad
+  category?: string;   // Nueva propiedad
   createdAt: string;
   updatedAt: string;
   isFeatured?: boolean; // Hacer que sea opcional
 }
-
 interface CartState {
   cartItems: CartProduct[];
 }
@@ -39,7 +41,7 @@ export const cartSlice = createSlice({
       );
       const cartProduct: CartProduct = {
         ...action.payload,
-        imageUrl: `https://backendiaecommerce.onrender.com/uploads/images/${
+        imageUrl: `http://localhost:3001/uploads/images/${
           action.payload.imageFileName || ""
         }`,
       };

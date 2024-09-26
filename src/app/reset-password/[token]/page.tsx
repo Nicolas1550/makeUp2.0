@@ -27,7 +27,8 @@ const ResetPassword = () => {
   const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false); // Para manejar la visibilidad de la contraseña
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState<boolean>(false); // Para confirmar visibilidad
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
+    useState<boolean>(false); // Para confirmar visibilidad
   const router = useRouter(); // Para redireccionar después de cambiar la contraseña
 
   useEffect(() => {
@@ -74,7 +75,7 @@ const ResetPassword = () => {
 
     try {
       // Llamar a la API de backend para restablecer la contraseña
-      await axios.post("https://backendiaecommerce.onrender.com/api/password/reset-password", {
+      await axios.post("http://localhost:3001/api/password/reset-password", {
         token, // Utilizamos el token desde params
         newPassword,
       });
@@ -89,7 +90,7 @@ const ResetPassword = () => {
       setTimeout(() => {
         router.push("/login"); // Redirige a la página de inicio de sesión
       }, 2000);
-    } catch (err) {
+    } catch {
       setError("El token es inválido o ha expirado.");
     } finally {
       setLoading(false);

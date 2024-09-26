@@ -25,15 +25,23 @@ import axios from "axios";
 import { io } from "socket.io-client";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
+// Definir la interfaz para describir la estructura de los empleados
+interface Employee {
+  id: string;
+  nombre: string;
+  apellido: string;
+  email: string;
+}
+
 // Configuración del socket.io
-const socket = io("https://backendiaecommerce.onrender.com", { transports: ["websocket"] });
+const socket = io("http://localhost:3001", { transports: ["websocket"] });
 
 const UserServiceManagement: React.FC = () => {
   const dispatch = useAppDispatch();
   const { services, selectedServiceUsers, isLoading, error } = useAppSelector(
     (state: RootState) => state.services
   );
-  const [availableEmployees, setAvailableEmployees] = useState<any[]>([]);
+  const [availableEmployees, setAvailableEmployees] = useState<Employee[]>([]); // Cambiado a Employee[]
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedServiceId, setSelectedServiceId] = useState<string>("");
 
@@ -41,13 +49,12 @@ const UserServiceManagement: React.FC = () => {
   useEffect(() => {
     const fetchServicesAndEmployees = async () => {
       try {
-
         // Fetch services
         await dispatch(fetchServices()).unwrap();
 
         // Fetch available employees
         const employeesResponse = await axios.get(
-          `https://backendiaecommerce.onrender.com/api/users/empleados/disponibles/general`,
+          `http://localhost:3001/api/users/empleados/disponibles/general`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -80,9 +87,7 @@ const UserServiceManagement: React.FC = () => {
       }
     });
     
-    
     socket.on("empleadoDesasignado", (data) => {
-
       // Eliminar el empleado de selectedServiceUsers y del servicio correspondiente
       dispatch(
         employeeRemoved({ userId: data.user.id, serviceId: data.servicio.id })
@@ -99,7 +104,6 @@ const UserServiceManagement: React.FC = () => {
   // Llamar a los usuarios del servicio seleccionado cuando se seleccione un servicio
   useEffect(() => {
     if (selectedServiceId) {
-     
       dispatch(fetchServiceUsers({ serviceId: selectedServiceId }));
     }
   }, [selectedServiceId, dispatch]);
@@ -107,7 +111,6 @@ const UserServiceManagement: React.FC = () => {
   // Asignar empleado a servicio
   const handleAssignToService = (userId: string) => {
     if (selectedServiceId) {
-    
       dispatch(
         assignEmployeeToService({ userId, serviceId: selectedServiceId })
       );
@@ -117,7 +120,6 @@ const UserServiceManagement: React.FC = () => {
   // Desasignar empleado del servicio
   const handleRemoveFromService = (userId: string) => {
     if (selectedServiceId) {
-     
       dispatch(
         removeEmployeeFromService({ userId, serviceId: selectedServiceId })
       );

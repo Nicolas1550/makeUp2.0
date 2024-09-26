@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+// Eliminamos 'useRouter' ya que no se está utilizando
 import {
   FormContainer,
   FormField,
@@ -18,7 +18,6 @@ const RequestResetPassword: React.FC = () => {
   const [message, setMessage] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,13 +26,13 @@ const RequestResetPassword: React.FC = () => {
     setMessage("");
 
     try {
-      await axios.post("https://backendiaecommerce.onrender.com/api/password/request-reset-password", {
+      await axios.post("http://localhost:3001/api/password/request-reset-password", {
         email,
       });
 
       setMessage("Revisa tu correo electrónico para las instrucciones de recuperación.");
       setEmail("");
-    } catch (err) {
+    } catch {
       setError("No pudimos encontrar una cuenta con ese correo electrónico.");
     } finally {
       setLoading(false);

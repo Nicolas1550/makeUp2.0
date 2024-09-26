@@ -7,7 +7,7 @@ const Particles = () => {
   const materialRef = useRef();
 
   useEffect(() => {
-    const particlesCount = 500; 
+    const particlesCount = 700; // Aumentamos la cantidad de partículas a 700
     const positions = new Float32Array(particlesCount * 3);
 
     for (let i = 0; i < particlesCount; i++) {
@@ -41,8 +41,8 @@ const Particles = () => {
       <pointsMaterial
         ref={materialRef}
         attach="material"
-        color={0xffd700}
-        size={0.15} 
+        color={0xf5f5dc}  // Para un beige claro
+        size={0.25}       // Aumentamos el tamaño de las partículas para hacerlas más visibles
         sizeAttenuation
         transparent
         opacity={0.75}

@@ -3,32 +3,70 @@ import Button from "@mui/material/Button";
 
 export const StyledModalContainer = styled.div`
   padding: 2.5rem;
-  background: linear-gradient(145deg, #1a1a1a, #333333);
-  color: #f8f9fa;
+  background: rgba(255, 255, 255, 0.9); /* Fondo blanco suave */
+  color: #6e5e4e; /* Marrón claro */
   border-radius: 12px;
   max-width: 600px;
   margin: 5rem auto;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1); /* Sombra suave */
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   position: relative;
 
   &:hover {
     transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2); /* Sombra más intensa */
+  }
+`;
+
+export const ProductDetailsContainer = styled.div`
+  padding: 10px;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco claro */
+  margin-bottom: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Sombra suave */
+  display: flex;
+  flex-direction: column;
+`;
+
+export const ProductName = styled.div`
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #6e5e4e; /* Marrón claro */
+  margin-bottom: 5px;
+`;
+
+export const ProductAttributes = styled.div`
+  display: flex;
+  flex-direction: column;
+  font-size: 0.9rem;
+  color: #6e5e4e; /* Marrón claro */
+`;
+
+export const ProductAttribute = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 3px;
+
+  span {
+    font-weight: bold;
+    margin-right: 5px;
+    color: #6e5e4e; /* Marrón claro */
   }
 `;
 
 export const ModalHeader = styled.h2`
   margin-bottom: 1.5rem;
-  color: #ffd700;
+  color: #d9b3a8; /* Beige suave rosado */
   text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
 `;
 
 export const OrderContainer = styled.div`
   margin-bottom: 1rem;
-  background-color: #2a2a2a;
+  background-color: rgba(240, 240, 240, 0.7); /* Fondo blanco claro */
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Sombra suave */
 `;
 
 export const OrderHeader = styled.div`
@@ -37,28 +75,28 @@ export const OrderHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  background-color: #333;
+  background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco suave */
   border-radius: 10px 10px 0 0;
   transition: background-color 0.2s ease;
 
   &:hover {
-    background-color: #444;
+    background-color: rgba(240, 240, 240, 0.7); /* Hover más claro */
   }
 
   span {
     font-weight: bold;
-    color: #ffd700;
+    color: #d9b3a8; /* Beige suave rosado */
   }
 `;
 
 export const ToggleButton = styled.span`
   font-size: 1.2rem;
-  color: #ffd700;
+  color: #d9b3a8; /* Beige suave rosado */
 `;
 
 export const OrderDetails = styled.div`
   padding: 1rem;
-  background-color: #1f1f1f;
+  background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco suave */
   border-radius: 0 0 10px 10px;
 `;
 
@@ -66,7 +104,7 @@ export const OrderItem = styled.div`
   margin-bottom: 0.5rem;
 
   strong {
-    color: #ffd700;
+    color: #d9b3a8; /* Beige suave rosado */
   }
 
   ul {
@@ -82,35 +120,34 @@ export const OrderItem = styled.div`
   }
 `;
 
-// Estilo para la imagen del producto
 export const ProductImage = styled.img`
   width: 50px;
   height: 50px;
   object-fit: cover;
   margin-right: 10px;
   border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Sombra suave */
 `;
 
 export const TableWrapper = styled.div`
   max-height: 400px;
   overflow-y: auto;
   margin-bottom: 1.5rem;
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05); /* Sombra interior suave */
 
   ::-webkit-scrollbar {
     width: 12px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #2a2a2a;
+    background: rgba(240, 240, 240, 0.7); /* Fondo claro */
     border-radius: 10px;
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: #ffd700;
+    background-color: #d9b3a8; /* Beige suave rosado */
     border-radius: 10px;
-    border: 3px solid #2a2a2a;
+    border: 3px solid rgba(240, 240, 240, 0.7); /* Fondo claro */
   }
 
   ::-webkit-scrollbar-thumb:hover {
@@ -119,8 +156,8 @@ export const TableWrapper = styled.div`
 `;
 
 export const CloseButton = styled(Button)`
-  background-color: #ffd700 !important;
-  color: #1c1c1c !important;
+  background-color: #f4c2c2 !important; /* Rosado suave */
+  color: #fff !important;
   padding: 0.6rem 1.2rem !important;
   border-radius: 8px !important;
   font-weight: bold !important;
@@ -128,8 +165,9 @@ export const CloseButton = styled(Button)`
   display: block !important;
   margin-left: auto !important;
   margin-right: auto !important;
+  transition: background-color 0.3s ease !important;
 
   &:hover {
-    background-color: #e5c200 !important;
+    background-color: #f08080 !important; /* Hover rosado más oscuro */
   }
 `;

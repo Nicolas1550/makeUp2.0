@@ -4,13 +4,48 @@ import styled from "styled-components";
 import Link from "next/link";
 import { useAppDispatch } from "@/redux/hooks";
 import { addToCart } from "@/redux/features/cart/cartSlice";
+const ColorCircles = styled.div<{ color: string }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0.5rem auto;
 
+  div {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: ${({ color }) => color};
+    border: 2px solid white;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+
+    &:nth-child(1) {
+      z-index: 3;
+    }
+
+    &:nth-child(2) {
+      margin-left: -10px;
+      z-index: 2;
+    }
+
+    &:nth-child(3) {
+      margin-left: -10px;
+      z-index: 1;
+    }
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+`;
+
+// Estilos
 const CardContainer = styled.li`
-  background: #2b2b2b;
+  background: linear-gradient(to bottom, #ffffff, #fff0e1);
   padding: 1.5rem;
   border-radius: 20px;
   text-align: center;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   list-style: none;
   cursor: pointer;
   display: flex;
@@ -21,9 +56,9 @@ const CardContainer = styled.li`
   position: relative;
 
   &:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-    filter: brightness(1.1);
+    transform: translateY(-10px) rotate(-2deg);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    filter: brightness(1.05);
   }
 
   @media (max-width: 768px) {
@@ -37,6 +72,16 @@ const CardContainer = styled.li`
   }
 `;
 
+const ProductBrand = styled.p`
+  font-size: 1rem;
+  font-weight: bold; /* Marca en negrita */
+  color: #222;
+  margin-top: 0.5rem;
+  text-transform: capitalize;
+  text-align: center;
+`;
+
+
 const DiscountBadge = styled.div`
   position: absolute;
   top: 15px;
@@ -47,7 +92,7 @@ const DiscountBadge = styled.div`
   font-weight: bold;
   padding: 0.5rem 1rem;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
   @media (max-width: 480px) {
     font-size: 0.75rem;
@@ -55,21 +100,15 @@ const DiscountBadge = styled.div`
   }
 `;
 
-const ImageContainer = styled.div`
+const ProductImage = styled.img`
   width: 100%;
   height: 220px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border-radius: 15px;
-  margin-bottom: 1rem;
-  box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.4), 
-              inset 0 -4px 8px rgba(255, 255, 255, 0.1);
-  transition: all 0.4s ease;
+  object-fit: cover;
+  transition: transform 0.4s ease, filter 0.4s ease;
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.1);
+    filter: brightness(1.1);
   }
 
   @media (max-width: 480px) {
@@ -77,23 +116,15 @@ const ImageContainer = styled.div`
   }
 `;
 
-const ProductImage = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease, filter 0.4s ease;
-
-  &:hover {
-    transform: scale(1.1);
-    filter: brightness(1.2);
-  }
-`;
-
 const ProductName = styled.h3`
   font-size: 1.6rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  color: #eaeaea;
+  color: #222;
+
+  &:hover {
+    color: #e63946;
+  }
 
   @media (max-width: 480px) {
     font-size: 1.2rem;
@@ -124,7 +155,7 @@ const OldPrice = styled.span`
 
 const ProductDescription = styled.p`
   font-size: 1rem;
-  color: #cccccc;
+  color: #666;
   line-height: 1.4;
   text-align: center;
   margin-top: 0.8rem;
@@ -138,27 +169,75 @@ const ProductDescription = styled.p`
 `;
 
 const AddToCartButton = styled.button`
-  background: linear-gradient(145deg, #ffd700, #ffc107);
-  color: #1c1c1c;
+  background: linear-gradient(
+    145deg,
+    #ffa6c1,
+    #ff59b4
+  ); // Colores de gradiente fijos
+  color: white;
   border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 10px;
+  padding: 15px 30px;
+  border-radius: 30px;
   font-weight: bold;
+  font-size: 1.1em;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.4s ease-in-out, background 0.6s ease-in-out,
+    transform 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
 
-  &:hover {
-    background: linear-gradient(145deg, #ffc107, #ffd700);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  &:before {
+    content: "🛍";
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2em;
   }
 
-  @media (max-width: 480px) {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.9rem;
+  &:hover {
+    background: linear-gradient(
+      145deg,
+      #ff59b4,
+      #ffa6c1
+    ); // Gradiente invertido en hover
+    transform: translateY(-10px) scale(1.05) rotate(2deg); // Animación de hover
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  @media (max-width: 768px) {
+    padding: 12px 24px; // Ajustar tamaño en pantallas más pequeñas
+    font-size: 0.9em;
+
+    &:hover {
+      transform: none; // Sin transformación en pantallas pequeñas
+    }
   }
 `;
 
+const ImageContainer = styled.div`
+  width: 100%;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 15px;
+  margin-bottom: 1rem;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1),
+    inset 0 -2px 4px rgba(255, 255, 255, 0.1);
+  transition: all 0.4s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  @media (max-width: 480px) {
+    height: 180px;
+  }
+`;
+
+// Componente del ProductCard
 interface ProductCardProps {
   id: number;
   name: string;
@@ -168,8 +247,10 @@ interface ProductCardProps {
   quantity: number;
   description: string;
   discount?: number;
-  createdAt?: string;  
-  updatedAt?: string;  
+  brand?: string;
+  color?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -181,6 +262,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
   quantity,
   description,
   discount,
+  brand = "Marca no disponible",
+  color = "Color no disponible",
   createdAt = new Date().toISOString(),
   updatedAt = new Date().toISOString(),
 }) => {
@@ -194,6 +277,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
       imageFileName,
       quantity,
       description,
+      brand,
+      color,
       createdAt,
       updatedAt,
     };
@@ -207,16 +292,28 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <div>
           <ImageContainer>
             <ProductImage
-              src={`https://backendiaecommerce.onrender.com/uploads/images/${imageFileName}`}
+              src={`http://localhost:3001/uploads/images/${imageFileName}`}
               alt={name}
             />
           </ImageContainer>
           <ProductName>{name}</ProductName>
           <ProductPrice>
-            {oldPrice && <OldPrice>${oldPrice}</OldPrice>}
-            ${price}
+            {oldPrice && <OldPrice>${oldPrice}</OldPrice>}${price}
           </ProductPrice>
           <ProductDescription>{description.slice(0, 60)}...</ProductDescription>
+
+          {/* Mostrar Marca en negrita */}
+          <ProductBrand>{brand}</ProductBrand>
+
+          {/* Mostrar círculo de color basado en el color del producto */}
+          {/* Reemplazar ColorCircle por ColorDisplay */}
+          {color !== "Color no disponible" && (
+            <ColorCircles color={color.toLowerCase()}>
+              <div />
+              <div />
+              <div />
+            </ColorCircles>
+          )}
         </div>
       </Link>
       <AddToCartButton onClick={handleAddToCart}>

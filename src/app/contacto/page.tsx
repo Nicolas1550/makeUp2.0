@@ -4,8 +4,8 @@ import styled from "styled-components";
 import axios from "axios";
 
 const ContenedorContacto = styled.div`
-  background-color: #1c1c1c;
-  color: #f8f9fa;
+  background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco suave */
+  color: #6e5e4e; /* Marrón claro */
   min-height: 100vh;
   padding: 2rem;
   display: flex;
@@ -16,34 +16,32 @@ const ContenedorContacto = styled.div`
 const ContenidoContacto = styled.div`
   max-width: 1200px;
   text-align: center;
-  background: rgba(28, 28, 28, 0.8);
+  background: rgba(255, 255, 255, 0.7); /* Fondo blanco suave */
   border-radius: 10px;
   padding: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(255, 215, 0, 0.3);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Sombra suave */
+  border: 1px solid rgba(240, 240, 240, 0.6); /* Borde claro */
   backdrop-filter: blur(10px);
   transition: background 0.3s ease, border 0.3s ease;
 `;
 
 const EncabezadoContacto = styled.h1`
-  color: #ffd700;
+  color: #d9b3a8; /* Beige suave rosado */
   font-size: 2.5rem;
   margin-bottom: 1.5rem;
   text-transform: uppercase;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(217, 179, 168, 0.5); /* Sombra suave */
 `;
 
 const ParrafoContacto = styled.p`
   font-size: 1.1rem;
   line-height: 1.6;
   margin-bottom: 1.5rem;
-  color: #f8f9fa;
+  color: #6e5e4e; /* Marrón claro */
 `;
 
-const Resaltado = styled.span`
-  color: #ffd700;
-  font-weight: bold;
-`;
+
 
 const FormularioContacto = styled.form`
   display: flex;
@@ -57,16 +55,16 @@ const InputFormulario = styled.input`
   width: 100%;
   max-width: 500px;
   padding: 0.75rem;
-  background: rgba(28, 28, 28, 0.9);
-  border: 1px solid rgba(255, 215, 0, 0.3);
+  background: rgba(255, 255, 255, 0.9); /* Fondo blanco claro */
+  border: 1px solid rgba(240, 240, 240, 0.6); /* Borde claro */
   border-radius: 5px;
-  color: #f8f9fa;
+  color: #6e5e4e; /* Marrón claro */
   font-size: 1rem;
   transition: border 0.3s ease, background 0.3s ease;
 
   &:focus {
-    border-color: #ffd700;
-    background: rgba(28, 28, 28, 1);
+    border-color: #d9b3a8; /* Beige suave rosado en focus */
+    background: rgba(255, 255, 255, 1);
   }
 `;
 
@@ -74,24 +72,24 @@ const TextAreaFormulario = styled.textarea`
   width: 100%;
   max-width: 500px;
   padding: 0.75rem;
-  background: rgba(28, 28, 28, 0.9);
-  border: 1px solid rgba(255, 215, 0, 0.3);
+  background: rgba(255, 255, 255, 0.9); /* Fondo blanco claro */
+  border: 1px solid rgba(240, 240, 240, 0.6); /* Borde claro */
   border-radius: 5px;
-  color: #f8f9fa;
+  color: #6e5e4e; /* Marrón claro */
   font-size: 1rem;
   resize: none;
   transition: border 0.3s ease, background 0.3s ease;
 
   &:focus {
-    border-color: #ffd700;
-    background: rgba(28, 28, 28, 1);
+    border-color: #d9b3a8; /* Beige suave rosado en focus */
+    background: rgba(255, 255, 255, 1);
   }
 `;
 
 const BotonEnviar = styled.button`
   padding: 0.75rem 2rem;
-  background-color: #ffd700;
-  color: #1c1c1c;
+  background-color: #f4c2c2; /* Rosado suave */
+  color: #fff; /* Texto blanco */
   border: none;
   border-radius: 5px;
   font-weight: bold;
@@ -99,8 +97,8 @@ const BotonEnviar = styled.button`
   transition: background-color 0.3s ease, color 0.3s ease;
 
   &:hover {
-    background-color: #1c1c1c;
-    color: #ffd700;
+    background-color: #f08080; /* Hover en rosa más oscuro */
+    color: #fff;
   }
 `;
 
@@ -129,7 +127,7 @@ const PaginaContacto: React.FC = () => {
 
         // Llamar a tu backend Express con la URL completa
         await axios.post(
-          "https://backendiaecommerce.onrender.com/api/email/send-email",
+          "http://localhost:3001/api/email/send-email",
           data
         );
         alert("¡Mensaje enviado con éxito!");

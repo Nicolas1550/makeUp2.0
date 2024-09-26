@@ -10,8 +10,8 @@ const slideIn = {
 };
 
 const ContenedorEscalera = styled.div`
-  background: linear-gradient(135deg, #1a1a1a, #2e2e2e);
-  color: #f8f9fa;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(240, 240, 240, 0.7));
+  color: #6e5e4e; /* Marrón claro */
   min-height: 100vh;
   padding: 4rem 2rem;
   display: flex;
@@ -20,10 +20,10 @@ const ContenedorEscalera = styled.div`
 `;
 
 const Escalon = styled(motion.div)<{ reverse?: boolean }>`
-  background-color: #242424;
+  background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco suave */
   padding: 2.5rem;
   border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05); /* Sombra suave */
   margin: 2.5rem 0;
   width: 100%;
   max-width: 1200px;
@@ -35,7 +35,7 @@ const Escalon = styled(motion.div)<{ reverse?: boolean }>`
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
   &:hover {
-    box-shadow: 0 16px 30px rgba(255, 215, 0, 0.5);
+    box-shadow: 0 16px 30px rgba(240, 192, 192, 0.5); /* Sombra rosada suave */
     transform: translateY(-10px);
   }
 `;
@@ -43,22 +43,23 @@ const Escalon = styled(motion.div)<{ reverse?: boolean }>`
 const TextoEscalon = styled.div`
   flex: 1;
   padding: 1.5rem 3rem;
-  color: #f0f0f0;
+  color: #6e5e4e; /* Marrón claro */
 `;
 
 const TituloEscalon = styled.h2`
   font-family: "Montserrat", sans-serif;
   font-size: 2.5rem;
-  color: #ffd700;
+  color: #d9b3a8; /* Beige suave rosado */
   margin-bottom: 1.5rem;
   text-transform: uppercase;
   letter-spacing: 1.5px;
+  text-shadow: 0 0 10px rgba(217, 179, 168, 0.5); /* Sombra suave */
 `;
 
 const ParrafoEscalon = styled.p`
   font-size: 1.2rem;
   line-height: 1.7;
-  color: #e0e0e0;
+  color: #6e5e4e; /* Marrón claro */
   font-family: "Montserrat", sans-serif;
 `;
 
@@ -70,8 +71,10 @@ const ImagenEscalon = styled.div<{ src: string }>`
   width: 100%;
   height: 250px;
   border-radius: 12px;
-  border: 3px solid #ffd700;
+  border: 3px solid #d9b3a8; /* Beige suave rosado */
+  box-shadow: 0 4px 10px rgba(240, 192, 192, 0.5); /* Sombra rosada suave */
 `;
+
 
 const PaginaNosotros: React.FC = () => {
   const [hasMounted, setHasMounted] = useState(false);

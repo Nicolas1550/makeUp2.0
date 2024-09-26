@@ -54,7 +54,7 @@ const Particles = () => {
         uniforms={{
           time: { value: 0 },
           pointTexture: {
-            value: new THREE.TextureLoader().load("/sparkle_alt.png"),
+            value: new THREE.TextureLoader().load("/sparkle_altt.png"),
           },
         }}
       />
@@ -76,8 +76,14 @@ const vertexShader = `
 const fragmentShader = `
   uniform sampler2D pointTexture;
   void main() {
-    gl_FragColor = texture2D(pointTexture, gl_PointCoord);
+    vec4 color = texture2D(pointTexture, gl_PointCoord);
+    
+    // Descartar píxeles transparentes
+    if (color.a < 0.1) discard;
+    
+    gl_FragColor = color;
   }
 `;
+
 
 export default Particles;

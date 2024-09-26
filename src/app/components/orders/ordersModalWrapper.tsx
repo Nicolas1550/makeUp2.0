@@ -10,7 +10,6 @@ import {
   fetchOrders,
   fetchAdminOrders,
   getOrdersStatus,
-  getOrdersError,
 } from "@/redux/features/orders/ordersSlice";
 
 import { ModalHeader } from "../modal/modalStyled";
@@ -29,7 +28,6 @@ const OrdersModalWrapper: React.FC<OrdersModalWrapperProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const ordersStatus = useAppSelector(getOrdersStatus);
-  const error = useAppSelector(getOrdersError);
 
   useEffect(() => {
     if (isOpen && ordersStatus === "idle") {

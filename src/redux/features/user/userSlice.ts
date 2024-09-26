@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from "axios"; // Importa AxiosError
 import { RootState } from "../../store";
 
 export interface Role {
@@ -35,9 +35,10 @@ const initialState: UserState = {
 
 const API_BASE_URL =
   process.env.NODE_ENV === "development"
-    ? "https://backendiaecommerce.onrender.com"
-    : "https://backendiaecommerce.onrender.com";
+    ? "http://localhost:3001"
+    : "http://localhost:3001";
 
+// Thunk para obtener todos los usuarios
 // Thunk para obtener todos los usuarios
 export const fetchUsers = createAsyncThunk<
   User[],
@@ -49,7 +50,7 @@ export const fetchUsers = createAsyncThunk<
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     return response.data as User[];
-  } catch (error: any) {
+  } catch {
     return rejectWithValue({ general: "Error al obtener los usuarios" });
   }
 });
@@ -65,7 +66,7 @@ export const fetchUserRoles = createAsyncThunk<
       headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
     return response.data;
-  } catch (error: any) {
+  } catch {
     return rejectWithValue({
       general: "Error al obtener los roles de los usuarios",
     });
@@ -89,7 +90,7 @@ export const assignRoleToEmployee = createAsyncThunk<
         }
       );
       return response.data as User;
-    } catch (error: any) {
+    } catch {
       return rejectWithValue({
         general: "Error al asignar el rol de empleado",
       });
@@ -111,7 +112,7 @@ export const removeRoleFromEmployee = createAsyncThunk<
       }
     );
     return response.data as User;
-  } catch (error: any) {
+  } catch {
     return rejectWithValue({
       general: "Error al desasignar el rol de empleado",
     });

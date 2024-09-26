@@ -17,7 +17,7 @@ import { motion } from "framer-motion";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import Link from "next/link";
 
-const images = ["/image1.webp", "/image2.webp", "/image3.webp"];
+const images = ["/122.webp", "/asd.webp", "/aasd.webp"];
 
 const Header: React.FC = () => {
   const [currentImage, setCurrentImage] = useState(0);
@@ -69,7 +69,7 @@ const Header: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
         >
-          <HeaderText>Bienvenidos a Salon Unisex</HeaderText>
+          <HeaderText>Bienvenidos a Fabiana Giménez</HeaderText>
           <Link href={"/servicios"}>
             <Button whileHover={{ scale: 1.1 }}>Reserva Ahora</Button>
           </Link>
@@ -83,7 +83,7 @@ const Header: React.FC = () => {
         </Canvas>
       </BottomCanvasContainer>
       <ArrowIcon onClick={nextImage}>
-        <ArrowForwardIosIcon style={{ fontSize: "2rem", color: "#ffd700" }} />
+      <ArrowForwardIosIcon style={{ fontSize: "2rem", color: "#f5f5dc" }} />
       </ArrowIcon>
       <PaginationContainer>
         {images.map((_, index) => (

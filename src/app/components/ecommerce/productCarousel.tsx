@@ -2,7 +2,6 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import {
-  Navigation,
   Pagination,
   Scrollbar,
   A11y,
@@ -22,6 +21,8 @@ interface ProductCarouselProps {
     quantity: number;
     description?: string;
     isFeatured: boolean;
+    brand: string;   // Añadir marca
+    color: string;   // Añadir color
   }>;
 }
 
@@ -35,11 +36,10 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({ products }) => {
   return (
     <CarouselContainer>
       <Swiper
-        modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay, EffectCoverflow]}
+        modules={[Pagination, Scrollbar, A11y, Autoplay, EffectCoverflow]}
         spaceBetween={30}
         slidesPerView={3}  // Mostrar 3 por defecto en pantallas grandes
         slidesPerGroup={1}
-        navigation
         pagination={{ clickable: true }}
         scrollbar={{ draggable: true }}
         loop={true} 
@@ -80,6 +80,8 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({ products }) => {
               imageFileName={product.imageFileName}
               quantity={product.quantity}
               description={product.description || "Sin descripción disponible"}
+              brand={product.brand || "Marca no disponible"}  // Mostrar marca
+              color={product.color || "Color no disponible"}  // Mostrar color
             />
           </SwiperSlide>
         ))}

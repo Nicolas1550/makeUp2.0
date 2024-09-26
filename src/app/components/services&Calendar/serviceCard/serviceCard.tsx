@@ -1,11 +1,11 @@
 import React from "react";
-import { FaRegCalendarAlt } from "react-icons/fa";
 import {
   Card,
   CardButton,
   CardTitle,
   CardDescription,
   CardPrice,
+  CalendarIcon,
 } from "./serviceCardStyled";
 import { Servicio } from "@/app/types/types";
 
@@ -18,8 +18,8 @@ const ServiceCard: React.FC<ServiceCardProps> = ({ servicio, onReserve }) => {
   return (
     <Card>
       <CardTitle>
-        <FaRegCalendarAlt style={{ marginRight: "8px", color: "#ffd700" }} />
-        {servicio.nombre}
+      <CalendarIcon />
+      {servicio.nombre}
       </CardTitle>
       <CardDescription>{servicio.descripcion}</CardDescription>
       <CardPrice>Precio: ${servicio.precio}</CardPrice>
