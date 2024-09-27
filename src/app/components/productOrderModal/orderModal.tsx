@@ -47,17 +47,16 @@ const OrderModal: React.FC<OrderModalProps> = ({ open, onClose }) => {
   const orders = useAppSelector(selectAllProductOrders);
   const orderStatus = useAppSelector(getProductOrderStatus);
   const orderError = useAppSelector(getProductOrderError);
-  const products = useAppSelector(selectAllProducts); // Productos del ProductSlice
+  const products = useAppSelector(selectAllProducts); 
   const isAdmin = useAppSelector(selectIsAdmin);
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
   const [selectedStatus, setSelectedStatus] = useState<string>("pendiente");
-  const [isAscending, setIsAscending] = useState(false); // Nuevo estado para controlar el orden
+  const [isAscending, setIsAscending] = useState(false); 
 
   useEffect(() => {
     if (open) {
-      console.log("Modal abierto. Solicitando órdenes...");
       dispatch(fetchProductOrders());
-      dispatch(fetchProducts()); // Asegurarse de cargar todos los productos
+      dispatch(fetchProducts()); 
     }
   }, [dispatch, open]);
 
@@ -66,14 +65,11 @@ const OrderModal: React.FC<OrderModalProps> = ({ open, onClose }) => {
   };
 
   const handleStatusChange = (orderId: number) => {
-    console.log(
-      `Cambiando el estado de la orden ${orderId} a ${selectedStatus}`
-    );
+  
     dispatch(updateOrderStatus({ id: orderId, status: selectedStatus }));
   };
 
   const handleDownload = (url: string) => {
-    console.log(`Descargando comprobante de pago desde ${url}`);
     const link = document.createElement("a");
     link.href = url;
     link.target = "_blank";

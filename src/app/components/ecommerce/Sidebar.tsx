@@ -296,30 +296,22 @@ const CombinedFilterComponent: React.FC = () => {
   };
 
   useEffect(() => {
-    // Esta función se ejecutará solo en el lado del cliente
     const handleResize = () => {
       const isMobileView = window.innerWidth <= 768;
       setIsMobile(isMobileView);
 
-      // Si estamos en vista móvil y el teclado virtual está abierto, mantener el estado
       if (isMobileView && document.activeElement instanceof HTMLInputElement) {
-        // Puedes dejar esto vacío o manejar el caso de teclado virtual abierto
       } else {
-        // Ajustar el estado basado en si estamos en vista móvil o no
         setIsExpanded(!isMobileView);
         setIsFilterOpen(!isMobileView);
       }
     };
 
-    // Verificar si estamos en el lado del cliente antes de ejecutar la lógica relacionada con el navegador
     if (typeof window !== "undefined") {
-      // Ejecutar inmediatamente para establecer el estado inicial basado en el ancho de la ventana
       handleResize();
 
-      // Agregar el manejador de eventos
       window.addEventListener("resize", handleResize);
 
-      // Limpiar el manejador de eventos en el desmontaje
       return () => window.removeEventListener("resize", handleResize);
     }
   }, []);
@@ -358,7 +350,6 @@ const CombinedFilterComponent: React.FC = () => {
     const checkIfMobile = () => {
       const isMobileView = window.innerWidth <= 768;
       setIsMobile(isMobileView);
-      // Actualizar isExpanded y isFilterOpen solo en el montaje del componente
       if (isMobileView) {
         setIsExpanded(false);
         setIsFilterOpen(false);
@@ -373,7 +364,6 @@ const CombinedFilterComponent: React.FC = () => {
     return () => window.removeEventListener("resize", checkIfMobile);
   }, []);
   useEffect(() => {
-    // Crear un contenedor para el portal del menú si no existe
     const portalElement = document.getElementById("menu-portal");
     if (!portalElement) {
       const newPortalElement = document.createElement("div");
@@ -385,7 +375,6 @@ const CombinedFilterComponent: React.FC = () => {
     }
   }, []);
   useEffect(() => {
-    // Asegurarte de que la categoría "Todos" esté seleccionada al cargar
     dispatch(setSelectedCategory("Todos"));
   }, [dispatch]);
 
@@ -395,7 +384,6 @@ const CombinedFilterComponent: React.FC = () => {
     setScrollY(currentScrollY);
     setIsSticky(currentScrollY > 500);
 
-    // Solo modificar isExpanded en escritorio
     if (!isMobile) {
       setIsExpanded(currentScrollY === 0);
     }
@@ -410,10 +398,8 @@ const CombinedFilterComponent: React.FC = () => {
     const atTop = window.scrollY === 0;
 
     if (isMobile) {
-      // En móviles, el estado de apertura se maneja exclusivamente a través del botón.
       setIsFilterOpen(atTop);
     } else {
-      // En escritorio, se puede manejar de forma diferente si es necesario
       setIsExpanded(atTop);
     }
   }, [isMobile]);
@@ -427,7 +413,6 @@ const CombinedFilterComponent: React.FC = () => {
     if (isMobile && isExpanded) {
       setForceShowScrollbar(true);
 
-      // Resetear después de un breve período
       setTimeout(() => setForceShowScrollbar(false), 0);
     }
   }, [isMobile, isExpanded]);
@@ -457,7 +442,6 @@ const CombinedFilterComponent: React.FC = () => {
   useEffect(() => {
     const updateScrollPosition = () => {
       requestAnimationFrame(() => {
-        // Eliminar la actualización de isExpanded basada en la posición del scroll para móviles
         if (!isMobile) {
           setIsExpanded(window.scrollY === 0);
         }
@@ -503,8 +487,8 @@ const CombinedFilterComponent: React.FC = () => {
     <div
       style={{
         display: "flex",
-        justifyContent: "center", // Centrar horizontalmente
-        width: "100%", // Asegurar que ocupe todo el ancho de la pantalla
+        justifyContent: "center", 
+        width: "100%", 
       }}
     >
       <>
@@ -576,9 +560,9 @@ const CombinedFilterComponent: React.FC = () => {
                       const option = newValue as OptionType | null;
                       const translatedColor =
                         colorMap[option?.value || ""] || "";
-                      dispatch(setSelectedColor(translatedColor)); // Usamos el color traducido aquí
+                      dispatch(setSelectedColor(translatedColor));
                     }}
-                    menuPortalTarget={menuPortalTarget} // Menú renderizado fuera del sidebar
+                    menuPortalTarget={menuPortalTarget} 
                     placeholder="Selecciona un color"
                     components={{
                       MenuList: CustomMenuList,
@@ -604,7 +588,7 @@ const CombinedFilterComponent: React.FC = () => {
                       const option = newValue as OptionType | null;
                       dispatch(setSelectedMarca(option?.value || ""));
                     }}
-                    menuPortalTarget={menuPortalTarget} // Menú renderizado fuera del sidebar
+                    menuPortalTarget={menuPortalTarget} 
                     placeholder="Selecciona una marca"
                     components={{
                       MenuList: CustomMenuList,

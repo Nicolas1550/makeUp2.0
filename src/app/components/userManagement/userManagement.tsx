@@ -53,7 +53,6 @@ const UserManagement: React.FC = () => {
   };
 
   // Filtrar usuarios basados en la búsqueda y establecer el número de usuarios visibles
-// Filtrar usuarios basados en la búsqueda y establecer el número de usuarios visibles
 useEffect(() => {
   const filteredUsers = users.filter(
     (user) =>

@@ -57,25 +57,25 @@ const LoadingContainer = styled.div`
 // Estilos personalizados para TextFields
 const textFieldStyles = {
   "& .MuiInputBase-root": {
-    color: "black", // Cambia el color del texto a negro
+    color: "black", 
     fontWeight: "bold",
   },
   "& .MuiInputLabel-root": {
-    color: "white", // Mantén la etiqueta en blanco
+    color: "white", 
     fontWeight: "bold",
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "white", // Borde blanco
+      borderColor: "white", 
     },
     "&:hover fieldset": {
-      borderColor: "white", // Borde blanco en hover
+      borderColor: "white", 
     },
     "&.Mui-focused fieldset": {
-      borderColor: "#f4c2c2", // Borde rosado suave en foco
+      borderColor: "#f4c2c2", 
     },
   },
-  input: { color: "black" }, // Cambia el color del texto dentro de los inputs a negro
+  input: { color: "black" }, 
 };
 
 

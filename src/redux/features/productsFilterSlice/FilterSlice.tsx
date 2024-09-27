@@ -10,18 +10,18 @@ export interface ProductType {
   description?: string;
   brand: string;
   color: string;
-  category?: string;  // Hacer que category sea opcional
+  category?: string;  
   createdAt: string;
   updatedAt: string;
 }
 
 // Estado inicial del filtro
 interface FilterState {
-  searchTerm: string;          // Para buscar por nombre o descripción
-  priceRange: [number, number]; // Rango de precios
-  selectedColor: string | null; // Filtro de color
-  selectedMarca: string | null; // Filtro de marca
-  selectedCategory: string | null; // Filtro de categoría
+  searchTerm: string;          
+  priceRange: [number, number]; 
+  selectedColor: string | null; 
+  selectedMarca: string | null; 
+  selectedCategory: string | null;
 }
 
 // Estado inicial del filtro
@@ -30,7 +30,7 @@ const initialState: FilterState = {
   priceRange: [0, 100000],
   selectedColor: null,
   selectedMarca: null,
-  selectedCategory: "Todos", // Predefinir "Todos" como la categoría inicial
+  selectedCategory: "Todos", 
 };
 
 // Slice para manejar los filtros
@@ -67,7 +67,6 @@ export const {
 
 export default filterSlice.reducer;
 
-// *** Definimos los selectores para acceder al estado del filtro ***
 
 // Selector para obtener el término de búsqueda
 export const selectSearchTerm = (state: { filter: FilterState }) => state.filter.searchTerm;

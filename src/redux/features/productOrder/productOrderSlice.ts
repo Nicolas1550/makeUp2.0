@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import { RootState } from "../../store";
-import { clearCart } from "../cart/cartSlice"; // Importamos la acción clearCart
+import { clearCart } from "../cart/cartSlice"; 
 
 // Definición de la interfaz User
 interface User {
@@ -80,7 +80,6 @@ export const fetchProductOrders = createAsyncThunk(
   "productOrders/fetchProductOrders",
   async (_, { rejectWithValue }) => {
     try {
-      console.log("Iniciando solicitud para obtener órdenes de productos...");
 
       const response = await axios.get(
         "https://makeupbackend2-0.onrender.com/api/productOrders",
@@ -92,7 +91,6 @@ export const fetchProductOrders = createAsyncThunk(
         }
       );
 
-      console.log("Respuesta recibida de la API:", response.data);
 
       const mappedOrders = response.data.map((order: ProductOrder) => {
         const paymentProof = order.payment_proof_url?.includes("/uploads/")
@@ -121,7 +119,6 @@ export const fetchProductOrders = createAsyncThunk(
         };
       });
 
-      console.log("Órdenes mapeadas:", mappedOrders);
       return mappedOrders;
     } catch (error: unknown) {
       console.error("Error en la solicitud de órdenes:", error);
@@ -155,7 +152,7 @@ export const createProductOrder = createAsyncThunk(
         }
       );
 
-      dispatch(clearCart()); // Limpiar carrito tras la creación exitosa de la orden con comprobante
+      dispatch(clearCart());
       return response.data.order as ProductOrder;
     } catch (error: unknown) {
       return rejectWithValue(
@@ -181,7 +178,7 @@ export const createProductOrderMercadoPago = createAsyncThunk(
         }
       );
 
-      dispatch(clearCart()); // Limpiar carrito tras la creación exitosa de la orden con Mercado Pago
+      dispatch(clearCart()); 
       return response.data.init_point;
     } catch (error: unknown) {
       console.error("Error en la solicitud de Mercado Pago:", error);

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import axios from "axios"; // Importa AxiosError
+import axios from "axios"; 
 import { RootState } from "../../store";
 
 interface User {
@@ -41,7 +41,6 @@ const API_BASE_URL =
     ? "https://makeupbackend2-0.onrender.com"
     : "https://makeupbackend2-0.onrender.com";
 
-// Thunk para obtener todos los servicios
 // Thunk para obtener todos los servicios
 export const fetchServices = createAsyncThunk<
   Service[],

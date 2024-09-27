@@ -305,8 +305,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           {/* Mostrar Marca en negrita */}
           <ProductBrand>{brand}</ProductBrand>
 
-          {/* Mostrar círculo de color basado en el color del producto */}
-          {/* Reemplazar ColorCircle por ColorDisplay */}
+     
           {color !== "Color no disponible" && (
             <ColorCircles color={color.toLowerCase()}>
               <div />

@@ -8,7 +8,7 @@ import {
   addCourseFecha,
   updateCourseFecha,
   deleteCourseFecha,
-  updateCoursePrice, // Importamos el thunk para actualizar el precio
+  updateCoursePrice, 
 } from "@/redux/features/course/courseSlice";
 import { format, parseISO } from "date-fns";
 import {
@@ -59,8 +59,8 @@ const CourseDetailPage = () => {
   });
 
   const [visibleClasses, setVisibleClasses] = useState(5);
-  const [newPrecio, setNewPrecio] = useState<number | null>(null); // Estado para el nuevo precio
-  const [isEditingPrice, setIsEditingPrice] = useState(false); // Estado para editar el precio
+  const [newPrecio, setNewPrecio] = useState<number | null>(null); 
+  const [isEditingPrice, setIsEditingPrice] = useState(false); 
 
   useEffect(() => {
     if (id) {
@@ -71,13 +71,13 @@ const CourseDetailPage = () => {
   // Manejar edición del precio
   const handleEditPrice = () => {
     setIsEditingPrice(true);
-    setNewPrecio(course?.precio || 0); // Cargar el precio actual en el campo de edición
+    setNewPrecio(course?.precio || 0); 
   };
 
   const handleSavePrice = () => {
     if (newPrecio !== null) {
       dispatch(updateCoursePrice({ id: Number(id), precio: newPrecio }));
-      setIsEditingPrice(false); // Salimos del modo edición después de guardar
+      setIsEditingPrice(false); 
     }
   };
 

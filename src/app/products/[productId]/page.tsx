@@ -56,11 +56,11 @@ const ProductPage: React.FC = () => {
   const { productId } = useParams();
   const dispatch = useAppDispatch();
   const products = useAppSelector(selectAllProducts);
-  const [isLoading, setIsLoading] = useState(true); // Estado de carga
+  const [isLoading, setIsLoading] = useState(true); 
 
   useEffect(() => {
     if (products.length === 0) {
-      dispatch(fetchProducts()).finally(() => setIsLoading(false)); // Detener el spinner al cargar productos
+      dispatch(fetchProducts()).finally(() => setIsLoading(false)); 
     } else {
       setIsLoading(false);
     }

@@ -14,22 +14,19 @@ function Home() {
   const [hasMounted, setHasMounted] = useState(false);
   const dispatch = useAppDispatch();
 
-  // Selecciona la lista de productos desde el estado global (Redux)
   const productList = useAppSelector(selectAllProducts); 
 
-  // Estado local para manejar el modal
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     setHasMounted(true);
-    dispatch(fetchProducts()); // Despacha la acción para obtener los productos
+    dispatch(fetchProducts()); 
   }, [dispatch]);
 
   if (!hasMounted) {
     return null;
   }
 
-  // Función para manejar el clic en un producto (muestra un modal por ejemplo)
   const handleProductClick = () => {
     setIsModalOpen(true);
   };

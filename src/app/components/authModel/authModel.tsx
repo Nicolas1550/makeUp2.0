@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // Importar para redireccionar
+import { useRouter } from "next/navigation"; 
 import { RootState } from "@/redux/store";
 import {
   loginUser,
@@ -27,7 +27,7 @@ import {
 
 const AuthModal: React.FC = () => {
   const dispatch = useAppDispatch();
-  const router = useRouter(); // Para redireccionar
+  const router = useRouter();
   const showModal = useAppSelector(
     (state: RootState) => state.ui.isAuthModalVisible
   );
@@ -66,7 +66,7 @@ const AuthModal: React.FC = () => {
 
     if (password !== confirmPassword) {
       setPasswordError("Las contraseñas no coinciden");
-      setIsRegistering(false); // Resetear el estado de registro
+      setIsRegistering(false); 
       return;
     }
     setPasswordError("");
@@ -114,7 +114,7 @@ const AuthModal: React.FC = () => {
     } else if (status === "failed" && error) {
       setTimeout(() => {
         dispatch(clearError());
-        setIsRegistering(false); // Resetear estado de registro si falla
+        setIsRegistering(false); 
       }, 3000);
     }
 
@@ -149,8 +149,8 @@ const AuthModal: React.FC = () => {
 
   // Redirigir a la página de recuperación de contraseña y cerrar el modal
   const handleForgotPassword = () => {
-    dispatch(hideAuthModal()); // Cerrar el modal
-    router.push("/reset-password/request"); // Redirigir a la página de solicitud de restablecimiento de contraseña
+    dispatch(hideAuthModal()); 
+    router.push("/reset-password/request"); 
   };
 
   return (
@@ -189,7 +189,7 @@ const AuthModal: React.FC = () => {
             <Label className={password ? "filled" : ""}>Contraseña</Label>
           </Field>
 
-          {!isLogin && ( // Mostrar estos campos solo en el modo de registro
+          {!isLogin && ( 
             <>
               <Field>
                 <Input

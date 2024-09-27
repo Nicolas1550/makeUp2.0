@@ -15,11 +15,10 @@ import {
 import { ActionButton, ProductTable, TableWrapper } from "./styles/adminPanelStyles";
 import Image from "next/image";
 
-// Componente para resaltar el término de búsqueda en el nombre del producto
 const HighlightedText: React.FC<{ text: string; highlight: string }> = ({ text, highlight }) => {
-  if (!highlight.trim()) return <>{text}</>; // Si no hay texto de búsqueda, devolver el texto completo
+  if (!highlight.trim()) return <>{text}</>; 
 
-  const parts = text.split(new RegExp(`(${highlight})`, 'gi')); // Dividir el texto en partes
+  const parts = text.split(new RegExp(`(${highlight})`, 'gi')); 
 
   return (
     <>
@@ -51,7 +50,7 @@ const FeaturedProductsPanel: React.FC = () => {
 
   // Función para manejar el input de búsqueda
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setSearchTerm(e.target.value)); // Actualizar el término de búsqueda en el estado sin trim()
+    dispatch(setSearchTerm(e.target.value)); 
   };
 
   const handleFeatureClick = (id: number) => {
@@ -70,8 +69,8 @@ const FeaturedProductsPanel: React.FC = () => {
       <input
         type="text"
         placeholder="Buscar productos por nombre"
-        value={searchTerm} // Vincular al estado del término de búsqueda
-        onChange={handleSearchChange} // Controlar los cambios en el input
+        value={searchTerm} 
+        onChange={handleSearchChange} 
         style={{ marginBottom: "1rem", padding: "0.5rem", width: "100%", color: "#000" }} // Color negro en el input
       />
 

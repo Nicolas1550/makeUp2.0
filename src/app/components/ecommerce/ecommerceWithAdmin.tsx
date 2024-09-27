@@ -37,7 +37,7 @@ const EcommerceWithAdmin: React.FC<EcommerceWithAdminProps> = ({ onClose }) => {
   const [showFeaturedProductsPanel, setShowFeaturedProductsPanel] =
     useState<boolean>(false);
 
-  const products = useAppSelector(selectAllProducts); // Selector correcto para obtener los productos
+  const products = useAppSelector(selectAllProducts); 
   const productStatus = useAppSelector(getProductStatus);
   const productError = useAppSelector(getProductError);
   const [editedProduct, setEditedProduct] = useState<Partial<Product>>({});
@@ -144,7 +144,7 @@ const EcommerceWithAdmin: React.FC<EcommerceWithAdminProps> = ({ onClose }) => {
         !showFeaturedProductsPanel &&
         productStatus === "succeeded" && (
           <ProductTableComponent
-            products={products} // La propiedad products se pasa correctamente aquí
+            products={products} 
             editingProductId={editingProductId}
             editedProduct={editedProduct}
             onEditProduct={(product) => {
@@ -164,12 +164,10 @@ const EcommerceWithAdmin: React.FC<EcommerceWithAdminProps> = ({ onClose }) => {
                 HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
               >
             ) => {
-              // Se maneja correctamente el cambio en diferentes tipos de inputs
               const { name, value } = e.target;
               setEditedProduct({ ...editedProduct, [name]: value });
             }}
             onFileChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              // Se maneja correctamente el cambio en input de archivos
               if (e.target.files && e.target.files.length > 0) {
                 setEditedProduct({
                   ...editedProduct,

@@ -41,8 +41,8 @@ const Particles = () => {
       <pointsMaterial
         ref={materialRef}
         attach="material"
-        color={0xf5f5dc}  // Para un beige claro
-        size={0.25}       // Aumentamos el tamaño de las partículas para hacerlas más visibles
+        color={0xf5f5dc}  
+        size={0.25}       
         sizeAttenuation
         transparent
         opacity={0.75}

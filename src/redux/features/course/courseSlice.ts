@@ -19,8 +19,8 @@ interface Fecha {
   curso_id: number;
   fecha_inicio: string;
   fecha_fin: string;
-  hora_inicio: string; // Nuevo campo para la hora de inicio
-  hora_fin: string; // Nuevo campo para la hora de fin
+  hora_inicio: string; 
+  hora_fin: string; 
 }
 
 // Definición de la interfaz Course
@@ -31,8 +31,8 @@ export interface Course {
   duracion: string;
   nivel: string;
   precio: number;
-  clases?: Clase[]; // Clases asociadas al curso
-  fechas?: Fecha[]; // Fechas y horarios asociados al curso
+  clases?: Clase[]; 
+  fechas?: Fecha[]; 
 }
 
 // Estado inicial para los cursos
@@ -65,7 +65,7 @@ export const updateCoursePrice = createAsyncThunk(
           },
         }
       );
-      return { id, precio }; // Retornamos el id y el nuevo precio
+      return { id, precio };
     } catch (error) {
       console.error("Error al actualizar el precio:", error);
       throw error;
@@ -186,7 +186,6 @@ export const deleteCourseFecha = createAsyncThunk(
   }
 );
 
-// Crear el slice para manejar los cursos
 // Crear el slice para manejar los cursos
 const courseSlice = createSlice({
   name: "courses",

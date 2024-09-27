@@ -11,7 +11,7 @@ import userReducer from "./features/user/userSlice";
 import serviceReducer from "./features/services/serviceSlice";
 import filterReducer from "./features/productsFilterSlice/FilterSlice";
 import uiiReducer from "./features/uiSlice/uiSlice";
-import courseReducer from "./features/course/courseSlice"; // Importa el courseReducer
+import courseReducer from "./features/course/courseSlice"; 
 
 export const store = configureStore({
   reducer: {

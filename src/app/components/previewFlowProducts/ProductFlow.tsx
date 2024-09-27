@@ -25,15 +25,14 @@ const AnimatedProductDetailsContainer = styled(ProductDetailsContainer)`
 `;
 
 const ProductFlow: React.FC<ProductFlowProps> = ({ products }) => {
-  const loopedProducts = [...products, ...products]; // Duplicamos productos para un flujo continuo
-
+  const loopedProducts = [...products, ...products];
   return (
     <ProductFlowContainer>
       {loopedProducts.map((product, index) => (
         <AnimatedProductDetailsContainer key={`product-${index}`}>
           <StyledProductImage
             src={
-              product.imageFileName // Usa imageFileName como propiedad de imagen
+              product.imageFileName
                 ? `https://makeupbackend2-0.onrender.com/uploads/images/${product.imageFileName}`
                 : "/path/to/default/image.png"
             }

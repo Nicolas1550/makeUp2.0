@@ -21,8 +21,8 @@ interface ProductCarouselProps {
     quantity: number;
     description?: string;
     isFeatured: boolean;
-    brand: string;   // Añadir marca
-    color: string;   // Añadir color
+    brand: string;  
+    color: string;  
   }>;
 }
 
@@ -38,7 +38,7 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({ products }) => {
       <Swiper
         modules={[Pagination, Scrollbar, A11y, Autoplay, EffectCoverflow]}
         spaceBetween={30}
-        slidesPerView={3}  // Mostrar 3 por defecto en pantallas grandes
+        slidesPerView={3}  
         slidesPerGroup={1}
         pagination={{ clickable: true }}
         scrollbar={{ draggable: true }}
@@ -53,20 +53,20 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({ products }) => {
           slideShadows: true,
         }}
         breakpoints={{
-          320: { // Ajuste para pantallas móviles pequeñas
-            slidesPerView: 1, // Mostrar solo 1 card en pantallas pequeñas
+          320: {
+            slidesPerView: 1, 
             spaceBetween: 10,
           },
           640: {
-            slidesPerView: 1, // Mantener 1 card en pantallas pequeñas-medias
+            slidesPerView: 1, 
             spaceBetween: 15,
           },
           768: {
-            slidesPerView: 2, // Mostrar 2 cards en pantallas medianas
+            slidesPerView: 2, 
             spaceBetween: 20,
           },
           1024: {
-            slidesPerView: 3, // Mostrar 3 cards en pantallas grandes
+            slidesPerView: 3, 
             spaceBetween: 30,
           },
         }}
@@ -80,8 +80,8 @@ const ProductCarousel: React.FC<ProductCarouselProps> = ({ products }) => {
               imageFileName={product.imageFileName}
               quantity={product.quantity}
               description={product.description || "Sin descripción disponible"}
-              brand={product.brand || "Marca no disponible"}  // Mostrar marca
-              color={product.color || "Color no disponible"}  // Mostrar color
+              brand={product.brand || "Marca no disponible"}  
+              color={product.color || "Color no disponible"}  
             />
           </SwiperSlide>
         ))}

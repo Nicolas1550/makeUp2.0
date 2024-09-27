@@ -22,7 +22,7 @@ export const useNavbarLogic = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMoreDropdownOpen, setIsMoreDropdownOpen] = useState(false);
 
-  const [servicios, setServicios] = useState([]); // Aquí almacenamos los servicios
+  const [servicios, setServicios] = useState([]);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = useState(false);
 
   const dropdownMenuRef = useRef<HTMLDivElement>(null);
@@ -61,7 +61,7 @@ export const useNavbarLogic = () => {
     const fetchServicios = async () => {
       try {
         const response = await axios.get(`${baseURL}/api/servicios`);
-        setServicios(response.data); // Asignar los servicios al estado
+        setServicios(response.data); 
       } catch (error) {
       }
     };
@@ -128,7 +128,7 @@ export const useNavbarLogic = () => {
     toggleMoreDropdown,
     isServicesDropdownOpen,
     toggleServicesDropdown,
-    closeDropdowns, // Devuelve la función para que se pueda usar en el componente Navbar
+    closeDropdowns, 
     dropdownMenuRef,
     moreDropdownRef,
     servicesDropdownRef,
@@ -140,6 +140,6 @@ export const useNavbarLogic = () => {
     handleAuthButtonClick,
     handleLogoutClick,
     profileImageUrl,
-    servicios, // Servicios cargados desde la API
+    servicios, 
   };
 };

@@ -157,9 +157,9 @@ const AdminProductManager: React.FC = () => {
     price: "",
     quantity: "",
     description: "",
-    brand: "",    // Nuevo campo para la marca
-    color: "",    // Nuevo campo para el color
-    category: "", // Nuevo campo para la categoría
+    brand: "",   
+    color: "",    
+    category: "", 
     image: null as File | null,
   });
 

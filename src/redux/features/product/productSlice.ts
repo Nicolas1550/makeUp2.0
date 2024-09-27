@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { RootState } from "../../store";
 
-// Definición de la interfaz Product
 // Interfaz Product
 export interface Product {
   id: number;
@@ -11,12 +10,12 @@ export interface Product {
   imageFileName?: string;
   quantity: number;
   description?: string;
-  brand: string; // Nueva propiedad
-  color: string; // Nueva propiedad
-  category: string; // Nueva propiedad
+  brand: string; 
+  color: string; 
+  category: string; 
   createdAt: string;
   updatedAt: string;
-  isFeatured?: boolean; // Hacer que sea opcional
+  isFeatured?: boolean; 
 }
 
 // Estado inicial para los productos
@@ -153,7 +152,6 @@ export const deleteProduct = createAsyncThunk(
 );
 
 // Slice para manejar el estado de productos
-// Slice para manejar el estado de productos
 const productSlice = createSlice({
   name: "products",
   initialState,
@@ -182,7 +180,7 @@ const productSlice = createSlice({
           (product) => product.id === action.payload.id
         );
         if (index !== -1) {
-          state.products[index] = action.payload; // Aquí debe actualizarse el producto completo, incluida la descripción
+          state.products[index] = action.payload; 
         }
       })
 

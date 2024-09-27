@@ -47,7 +47,7 @@ interface EditableProduct extends Product {
 }
 
 interface ProductTableProps {
-  products: Product[];  // Ya existente
+  products: Product[];  
   editingProductId: number | null;
   editedProduct: Partial<EditableProduct>;
   onEditProduct: (product: Product) => void;
@@ -60,9 +60,9 @@ interface ProductTableProps {
 
 // Componente para resaltar el término de búsqueda
 const HighlightedText: React.FC<{ text: string; highlight: string }> = ({ text, highlight }) => {
-  if (!highlight.trim()) return <>{text}</>; // Si no hay texto de búsqueda, devolver el texto completo
+  if (!highlight.trim()) return <>{text}</>; 
 
-  const parts = text.split(new RegExp(`(${highlight})`, 'gi')); // Dividir el texto en partes
+  const parts = text.split(new RegExp(`(${highlight})`, 'gi')); 
 
   return (
     <>
@@ -138,7 +138,7 @@ const ProductTableComponent: React.FC<ProductTableProps> = ({
       formData.append("name", localEditedProduct.name || "");
       formData.append("price", localEditedProduct.price?.toString() || "0");
       formData.append("quantity", localEditedProduct.quantity?.toString() || "0");
-      formData.append("description", localEditedProduct.description || "");  // Asegúrate de que la descripción se añada aquí
+      formData.append("description", localEditedProduct.description || ""); 
       formData.append("brand", localEditedProduct.brand || "");
       formData.append("color", localEditedProduct.color || "");
       formData.append("category", localEditedProduct.category || "");
@@ -147,7 +147,7 @@ const ProductTableComponent: React.FC<ProductTableProps> = ({
         formData.append("image", localEditedProduct.imageFile);
       }
   
-      onSaveProduct(formData);  // Envía el FormData con la descripción
+      onSaveProduct(formData);  
     }
   };
   
@@ -155,7 +155,7 @@ const ProductTableComponent: React.FC<ProductTableProps> = ({
 
   // Función para manejar el input de búsqueda
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setSearchTerm(e.target.value)); // Actualizar el término de búsqueda en el estado
+    dispatch(setSearchTerm(e.target.value));
   };
 
   return (
@@ -164,8 +164,8 @@ const ProductTableComponent: React.FC<ProductTableProps> = ({
       <input
         type="text"
         placeholder="Buscar productos por nombre"
-        value={searchTerm} // Vincular al estado del término de búsqueda
-        onChange={handleSearchChange} // Controlar los cambios en el input
+        value={searchTerm} 
+        onChange={handleSearchChange} 
         style={{ marginBottom: "1rem", padding: "0.5rem", width: "100%", color: "#000" }} // Color negro en el input
       />
 

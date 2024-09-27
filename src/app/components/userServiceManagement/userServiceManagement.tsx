@@ -41,7 +41,7 @@ const UserServiceManagement: React.FC = () => {
   const { services, selectedServiceUsers, isLoading, error } = useAppSelector(
     (state: RootState) => state.services
   );
-  const [availableEmployees, setAvailableEmployees] = useState<Employee[]>([]); // Cambiado a Employee[]
+  const [availableEmployees, setAvailableEmployees] = useState<Employee[]>([]); 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedServiceId, setSelectedServiceId] = useState<string>("");
 
@@ -76,9 +76,7 @@ const UserServiceManagement: React.FC = () => {
     // Configurar WebSocket para escuchar asignaciones y desasignaciones
     socket.on("empleadoAsignado", (data) => {
       if (data && data.user && data.servicio && data.user.id && data.servicio.id) {
-        console.log("Datos válidos recibidos en el evento 'empleadoAsignado':", data);
     
-        // Agregar el empleado a selectedServiceUsers y al servicio correspondiente
         dispatch(
           employeeAssigned({ user: data.user, serviceId: data.servicio.id })
         );
@@ -88,27 +86,23 @@ const UserServiceManagement: React.FC = () => {
     });
     
     socket.on("empleadoDesasignado", (data) => {
-      // Eliminar el empleado de selectedServiceUsers y del servicio correspondiente
       dispatch(
         employeeRemoved({ userId: data.user.id, serviceId: data.servicio.id })
       );
     });
 
-    // Limpiar los eventos de socket al desmontar el componente
     return () => {
       socket.off("empleadoAsignado");
       socket.off("empleadoDesasignado");
     };
   }, [dispatch, selectedServiceId]);
 
-  // Llamar a los usuarios del servicio seleccionado cuando se seleccione un servicio
   useEffect(() => {
     if (selectedServiceId) {
       dispatch(fetchServiceUsers({ serviceId: selectedServiceId }));
     }
   }, [selectedServiceId, dispatch]);
 
-  // Asignar empleado a servicio
   const handleAssignToService = (userId: string) => {
     if (selectedServiceId) {
       dispatch(
@@ -117,7 +111,6 @@ const UserServiceManagement: React.FC = () => {
     }
   };
 
-  // Desasignar empleado del servicio
   const handleRemoveFromService = (userId: string) => {
     if (selectedServiceId) {
       dispatch(
@@ -126,7 +119,6 @@ const UserServiceManagement: React.FC = () => {
     }
   };
 
-  // Filtrar los usuarios disponibles en función del término de búsqueda
   const filteredUsers = Array.isArray(availableEmployees)
     ? availableEmployees.filter((user) => {
         return (

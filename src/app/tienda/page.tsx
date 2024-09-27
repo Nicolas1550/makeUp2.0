@@ -48,7 +48,7 @@ const EcommercePage: React.FC = () => {
 
   const [visibleProducts, setVisibleProducts] = useState<number>(6);
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
-  const [hasMounted, setHasMounted] = useState(false); // Estado para verificar el montaje
+  const [hasMounted, setHasMounted] = useState(false); 
 
   const carouselRef = useRef<HTMLDivElement>(null);
   const loaderRef = useRef<HTMLDivElement>(null);
@@ -121,11 +121,11 @@ const EcommercePage: React.FC = () => {
       selectedCategory === "Todos" || product.category === selectedCategory;
 
     const matchesColor =
-      !selectedColor || // Manejar el caso cuando selectedColor es null
+      !selectedColor || 
       product.color.toLowerCase() === selectedColor.toLowerCase();
 
     const matchesMarca =
-      !selectedMarca || // Manejar el caso cuando selectedMarca es null
+      !selectedMarca || 
       product.brand.toLowerCase() === selectedMarca.toLowerCase();
 
     return (
@@ -160,7 +160,7 @@ const EcommercePage: React.FC = () => {
               <ProductCarousel
                 products={products.map((product) => ({
                   ...product,
-                  isFeatured: product.isFeatured ?? false, // Asegura que isFeatured esté definido
+                  isFeatured: product.isFeatured ?? false, 
                 }))}
               />
             )

@@ -5,7 +5,6 @@ import axios from "axios";
 import { Servicio } from "@/app/types/types";
 import ServiceCard from "@/app/components/services&Calendar/serviceCard/serviceCard";
 import ServiceEmployeesModal from "@/app/components/services&Calendar/serviceList/serviceEmployees";
-import styled, { keyframes } from "styled-components";
 import {
   CustomerName,
   LoadingSpinner,

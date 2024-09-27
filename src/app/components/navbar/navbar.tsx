@@ -76,7 +76,7 @@ const Navbar: React.FC = () => {
     handleAuthButtonClick,
     handleLogoutClick,
     profileImageUrl,
-    servicios, // Aquí se asume que servicios es de tipo Servicio[]
+    servicios, 
   } = useNavbarLogic();
 
 

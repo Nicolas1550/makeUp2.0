@@ -39,7 +39,6 @@ const API_BASE_URL =
     : "https://makeupbackend2-0.onrender.com";
 
 // Thunk para obtener todos los usuarios
-// Thunk para obtener todos los usuarios
 export const fetchUsers = createAsyncThunk<
   User[],
   void,
