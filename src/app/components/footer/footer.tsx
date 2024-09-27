@@ -27,10 +27,10 @@ const Footer: React.FC = () => {
     <FooterContainer key={forceRenderKey}>
       <FooterWrapper>
         <FooterLinks>
-          <FooterLink href="#">Inicio</FooterLink>
-          <FooterLink href="#">Nosotros</FooterLink>
-          <FooterLink href="#">Servicios</FooterLink>
-          <FooterLink href="#">Contacto</FooterLink>
+          <FooterLink href="/">Inicio</FooterLink>
+          <FooterLink href="/nosotros">Nosotros</FooterLink>
+          <FooterLink href="/servicios">Servicios</FooterLink>
+          <FooterLink href="/contacto">Contacto</FooterLink>
         </FooterLinks>
 
         <FooterIconContainer>
