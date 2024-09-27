@@ -29,10 +29,12 @@ import { Modal } from "@mui/material";
 import Cart from "../cart/cart";
 import { useNavbarLogic } from "./navbarLogic";
 import styled from "styled-components";
+
 interface Servicio {
   id: string;
   nombre: string;
 }
+
 const AuthModal = dynamic(() => import("../authModel/authModel"), {
   ssr: false,
 });
@@ -77,7 +79,11 @@ const Navbar: React.FC = () => {
     servicios, // Aquí se asume que servicios es de tipo Servicio[]
   } = useNavbarLogic();
 
+  // Agrega un console.log para verificar que los servicios se están obteniendo correctamente
+  console.log(servicios);
+
   if (!isAuthChecked) return null;
+
   const MobileOnly = styled.div`
     @media (min-width: 769px) {
       display: none;
@@ -89,6 +95,7 @@ const Navbar: React.FC = () => {
       display: none;
     }
   `;
+
   return (
     <Nav>
       <NavContainer>
@@ -116,15 +123,20 @@ const Navbar: React.FC = () => {
                     <NavLink onClick={closeDropdowns}>Cualquiera</NavLink>
                   </Link>
                 </DropdownItem>
-                {servicios.map((servicio: Servicio) => (
-                  <DropdownItem key={servicio.id}>
-                    <Link href={`/servicios/${servicio.id}`} passHref>
-                      <NavLink onClick={closeDropdowns}>
-                        {servicio.nombre}
-                      </NavLink>
-                    </Link>
-                  </DropdownItem>
-                ))}
+                {/* Aquí se renderizan los servicios correctamente */}
+                {servicios.length > 0 ? (
+                  servicios.map((servicio: Servicio) => (
+                    <DropdownItem key={servicio.id}>
+                      <Link href={`/servicios/${servicio.id}`} passHref>
+                        <NavLink onClick={closeDropdowns}>
+                          {servicio.nombre}
+                        </NavLink>
+                      </Link>
+                    </DropdownItem>
+                  ))
+                ) : (
+                  <DropdownItem>No hay servicios disponibles</DropdownItem>
+                )}
               </DropdownMenu>
             )}
           </DropdownButtonContainer>
@@ -283,6 +295,7 @@ const Navbar: React.FC = () => {
           )}
         </MobileMenu>
       </NavContainer>
+
       {isAuthChecked && <AuthModal />}
       {isProductOrdersModalOpen && (
         <ProductOrdersModal
