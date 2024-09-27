@@ -238,7 +238,7 @@ export const StickyFilterContainer = styled(StickyFilterContainerBase)`
     isSticky ? (isExpanded ? "70px" : "-30%") : "0"};
   z-index: 4;
   background-color: #fffaf0;
-  padding: 20px;
+  padding: 25px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   margin-top: ${({ isSticky }) => (isSticky ? "0" : "30px")};
