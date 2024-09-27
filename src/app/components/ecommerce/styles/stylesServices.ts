@@ -48,7 +48,8 @@ export const ServiceCardContainer = styled.div`
   border-radius: 20px;
   border: 2px solid #d9b3a8; /* Beige suave rosado */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(217, 179, 168, 0.2); /* Sombra suave */
-  margin: -80px auto 100px auto;
+  margin: 80px auto 100px auto;
+  margin: 
   max-width: 900px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   animation: ${slideUp} 1s ease-out;
