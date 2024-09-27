@@ -47,28 +47,40 @@ interface EditableProduct extends Product {
 }
 
 interface ProductTableProps {
-  products: Product[];  
+  products: Product[];
   editingProductId: number | null;
   editedProduct: Partial<EditableProduct>;
   onEditProduct: (product: Product) => void;
   onDeleteProduct: (id: number) => void;
   onSaveProduct: (formData: FormData) => void;
   onCancelEdit: () => void;
-  onInputChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void; // Agregar esta línea
+  onInputChange: (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => void; // Agregar esta línea
   onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 // Componente para resaltar el término de búsqueda
-const HighlightedText: React.FC<{ text: string; highlight: string }> = ({ text, highlight }) => {
-  if (!highlight.trim()) return <>{text}</>; 
+const HighlightedText: React.FC<{ text: string; highlight: string }> = ({
+  text,
+  highlight,
+}) => {
+  if (!highlight.trim()) return <>{text}</>;
 
-  const parts = text.split(new RegExp(`(${highlight})`, 'gi')); 
+  const parts = text.split(new RegExp(`(${highlight})`, "gi"));
 
   return (
     <>
       {parts.map((part, i) =>
         part.toLowerCase() === highlight.toLowerCase() ? (
-          <span key={i} style={{ backgroundColor: "#ffd700", fontWeight: "bold" }}>{part}</span>
+          <span
+            key={i}
+            style={{ backgroundColor: "#ffd700", fontWeight: "bold" }}
+          >
+            {part}
+          </span>
         ) : (
           part
         )
@@ -92,9 +104,10 @@ const ProductTableComponent: React.FC<ProductTableProps> = ({
 
   // Obtener los productos filtrados según el término de búsqueda
   const products = useAppSelector(selectFilteredProducts);
-  
+
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [localEditedProduct, setLocalEditedProduct] = useState<Partial<EditableProduct>>(editedProduct);
+  const [localEditedProduct, setLocalEditedProduct] =
+    useState<Partial<EditableProduct>>(editedProduct);
 
   useEffect(() => {
     setLocalEditedProduct(editedProduct);
@@ -106,7 +119,6 @@ const ProductTableComponent: React.FC<ProductTableProps> = ({
       setImagePreview(null);
     }
   }, [editedProduct]);
-  
 
   const handleInputChange = (
     e: React.ChangeEvent<
@@ -119,7 +131,6 @@ const ProductTableComponent: React.FC<ProductTableProps> = ({
       [name]: value,
     }));
   };
-  
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -137,21 +148,22 @@ const ProductTableComponent: React.FC<ProductTableProps> = ({
       const formData = new FormData();
       formData.append("name", localEditedProduct.name || "");
       formData.append("price", localEditedProduct.price?.toString() || "0");
-      formData.append("quantity", localEditedProduct.quantity?.toString() || "0");
-      formData.append("description", localEditedProduct.description || ""); 
+      formData.append(
+        "quantity",
+        localEditedProduct.quantity?.toString() || "0"
+      );
+      formData.append("description", localEditedProduct.description || "");
       formData.append("brand", localEditedProduct.brand || "");
       formData.append("color", localEditedProduct.color || "");
       formData.append("category", localEditedProduct.category || "");
-  
+
       if (localEditedProduct.imageFile) {
         formData.append("image", localEditedProduct.imageFile);
       }
-  
-      onSaveProduct(formData);  
+
+      onSaveProduct(formData);
     }
   };
-  
-  
 
   // Función para manejar el input de búsqueda
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -384,5 +396,5 @@ const ProductTableComponent: React.FC<ProductTableProps> = ({
     </TableWrapper>
   );
 };
-
 export default ProductTableComponent;
+
