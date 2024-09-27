@@ -164,9 +164,14 @@ const ProductTableComponent: React.FC<ProductTableProps> = ({
       <input
         type="text"
         placeholder="Buscar productos por nombre"
-        value={searchTerm} 
-        onChange={handleSearchChange} 
-        style={{ marginBottom: "1rem", padding: "0.5rem", width: "100%", color: "#000" }} // Color negro en el input
+        value={searchTerm}
+        onChange={handleSearchChange}
+        style={{
+          marginBottom: "1rem",
+          padding: "0.5rem",
+          width: "100%",
+          color: "#000",
+        }} // Color negro en el input
       />
 
       <ProductTable>
@@ -184,95 +189,166 @@ const ProductTableComponent: React.FC<ProductTableProps> = ({
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
-            <tr key={product.id}>
-              {editingProductId === product.id ? (
-                <>
-                  <td>
-                    <Input
-                      type="text"
-                      name="name"
-                      value={localEditedProduct.name || ""}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </td>
-                  <td>
-                    <Input
-                      type="text"
-                      name="price"
-                      value={localEditedProduct.price?.toString() || ""}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </td>
-                  <td>
-                    <Input
-                      type="number"
-                      name="quantity"
-                      value={localEditedProduct.quantity?.toString() || ""}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </td>
-                  <td>
-                    <SelectWrapper>
-                      <StyledSelect
-                        name="brand"
-                        value={localEditedProduct.brand || ""}
-                        onChange={handleInputChange}
-                        required
-                      >
-                        {marcaOptions.map((option) => (
-                          <StyledOption key={option.value} value={option.value}>
-                            {option.label}
-                          </StyledOption>
-                        ))}
-                      </StyledSelect>
-                    </SelectWrapper>
-                  </td>
-                  <td>
-                    <SelectWrapper>
-                      <StyledSelect
-                        name="color"
-                        value={localEditedProduct.color || ""}
-                        onChange={handleInputChange}
-                        required
-                      >
-                        {colorOptions.map((option) => (
-                          <StyledOption key={option.value} value={option.value}>
-                            {option.label}
-                          </StyledOption>
-                        ))}
-                      </StyledSelect>
-                    </SelectWrapper>
-                  </td>
+          {products.map((product) => {
+            if (!product || !product.id) {
+              console.error("Producto indefinido o sin ID:", product);
+              return null; // No renderizar si el producto no tiene un ID válido
+            }
 
-                  <td>
-                    <Input
-                      type="text"
-                      name="category"
-                      value={localEditedProduct.category || ""}
-                      onChange={handleInputChange}
-                      required
-                    />
-                  </td>
-                  <td>
-                    {imagePreview ? (
-                      <Image
-                        src={imagePreview}
-                        alt={localEditedProduct.name || "Producto"}
-                        width={50}
-                        height={50}
-                        style={{
-                          borderRadius: "8px",
-                          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
-                        }}
+            return (
+              <tr key={product.id}>
+                {editingProductId === product.id ? (
+                  <>
+                    <td>
+                      <Input
+                        type="text"
+                        name="name"
+                        value={localEditedProduct.name || ""}
+                        onChange={handleInputChange}
+                        required
                       />
-                    ) : (
-                      product.imageFileName && (
+                    </td>
+                    <td>
+                      <Input
+                        type="text"
+                        name="price"
+                        value={localEditedProduct.price?.toString() || ""}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </td>
+                    <td>
+                      <Input
+                        type="number"
+                        name="quantity"
+                        value={localEditedProduct.quantity?.toString() || ""}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </td>
+                    <td>
+                      <SelectWrapper>
+                        <StyledSelect
+                          name="brand"
+                          value={localEditedProduct.brand || ""}
+                          onChange={handleInputChange}
+                          required
+                        >
+                          {marcaOptions.map((option) => (
+                            <StyledOption
+                              key={option.value}
+                              value={option.value}
+                            >
+                              {option.label}
+                            </StyledOption>
+                          ))}
+                        </StyledSelect>
+                      </SelectWrapper>
+                    </td>
+                    <td>
+                      <SelectWrapper>
+                        <StyledSelect
+                          name="color"
+                          value={localEditedProduct.color || ""}
+                          onChange={handleInputChange}
+                          required
+                        >
+                          {colorOptions.map((option) => (
+                            <StyledOption
+                              key={option.value}
+                              value={option.value}
+                            >
+                              {option.label}
+                            </StyledOption>
+                          ))}
+                        </StyledSelect>
+                      </SelectWrapper>
+                    </td>
+
+                    <td>
+                      <Input
+                        type="text"
+                        name="category"
+                        value={localEditedProduct.category || ""}
+                        onChange={handleInputChange}
+                        required
+                      />
+                    </td>
+                    <td>
+                      {imagePreview ? (
                         <Image
-                          src={`https://makeupbackend2-0.onrender.com/uploads/images/${product.imageFileName}`}
+                          src={imagePreview}
+                          alt={localEditedProduct.name || "Producto"}
+                          width={50}
+                          height={50}
+                          style={{
+                            borderRadius: "8px",
+                            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
+                          }}
+                        />
+                      ) : (
+                        product.imageFileName && (
+                          <Image
+                            src={`http://localhost:3001/uploads/images/${product.imageFileName}`}
+                            alt={product.name}
+                            width={50}
+                            height={50}
+                            style={{
+                              borderRadius: "8px",
+                              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
+                            }}
+                          />
+                        )
+                      )}
+                      <Input
+                        type="file"
+                        name="image"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        style={{ marginTop: "10px" }}
+                      />
+                    </td>
+                    <td>
+                      <Textarea
+                        name="description"
+                        value={localEditedProduct.description ?? ""}
+                        onChange={handleInputChange}
+                        rows={3}
+                        required
+                      />
+                    </td>
+                    <td>
+                      <ActionButton
+                        onClick={handleSaveClick}
+                        style={{ backgroundColor: "#4CAF50", color: "#fff" }}
+                      >
+                        Guardar
+                      </ActionButton>
+                      <ActionButton
+                        onClick={onCancelEdit}
+                        style={{ backgroundColor: "#f44336", color: "#fff" }}
+                      >
+                        Cancelar
+                      </ActionButton>
+                    </td>
+                  </>
+                ) : (
+                  <>
+                    <td>
+                      <HighlightedText
+                        text={product.name}
+                        highlight={searchTerm}
+                      />
+                    </td>
+                    <td>${product.price}</td>
+                    <td>{product.quantity}</td>
+                    <td>{product.brand}</td>
+                    <td>{product.color}</td>
+                    <td>{product.category}</td>
+                    <td>
+                      {product.imageFileName && (
+                        <Image
+                          src={`http://localhost:3001/uploads/images/${product.imageFileName}`}
                           alt={product.name}
                           width={50}
                           height={50}
@@ -281,83 +357,28 @@ const ProductTableComponent: React.FC<ProductTableProps> = ({
                             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
                           }}
                         />
-                      )
-                    )}
-                    <Input
-                      type="file"
-                      name="image"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                      style={{ marginTop: "10px" }}
-                    />
-                  </td>
-                  <td>
-                    <Textarea
-                      name="description"
-                      value={localEditedProduct.description ?? ""}
-                      onChange={handleInputChange}
-                      rows={3}
-                      required
-                    />
-                  </td>
-                  <td>
-                    <ActionButton
-                      onClick={handleSaveClick}
-                      style={{ backgroundColor: "#4CAF50", color: "#fff" }}
-                    >
-                      Guardar
-                    </ActionButton>
-                    <ActionButton
-                      onClick={onCancelEdit}
-                      style={{ backgroundColor: "#f44336", color: "#fff" }}
-                    >
-                      Cancelar
-                    </ActionButton>
-                  </td>
-                </>
-              ) : (
-                <>
-                  <td>
-                    <HighlightedText text={product.name} highlight={searchTerm} />
-                  </td>
-                  <td>${product.price}</td>
-                  <td>{product.quantity}</td>
-                  <td>{product.brand}</td>
-                  <td>{product.color}</td>
-                  <td>{product.category}</td>
-                  <td>
-                    {product.imageFileName && (
-                      <Image
-                        src={`https://makeupbackend2-0.onrender.com/uploads/images/${product.imageFileName}`}
-                        alt={product.name}
-                        width={50}
-                        height={50}
-                        style={{
-                          borderRadius: "8px",
-                          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",
-                        }}
-                      />
-                    )}
-                  </td>
-                  <td>{product.description || ""}</td>
-                  <td>
-                    <ActionButton
-                      onClick={() => onEditProduct(product)}
-                      style={{ backgroundColor: "#2196F3", color: "#fff" }}
-                    >
-                      Editar
-                    </ActionButton>
-                    <ActionButton
-                      onClick={() => onDeleteProduct(product.id)}
-                      style={{ backgroundColor: "#f44336", color: "#fff" }}
-                    >
-                      Eliminar
-                    </ActionButton>
-                  </td>
-                </>
-              )}
-            </tr>
-          ))}
+                      )}
+                    </td>
+                    <td>{product.description || ""}</td>
+                    <td>
+                      <ActionButton
+                        onClick={() => onEditProduct(product)}
+                        style={{ backgroundColor: "#2196F3", color: "#fff" }}
+                      >
+                        Editar
+                      </ActionButton>
+                      <ActionButton
+                        onClick={() => onDeleteProduct(product.id)}
+                        style={{ backgroundColor: "#f44336", color: "#fff" }}
+                      >
+                        Eliminar
+                      </ActionButton>
+                    </td>
+                  </>
+                )}
+              </tr>
+            );
+          })}
         </tbody>
       </ProductTable>
     </TableWrapper>
