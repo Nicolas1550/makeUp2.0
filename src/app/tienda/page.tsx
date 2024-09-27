@@ -24,7 +24,6 @@ import {
   Testimonial,
   TestimonialSection,
 } from "../components/ecommerce/styles/ecommerceStyles";
-import Sidebar from "../components/ecommerce/Sidebar";
 import {
   selectSearchTerm,
   selectPriceRange,
@@ -32,6 +31,7 @@ import {
   selectSelectedColor,
   selectSelectedMarca,
 } from "@/redux/features/productsFilterSlice/FilterSlice";
+import Sidebar from "../components/ecommerce/Sidebar";
 
 const EcommercePage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -48,7 +48,7 @@ const EcommercePage: React.FC = () => {
 
   const [visibleProducts, setVisibleProducts] = useState<number>(6);
   const [loadingMore, setLoadingMore] = useState<boolean>(false);
-  const [hasMounted, setHasMounted] = useState(false); 
+  const [hasMounted, setHasMounted] = useState(false);
 
   const carouselRef = useRef<HTMLDivElement>(null);
   const loaderRef = useRef<HTMLDivElement>(null);
@@ -110,6 +110,11 @@ const EcommercePage: React.FC = () => {
 
   // Filtrar los productos en función de los filtros seleccionados
   const filteredProducts = products.filter((product) => {
+    if (!product || !product.name) {
+      console.error("Producto indefinido o sin nombre:", product);
+      return false; // No incluir productos indefinidos o sin nombre
+    }
+
     const matchesSearchTerm = product.name
       .toLowerCase()
       .includes(searchTerm.toLowerCase());
@@ -121,12 +126,12 @@ const EcommercePage: React.FC = () => {
       selectedCategory === "Todos" || product.category === selectedCategory;
 
     const matchesColor =
-      !selectedColor || 
-      product.color.toLowerCase() === selectedColor.toLowerCase();
+      !selectedColor ||
+      product.color?.toLowerCase() === selectedColor.toLowerCase();
 
     const matchesMarca =
-      !selectedMarca || 
-      product.brand.toLowerCase() === selectedMarca.toLowerCase();
+      !selectedMarca ||
+      product.brand?.toLowerCase() === selectedMarca.toLowerCase();
 
     return (
       matchesSearchTerm &&
@@ -156,11 +161,12 @@ const EcommercePage: React.FC = () => {
               <LoadingSpinner />
             </SpinnerContainer>
           ) : (
-            productStatus === "succeeded" && products.length > 0 && (
+            productStatus === "succeeded" &&
+            products.length > 0 && (
               <ProductCarousel
                 products={products.map((product) => ({
                   ...product,
-                  isFeatured: product.isFeatured ?? false, 
+                  isFeatured: product?.isFeatured ?? false, 
                 }))}
               />
             )
@@ -209,7 +215,8 @@ const EcommercePage: React.FC = () => {
         <TestimonialSection>
           <SectionTitle>Lo que dicen nuestros clientes</SectionTitle>
           <Testimonial>
-            &quot;Excelente calidad y atención al cliente, sin duda volveré a comprar.&quot;
+            &quot;Excelente calidad y atención al cliente, sin duda volveré a
+            comprar.&quot;
           </Testimonial>
           <CustomerName>— Juan Pérez</CustomerName>
         </TestimonialSection>
