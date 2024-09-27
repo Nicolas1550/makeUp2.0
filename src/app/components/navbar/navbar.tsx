@@ -79,8 +79,6 @@ const Navbar: React.FC = () => {
     servicios, // Aquí se asume que servicios es de tipo Servicio[]
   } = useNavbarLogic();
 
-  // Agrega un console.log para verificar que los servicios se están obteniendo correctamente
-  console.log(servicios);
 
   if (!isAuthChecked) return null;
 
