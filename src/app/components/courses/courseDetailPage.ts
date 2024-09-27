@@ -22,6 +22,14 @@ export const CourseDetailContainer = styled.div`
   animation: ${fadeIn} 0.8s ease-out;
   position: relative;
   background: linear-gradient(145deg, #f9eae3, #f4e5d8);
+
+  @media (max-width: 768px) {
+    padding: 3rem 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 2rem 1rem;
+  }
 `;
 
 export const CourseTitle = styled.h1`
@@ -36,6 +44,14 @@ export const CourseTitle = styled.h1`
   background: linear-gradient(90deg, #ff9a8b, #ff6f61, #ff3c41);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+
+  @media (max-width: 768px) {
+    font-size: 3.2rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 2.5rem;
+  }
 `;
 
 export const CourseDescription = styled.p`
@@ -48,21 +64,37 @@ export const CourseDescription = styled.p`
   margin: 0 auto;
   animation: ${fadeIn} 1s ease-out;
   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    font-size: 1.6rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.4rem;
+  }
 `;
 
 export const InfoWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   margin-bottom: 3.5rem;
-  gap: 2rem; /* Espaciado entre las dos mitades */
+  gap: 2rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 export const CourseInfo = styled.div`
-  width: 50%; /* 50% del ancho */
+  width: 50%;
   background-color: #fff6f1;
   padding: 2rem;
   border-radius: 15px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 export const DetailSection = styled.div`
@@ -70,21 +102,28 @@ export const DetailSection = styled.div`
   font-size: 1.6rem;
   line-height: 1.7;
   color: #333;
+
   strong {
     color: #ff6f61;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.4rem;
   }
 `;
 
 export const ClassesWrapper = styled.div`
-  width: 50%; /* 50% del ancho */
-  max-height: 800px; /* Altura máxima con scroll */
+  width: 50%;
+  max-height: 800px;
   overflow-y: auto;
   background-color: #fffaf7;
   padding: 2rem;
   border-radius: 15px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-  scrollbar-width: thin; /* Para Firefox */
-  scrollbar-color: #ff6f61 #f4e5d8; /* Colores del thumb y background */
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 
   h2 {
     font-size: 2.7rem;
@@ -95,27 +134,10 @@ export const ClassesWrapper = styled.div`
     margin-bottom: 2.5rem;
     text-align: center;
     text-transform: uppercase;
-  }
 
-  /* Estilos del scroll personalizado */
-  /* Navegadores Webkit (Chrome, Safari) */
-  &::-webkit-scrollbar {
-    width: 12px;
-    background-color: #f4e5d8; /* Color de fondo del scrollbar */
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #ff6f61; /* Color del thumb */
-    border-radius: 10px; /* Bordes redondeados */
-    border: 3px solid #f4e5d8; /* Espacio alrededor del thumb */
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background-color: #ff3c41; /* Color del thumb al hacer hover */
-  }
-
-  &::-webkit-scrollbar-track {
-    background-color: #f4e5d8; /* Color de fondo de la pista del scrollbar */
+    @media (max-width: 480px) {
+      font-size: 2rem;
+    }
   }
 `;
 
@@ -138,11 +160,19 @@ export const ClassItem = styled.li`
     font-size: 2rem;
     color: #d9735a;
     margin-bottom: 1.2rem;
+
+    @media (max-width: 480px) {
+      font-size: 1.6rem;
+    }
   }
 
   p {
     margin-bottom: 1.4rem;
     color: #666;
+
+    @media (max-width: 480px) {
+      font-size: 1.2rem;
+    }
   }
 `;
 
@@ -187,6 +217,11 @@ export const BuyButton = styled.a`
     transform: translateY(-5px);
     box-shadow: 0 10px 35px rgba(255, 111, 97, 0.7);
   }
+
+  @media (max-width: 480px) {
+    font-size: 1.4rem;
+    padding: 1.2rem 3rem;
+  }
 `;
 
 export const Divider = styled.hr`
@@ -198,6 +233,7 @@ export const Divider = styled.hr`
   margin: 3.5rem auto;
   opacity: 0.5;
 `;
+
 export const FechaItem = styled.li`
   margin: 1rem 0;
   padding: 1rem;
@@ -237,10 +273,11 @@ export const DeleteButton = styled.button`
     background-color: #d32f2f;
   }
 `;
+
 export const ClassesSubContainer = styled.div`
   display: flex;
   flex-direction: column;
-  flex-grow: 1; /* Para que el contenedor crezca con el contenido */
+  flex-grow: 1;
 `;
 
 export const ViewMoreButton = styled.button`
@@ -296,11 +333,11 @@ export const TimeInput = styled.input`
   }
 `;
 
-// Estilos para los textos de fechas (Inicio/Fin y hora)
 export const FechaTexto = styled.p`
   margin: 0.5rem 0;
   font-size: 1.4rem;
   color: #333;
+
   strong {
     color: #ff6f61;
   }
