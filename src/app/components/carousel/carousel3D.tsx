@@ -174,7 +174,7 @@ const AcercaDe: React.FC = () => (
       <Grid item xs={12} md={6}>
         <ContentWrapper>
           <StyledTypography variant="h2" gutterBottom>
-            Acerca de <HighlightedText>Sofia Luciuk</HighlightedText>
+            Acerca de <HighlightedText>Fabiana Giménez</HighlightedText>
           </StyledTypography>
           <StyledTypography variant="h6" gutterBottom>
             Transformando la belleza, un rostro a la vez.
@@ -185,7 +185,7 @@ const AcercaDe: React.FC = () => (
             para proporcionar a nuestros clientes los servicios y productos de
             la más alta calidad.
           </StyledTypography>
-          <Link href="/acercaDe" passHref>
+          <Link href="/nosotros" passHref>
             <PinkButton>Más sobre nosotros</PinkButton>
           </Link>
         </ContentWrapper>
