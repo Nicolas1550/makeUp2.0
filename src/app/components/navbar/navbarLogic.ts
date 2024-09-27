@@ -38,7 +38,7 @@ export const useNavbarLogic = () => {
   const cartItems = useAppSelector(selectCartItems);
   const { logout } = useAuthToken();
 
-  const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://makeupbackend2-0.onrender.com";
+  const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001";
 
   // Estado para la URL de la imagen de perfil
   const [profileImageUrl, setProfileImageUrl] = useState<string>("");

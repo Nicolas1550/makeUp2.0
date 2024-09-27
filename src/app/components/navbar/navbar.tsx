@@ -28,17 +28,21 @@ import {
 import { Modal } from "@mui/material";
 import Cart from "../cart/cart";
 import { useNavbarLogic } from "./navbarLogic";
+
 interface Servicio {
   id: string;
   nombre: string;
 }
+
 const AuthModal = dynamic(() => import("../authModel/authModel"), {
   ssr: false,
 });
+
 const ProductOrdersModal = dynamic(
   () => import("../productOrderModal/orderModal"),
   { ssr: false }
 );
+
 const EcommerceWithAdmin = dynamic(
   () => import("../ecommerce/ecommerceWithAdmin"),
   { ssr: false }
@@ -73,7 +77,7 @@ const Navbar: React.FC = () => {
     handleAuthButtonClick,
     handleLogoutClick,
     profileImageUrl,
-    servicios, // Aquí se asume que servicios es de tipo Servicio[]
+    servicios,
   } = useNavbarLogic();
 
   if (!isAuthChecked) return null;
@@ -86,9 +90,7 @@ const Navbar: React.FC = () => {
         </HamburgerIcon>
         <Logo href="/">Fabiana Giménez</Logo>
         <NavLinks>
-          <motion.div
-            whileHover={{ scale: 1.2, transition: { duration: 0.3 } }}
-          >
+          <motion.div whileHover={{ scale: 1.2, transition: { duration: 0.3 } }}>
             <Link href="/" passHref>
               <NavLink>Inicio</NavLink>
             </Link>
@@ -108,9 +110,7 @@ const Navbar: React.FC = () => {
                 {servicios.map((servicio: Servicio) => (
                   <DropdownItem key={servicio.id}>
                     <Link href={`/servicios/${servicio.id}`} passHref>
-                      <NavLink onClick={closeDropdowns}>
-                        {servicio.nombre}
-                      </NavLink>
+                      <NavLink onClick={closeDropdowns}>{servicio.nombre}</NavLink>
                     </Link>
                   </DropdownItem>
                 ))}
@@ -118,12 +118,16 @@ const Navbar: React.FC = () => {
             )}
           </DropdownButtonContainer>
 
-          <motion.div
-            whileHover={{ scale: 1.2, transition: { duration: 0.3 } }}
-          >
+          <motion.div whileHover={{ scale: 1.2, transition: { duration: 0.3 } }}>
             <Link href="/tienda" passHref>
               <NavLink onClick={closeDropdowns}>Tienda</NavLink>
             </Link>
+          </motion.div>
+
+          <motion.div whileHover={{ scale: 1.2, transition: { duration: 0.3 } }}>
+            <NavLink onClick={toggleProductOrdersModal}>
+              Órdenes de Productos
+            </NavLink>
           </motion.div>
 
           <DropdownButtonContainer ref={moreDropdownRef}>
@@ -156,9 +160,7 @@ const Navbar: React.FC = () => {
           </Badge>
 
           {isAdmin && (
-            <motion.div
-              whileHover={{ scale: 1.2, transition: { duration: 0.3 } }}
-            >
+            <motion.div whileHover={{ scale: 1.2, transition: { duration: 0.3 } }}>
               <AuthButton onClick={toggleAdminPanel}>Admin Panel</AuthButton>
             </motion.div>
           )}
@@ -166,9 +168,7 @@ const Navbar: React.FC = () => {
           {!isLoading && showButtons ? (
             <>
               {!isAuthenticated ? (
-                <AuthButton onClick={handleAuthButtonClick}>
-                  Iniciar Sesión
-                </AuthButton>
+                <AuthButton onClick={handleAuthButtonClick}>Iniciar Sesión</AuthButton>
               ) : (
                 <>
                   <DropdownButtonContainer ref={dropdownMenuRef}>
@@ -213,7 +213,6 @@ const Navbar: React.FC = () => {
               <NavLink onClick={toggleMenu}>{item}</NavLink>
             </Link>
           ))}
-
           <Badge
             badgeContent={cartItems.length}
             color="secondary"
@@ -224,10 +223,7 @@ const Navbar: React.FC = () => {
           </Badge>
 
           {isAdmin && (
-            <AuthButton
-              onClick={toggleAdminPanel}
-              style={{ marginTop: "1rem" }}
-            >
+            <AuthButton onClick={toggleAdminPanel} style={{ marginTop: "1rem" }}>
               Admin Panel
             </AuthButton>
           )}
@@ -235,24 +231,13 @@ const Navbar: React.FC = () => {
           {!isLoading && showButtons ? (
             <>
               {!isAuthenticated ? (
-                <AuthButton onClick={handleAuthButtonClick}>
-                  Iniciar Sesión
-                </AuthButton>
+                <AuthButton onClick={handleAuthButtonClick}>Iniciar Sesión</AuthButton>
               ) : (
                 <>
-                  <DropdownButton onClick={toggleDropdown}>
-                    Pedidos
+                  <DropdownButton onClick={toggleProductOrdersModal}>
+                    Órdenes de Productos
                   </DropdownButton>
-                  {isDropdownOpen && (
-                    <DropdownMenu>
-                      <DropdownItem onClick={toggleProductOrdersModal}>
-                        Órdenes de Productos
-                      </DropdownItem>
-                    </DropdownMenu>
-                  )}
-                  <AuthButton onClick={handleLogoutClick}>
-                    Cerrar Sesión
-                  </AuthButton>
+                  <AuthButton onClick={handleLogoutClick}>Cerrar Sesión</AuthButton>
                 </>
               )}
             </>
@@ -261,12 +246,10 @@ const Navbar: React.FC = () => {
           )}
         </MobileMenu>
       </NavContainer>
+
       {isAuthChecked && <AuthModal />}
       {isProductOrdersModalOpen && (
-        <ProductOrdersModal
-          open={isProductOrdersModalOpen}
-          onClose={toggleProductOrdersModal}
-        />
+        <ProductOrdersModal open={isProductOrdersModalOpen} onClose={toggleProductOrdersModal} />
       )}
       <Modal
         open={isAdminPanelOpen}
@@ -277,11 +260,7 @@ const Navbar: React.FC = () => {
           <EcommerceWithAdmin onClose={toggleAdminPanel} />
         </div>
       </Modal>
-      <Modal
-        open={isCartOpen}
-        onClose={toggleCart}
-        aria-labelledby="cart-modal"
-      >
+      <Modal open={isCartOpen} onClose={toggleCart} aria-labelledby="cart-modal">
         <div>
           <Cart isOpen={isCartOpen} onClose={toggleCart} />
         </div>
