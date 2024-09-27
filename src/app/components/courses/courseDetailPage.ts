@@ -496,3 +496,30 @@ export const FechaTexto = styled.p`
     font-size: 1.1rem;
   }
 `;
+
+
+export const Spinner = styled.div`
+  border: 8px solid rgba(255, 111, 97, 0.3);
+  border-top: 8px solid #ff6f61;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+  margin: auto;
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+`;
+
+export const SpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+`;

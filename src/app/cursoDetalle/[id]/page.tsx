@@ -32,6 +32,8 @@ import {
   TimeInput,
   DateInput,
   FechaTexto,
+  SpinnerContainer,
+  Spinner,
 } from "@/app/components/courses/courseDetailPage";
 
 import { selectIsAdmin } from "@/redux/authSelectors";
@@ -155,7 +157,11 @@ const CourseDetailPage = () => {
   };
 
   if (!course) {
-    return <div>Cargando curso...</div>;
+    return (
+      <SpinnerContainer>
+        <Spinner />
+      </SpinnerContainer>
+    );
   }
 
   const formatDate = (dateString: string, formatString: string) => {
@@ -187,12 +193,16 @@ const CourseDetailPage = () => {
                     value={newPrecio ?? ""}
                     onChange={(e) => setNewPrecio(Number(e.target.value))}
                   />
-                  <EditButton onClick={handleSavePrice}>Guardar Precio</EditButton>
+                  <EditButton onClick={handleSavePrice}>
+                    Guardar Precio
+                  </EditButton>
                 </>
               ) : (
                 <>
                   ${course.precio}
-                  <EditButton onClick={handleEditPrice}>Editar Precio</EditButton>
+                  <EditButton onClick={handleEditPrice}>
+                    Editar Precio
+                  </EditButton>
                 </>
               )
             ) : (
@@ -248,7 +258,9 @@ const CourseDetailPage = () => {
                             })
                           }
                         />
-                        <EditButton onClick={handleSaveFecha}>Guardar</EditButton>
+                        <EditButton onClick={handleSaveFecha}>
+                          Guardar
+                        </EditButton>
                       </>
                     ) : (
                       <FechaTexto>
@@ -270,7 +282,9 @@ const CourseDetailPage = () => {
                         <EditButton onClick={() => handleEditFecha(fecha.id)}>
                           Editar
                         </EditButton>
-                        <DeleteButton onClick={() => handleDeleteFecha(fecha.id)}>
+                        <DeleteButton
+                          onClick={() => handleDeleteFecha(fecha.id)}
+                        >
                           Eliminar
                         </DeleteButton>
                       </>
@@ -357,7 +371,9 @@ const CourseDetailPage = () => {
               )}
             </ul>
             {course.clases && visibleClasses < course.clases.length && (
-              <ViewMoreButton onClick={handleViewMoreClasses}>Ver más</ViewMoreButton>
+              <ViewMoreButton onClick={handleViewMoreClasses}>
+                Ver más
+              </ViewMoreButton>
             )}
           </ClassesSubContainer>
         </ClassesWrapper>
