@@ -14,7 +14,10 @@ const ColorCircles = styled.div<{ color: string }>`
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background-color: ${({ color }) => color};
+    background-color: ${({ color }) =>
+      /^#[0-9A-F]{6}$/i.test(color) || /^[a-z]+$/i.test(color)
+        ? color
+        : "#ccc"}; /* Validar si es un color válido, sino usar color predeterminado */
     border: 2px solid white;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease;
@@ -274,7 +277,16 @@ interface ProductCardProps {
   createdAt?: string;
   updatedAt?: string;
 }
-
+const colorMapping: Record<string, string> = {
+  Blanco: "#FFFFFF", // Blanco -> White
+  Negro: "#000000", // Negro -> Black
+  Nude: "#F5CBB0", // Nude -> Beige-like color
+  Rojo: "#FF0000", // Rojo -> Red
+  Rosa: "#FFC0CB", // Rosa -> Pink
+  Azul: "#0000FF", // Azul -> Blue
+  Marron: "#8B4513", // Marron -> Brown
+  "": "#D3D3D3", // Default color for empty selection
+};
 const ProductCard: React.FC<ProductCardProps> = ({
   id,
   name,
@@ -307,6 +319,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
     dispatch(addToCart(product));
   };
 
+  // Log para verificar si el color es recibido correctamente
+  console.log(`Producto: ${name}, Color: ${color}`);
+
+  // Usar el color mapeado
+  const mappedColor = colorMapping[color] || "#D3D3D3"; // Color por defecto si no se encuentra
+
   return (
     <CardContainer>
       {/* Mostrar el overlay si no hay stock */}
@@ -334,8 +352,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
           {/* Mostrar Marca en negrita */}
           <ProductBrand>{brand}</ProductBrand>
 
-          {color !== "Color no disponible" && (
-            <ColorCircles color={color.toLowerCase()}>
+          {/* ColorCircles con el color mapeado */}
+          {color && color !== "Color no disponible" && (
+            <ColorCircles color={mappedColor}>
               <div />
               <div />
               <div />
@@ -349,5 +368,4 @@ const ProductCard: React.FC<ProductCardProps> = ({
     </CardContainer>
   );
 };
-
 export default ProductCard;

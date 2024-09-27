@@ -241,13 +241,13 @@ const CombinedFilterComponent: React.FC = () => {
     dispatch(setSidebarExpanded(isExpanded));
   }, [isExpanded, dispatch]);
   const colorMap: { [key: string]: string } = {
-    Blanco: "White",
-    Negro: "Black",
+    Blanco: "Blanco",
+    Negro: "Negro",
     Nude: "Nude",
-    Rojo: "Red",
-    Rosa: "Pink",
-    Azul: "Blue",
-    Marron: "Brown",
+    Rojo: "Rojo",
+    Rosa: "Rosa",
+    Azul: "Azul",
+    Marron: "Marrón",
   };
 
   const colorOptions = [
@@ -487,8 +487,8 @@ const CombinedFilterComponent: React.FC = () => {
     <div
       style={{
         display: "flex",
-        justifyContent: "center", 
-        width: "100%", 
+        justifyContent: "center",
+        width: "100%",
       }}
     >
       <>
@@ -562,7 +562,7 @@ const CombinedFilterComponent: React.FC = () => {
                         colorMap[option?.value || ""] || "";
                       dispatch(setSelectedColor(translatedColor));
                     }}
-                    menuPortalTarget={menuPortalTarget} 
+                    menuPortalTarget={menuPortalTarget}
                     placeholder="Selecciona un color"
                     components={{
                       MenuList: CustomMenuList,
@@ -588,7 +588,7 @@ const CombinedFilterComponent: React.FC = () => {
                       const option = newValue as OptionType | null;
                       dispatch(setSelectedMarca(option?.value || ""));
                     }}
-                    menuPortalTarget={menuPortalTarget} 
+                    menuPortalTarget={menuPortalTarget}
                     placeholder="Selecciona una marca"
                     components={{
                       MenuList: CustomMenuList,
