@@ -54,7 +54,7 @@ const OutOfStockOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10;
+  z-index: 1;
   pointer-events: none; /* Para que no interfiera con el click en la tarjeta */
 `;
 
