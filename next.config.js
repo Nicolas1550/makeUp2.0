@@ -6,7 +6,9 @@ const nextConfig = {
             'th.bing.com',
             'media.metrolatam.com',
             'localhost',
-            'backendiaecommerce.onrender.com' // Añade este dominio
+            'backendiaecommerce.onrender.com',
+            'makeupbackend2-0.onrender.com'
+
         ]
     }
 };
