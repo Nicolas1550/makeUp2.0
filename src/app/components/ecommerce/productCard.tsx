@@ -40,6 +40,29 @@ const ColorCircles = styled.div<{ color: string }>`
 `;
 
 // Estilos
+// Estilo del overlay para "Sin stock"
+const OutOfStockOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7); /* Blanco transparente */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  pointer-events: none; /* Para que no interfiera con el click en la tarjeta */
+`;
+
+const OutOfStockText = styled.span`
+  color: red;
+  font-size: 2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  transform: rotate(-20deg); /* Texto en diagonal */
+`;
+
 const CardContainer = styled.li`
   background: linear-gradient(to bottom, #ffffff, #fff0e1);
   padding: 1.5rem;
@@ -53,7 +76,7 @@ const CardContainer = styled.li`
   align-items: center;
   justify-content: space-between;
   transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
-  position: relative;
+  position: relative; /* Importante para el overlay */
 
   &:hover {
     transform: translateY(-10px) rotate(-2deg);
@@ -80,7 +103,6 @@ const ProductBrand = styled.p`
   text-transform: capitalize;
   text-align: center;
 `;
-
 
 const DiscountBadge = styled.div`
   position: absolute;
@@ -287,6 +309,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <CardContainer>
+      {/* Mostrar el overlay si no hay stock */}
+      {quantity === 0 && (
+        <OutOfStockOverlay>
+          <OutOfStockText>Sin stock</OutOfStockText>
+        </OutOfStockOverlay>
+      )}
+
       {discount && <DiscountBadge>{discount}% OFF</DiscountBadge>}
       <Link href={`/products/${id}`} passHref>
         <div>
@@ -305,7 +334,6 @@ const ProductCard: React.FC<ProductCardProps> = ({
           {/* Mostrar Marca en negrita */}
           <ProductBrand>{brand}</ProductBrand>
 
-     
           {color !== "Color no disponible" && (
             <ColorCircles color={color.toLowerCase()}>
               <div />
@@ -315,7 +343,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           )}
         </div>
       </Link>
-      <AddToCartButton onClick={handleAddToCart}>
+      <AddToCartButton onClick={handleAddToCart} disabled={quantity === 0}>
         Agregar al carrito
       </AddToCartButton>
     </CardContainer>
