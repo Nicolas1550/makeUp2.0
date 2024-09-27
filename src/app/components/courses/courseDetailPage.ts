@@ -28,7 +28,7 @@ export const CourseDetailContainer = styled.div`
   }
 
   @media (max-width: 480px) {
-    padding: 2rem 1rem;
+    padding: 2rem 1.5rem;
   }
 `;
 
@@ -50,7 +50,9 @@ export const CourseTitle = styled.h1`
   }
 
   @media (max-width: 480px) {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
   }
 `;
 
@@ -70,7 +72,9 @@ export const CourseDescription = styled.p`
   }
 
   @media (max-width: 480px) {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
   }
 `;
 
@@ -82,6 +86,7 @@ export const InfoWrapper = styled.div`
 
   @media (max-width: 768px) {
     flex-direction: column;
+    gap: 1.5rem;
   }
 `;
 
@@ -94,6 +99,11 @@ export const CourseInfo = styled.div`
 
   @media (max-width: 768px) {
     width: 100%;
+    padding: 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1rem;
   }
 `;
 
@@ -108,7 +118,8 @@ export const DetailSection = styled.div`
   }
 
   @media (max-width: 480px) {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
+    line-height: 1.5;
   }
 `;
 
@@ -123,6 +134,8 @@ export const ClassesWrapper = styled.div`
 
   @media (max-width: 768px) {
     width: 100%;
+    padding: 1.5rem;
+    max-height: 500px;
   }
 
   h2 {
@@ -136,7 +149,8 @@ export const ClassesWrapper = styled.div`
     text-transform: uppercase;
 
     @media (max-width: 480px) {
-      font-size: 2rem;
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
     }
   }
 `;
@@ -162,7 +176,7 @@ export const ClassItem = styled.li`
     margin-bottom: 1.2rem;
 
     @media (max-width: 480px) {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
     }
   }
 
@@ -187,12 +201,24 @@ export const VideoLink = styled.a`
   &:hover {
     color: #2563eb;
   }
+
+  @media (max-width: 480px) {
+    font-size: 1.3rem;
+  }
 `;
+
+
+
+
 
 export const AdditionalMaterial = styled.p`
   margin-top: 0.8rem;
   font-style: italic;
   color: #6b7280;
+
+  @media (max-width: 480px) {
+    font-size: 1.2rem;
+  }
 `;
 
 export const BuyButton = styled.a`
@@ -210,7 +236,6 @@ export const BuyButton = styled.a`
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease;
   box-shadow: 0 5px 30px rgba(255, 111, 97, 0.7);
-  animation: ${fadeIn} 1.2s ease-out;
 
   &:hover {
     background-color: #ff3c41;
@@ -232,6 +257,10 @@ export const Divider = styled.hr`
   max-width: 850px;
   margin: 3.5rem auto;
   opacity: 0.5;
+
+  @media (max-width: 480px) {
+    margin: 2.5rem auto;
+  }
 `;
 
 export const FechaItem = styled.li`
@@ -243,6 +272,12 @@ export const FechaItem = styled.li`
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 480px) {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+  }
 `;
 
 export const EditButton = styled.button`
@@ -258,6 +293,12 @@ export const EditButton = styled.button`
   &:hover {
     background-color: #e68900;
   }
+
+  @media (max-width: 480px) {
+    margin-right: 0;
+    margin-bottom: 0.5rem;
+    width: 100%;
+  }
 `;
 
 export const DeleteButton = styled.button`
@@ -272,12 +313,20 @@ export const DeleteButton = styled.button`
   &:hover {
     background-color: #d32f2f;
   }
+
+  @media (max-width: 480px) {
+    width: 100%;
+  }
 `;
 
 export const ClassesSubContainer = styled.div`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+
+  @media (max-width: 480px) {
+    padding: 1rem;
+  }
 `;
 
 export const ViewMoreButton = styled.button`
@@ -293,9 +342,13 @@ export const ViewMoreButton = styled.button`
   &:hover {
     background-color: #e68900;
   }
+
+  @media (max-width: 480px) {
+    padding: 0.8rem 1.5rem;
+    font-size: 1.2rem;
+  }
 `;
 
-// Estilos para los inputs de fecha
 export const DateInput = styled.input`
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -312,9 +365,13 @@ export const DateInput = styled.input`
     border-color: #ff6f61;
     outline: none;
   }
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+    padding: 0.4rem 0.8rem;
+  }
 `;
 
-// Estilos para los inputs de hora
 export const TimeInput = styled.input`
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -331,6 +388,11 @@ export const TimeInput = styled.input`
     border-color: #ff6f61;
     outline: none;
   }
+
+  @media (max-width: 480px) {
+    font-size: 1rem;
+    padding: 0.4rem 0.8rem;
+  }
 `;
 
 export const FechaTexto = styled.p`
@@ -340,5 +402,9 @@ export const FechaTexto = styled.p`
 
   strong {
     color: #ff6f61;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.2rem;
   }
 `;
