@@ -1,5 +1,3 @@
-
-
 "use client";
 import React from "react";
 import dynamic from "next/dynamic";
@@ -189,9 +187,7 @@ const Navbar: React.FC = () => {
 
                     {isDropdownOpen && (
                       <ProfileDropdown>
-                        <ProfileDropdownItem
-                          onClick={toggleProductOrdersModal}
-                        >
+                        <ProfileDropdownItem onClick={toggleProductOrdersModal}>
                           Órdenes de Productos
                         </ProfileDropdownItem>
                         <ProfileDropdownItem onClick={handleLogoutClick}>
@@ -217,6 +213,7 @@ const Navbar: React.FC = () => {
               <NavLink onClick={toggleMenu}>{item}</NavLink>
             </Link>
           ))}
+
           <Badge
             badgeContent={cartItems.length}
             color="secondary"
@@ -243,7 +240,9 @@ const Navbar: React.FC = () => {
                 </AuthButton>
               ) : (
                 <>
-                  <DropdownButton onClick={toggleDropdown}>Pedidos</DropdownButton>
+                  <DropdownButton onClick={toggleDropdown}>
+                    Pedidos
+                  </DropdownButton>
                   {isDropdownOpen && (
                     <DropdownMenu>
                       <DropdownItem onClick={toggleProductOrdersModal}>
@@ -278,7 +277,11 @@ const Navbar: React.FC = () => {
           <EcommerceWithAdmin onClose={toggleAdminPanel} />
         </div>
       </Modal>
-      <Modal open={isCartOpen} onClose={toggleCart} aria-labelledby="cart-modal">
+      <Modal
+        open={isCartOpen}
+        onClose={toggleCart}
+        aria-labelledby="cart-modal"
+      >
         <div>
           <Cart isOpen={isCartOpen} onClose={toggleCart} />
         </div>
