@@ -30,6 +30,10 @@ export const CourseDetailContainer = styled.div`
   @media (max-width: 480px) {
     padding: 2rem 1.5rem;
   }
+
+  @media (max-width: 400px) {
+    padding: 1.5rem 1rem;
+  }
 `;
 
 export const CourseTitle = styled.h1`
@@ -54,6 +58,12 @@ export const CourseTitle = styled.h1`
     letter-spacing: 1px;
     margin-bottom: 1.5rem;
   }
+
+  @media (max-width: 400px) {
+    font-size: 2rem;
+    letter-spacing: 0.8px;
+    margin-bottom: 1.2rem;
+  }
 `;
 
 export const CourseDescription = styled.p`
@@ -75,6 +85,11 @@ export const CourseDescription = styled.p`
     font-size: 1.3rem;
     line-height: 1.6;
     margin-bottom: 2rem;
+  }
+
+  @media (max-width: 400px) {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
   }
 `;
 
@@ -105,6 +120,10 @@ export const CourseInfo = styled.div`
   @media (max-width: 480px) {
     padding: 1rem;
   }
+
+  @media (max-width: 400px) {
+    padding: 0.8rem;
+  }
 `;
 
 export const DetailSection = styled.div`
@@ -120,6 +139,10 @@ export const DetailSection = styled.div`
   @media (max-width: 480px) {
     font-size: 1.2rem;
     line-height: 1.5;
+  }
+
+  @media (max-width: 400px) {
+    font-size: 1.1rem;
   }
 `;
 
@@ -138,6 +161,10 @@ export const ClassesWrapper = styled.div`
     max-height: 500px;
   }
 
+  @media (max-width: 400px) {
+    padding: 1rem;
+  }
+
   h2 {
     font-size: 2.7rem;
     color: #ff6f61;
@@ -151,6 +178,11 @@ export const ClassesWrapper = styled.div`
     @media (max-width: 480px) {
       font-size: 1.8rem;
       margin-bottom: 1.5rem;
+    }
+
+    @media (max-width: 400px) {
+      font-size: 1.6rem;
+      margin-bottom: 1.2rem;
     }
   }
 `;
@@ -178,6 +210,10 @@ export const ClassItem = styled.li`
     @media (max-width: 480px) {
       font-size: 1.5rem;
     }
+
+    @media (max-width: 400px) {
+      font-size: 1.4rem;
+    }
   }
 
   p {
@@ -186,6 +222,10 @@ export const ClassItem = styled.li`
 
     @media (max-width: 480px) {
       font-size: 1.2rem;
+    }
+
+    @media (max-width: 400px) {
+      font-size: 1.1rem;
     }
   }
 `;
@@ -205,11 +245,11 @@ export const VideoLink = styled.a`
   @media (max-width: 480px) {
     font-size: 1.3rem;
   }
+
+  @media (max-width: 400px) {
+    font-size: 1.1rem;
+  }
 `;
-
-
-
-
 
 export const AdditionalMaterial = styled.p`
   margin-top: 0.8rem;
@@ -218,6 +258,10 @@ export const AdditionalMaterial = styled.p`
 
   @media (max-width: 480px) {
     font-size: 1.2rem;
+  }
+
+  @media (max-width: 400px) {
+    font-size: 1rem;
   }
 `;
 
@@ -247,6 +291,11 @@ export const BuyButton = styled.a`
     font-size: 1.4rem;
     padding: 1.2rem 3rem;
   }
+
+  @media (max-width: 400px) {
+    font-size: 1.2rem;
+    padding: 1rem 2.5rem;
+  }
 `;
 
 export const Divider = styled.hr`
@@ -260,6 +309,10 @@ export const Divider = styled.hr`
 
   @media (max-width: 480px) {
     margin: 2.5rem auto;
+  }
+
+  @media (max-width: 400px) {
+    margin: 2rem auto;
   }
 `;
 
@@ -277,6 +330,10 @@ export const FechaItem = styled.li`
     flex-direction: column;
     align-items: flex-start;
     padding: 1rem;
+  }
+
+  @media (max-width: 400px) {
+    padding: 0.8rem;
   }
 `;
 
@@ -299,6 +356,10 @@ export const EditButton = styled.button`
     margin-bottom: 0.5rem;
     width: 100%;
   }
+
+  @media (max-width: 400px) {
+    padding: 0.4rem 0.8rem;
+  }
 `;
 
 export const DeleteButton = styled.button`
@@ -317,6 +378,10 @@ export const DeleteButton = styled.button`
   @media (max-width: 480px) {
     width: 100%;
   }
+
+  @media (max-width: 400px) {
+    padding: 0.4rem 0.8rem;
+  }
 `;
 
 export const ClassesSubContainer = styled.div`
@@ -326,6 +391,10 @@ export const ClassesSubContainer = styled.div`
 
   @media (max-width: 480px) {
     padding: 1rem;
+  }
+
+  @media (max-width: 400px) {
+    padding: 0.8rem;
   }
 `;
 
@@ -346,6 +415,11 @@ export const ViewMoreButton = styled.button`
   @media (max-width: 480px) {
     padding: 0.8rem 1.5rem;
     font-size: 1.2rem;
+  }
+
+  @media (max-width: 400px) {
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
   }
 `;
 
@@ -370,6 +444,11 @@ export const DateInput = styled.input`
     font-size: 1rem;
     padding: 0.4rem 0.8rem;
   }
+
+  @media (max-width: 400px) {
+    font-size: 0.9rem;
+    padding: 0.3rem 0.6rem;
+  }
 `;
 
 export const TimeInput = styled.input`
@@ -393,6 +472,11 @@ export const TimeInput = styled.input`
     font-size: 1rem;
     padding: 0.4rem 0.8rem;
   }
+
+  @media (max-width: 400px) {
+    font-size: 0.9rem;
+    padding: 0.3rem 0.6rem;
+  }
 `;
 
 export const FechaTexto = styled.p`
@@ -406,5 +490,9 @@ export const FechaTexto = styled.p`
 
   @media (max-width: 480px) {
     font-size: 1.2rem;
+  }
+
+  @media (max-width: 400px) {
+    font-size: 1.1rem;
   }
 `;
