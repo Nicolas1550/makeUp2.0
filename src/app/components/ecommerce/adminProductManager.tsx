@@ -25,21 +25,20 @@ const marcaOptions = [
   { value: "Liderma", label: "Liderma" },
 ];
 
-
 // Título de sección con estilo coherente al navbar
 export const SectionTitle = styled.h2`
-  font-size: 2.5rem; /* Tamaño de texto mayor para énfasis */
+  font-size: 2.5rem;
   font-weight: bold;
   text-align: center;
-  color: #f4c2c2; /* Rosado suave */
+  color: #f4c2c2;
   margin-bottom: 2rem;
   text-transform: uppercase;
-  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2); /* Sombra más suave */
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 `;
 
 // Botón con colores coherentes al navbar
 export const Button = styled.button`
-  background-color: #f4c2c2; /* Rosado suave */
+  background-color: #f4c2c2;
   color: #1c1c1c;
   padding: 0.6rem 1.2rem;
   border: none;
@@ -50,7 +49,7 @@ export const Button = styled.button`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 
   &:hover {
-    background-color: #f08080; /* Hover en rosado más oscuro */
+    background-color: #f08080;
     transform: translateY(-3px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   }
@@ -64,7 +63,7 @@ export const AddProductForm = styled.form`
   max-width: 400px;
   margin: 0 auto;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.9); /* Fondo blanco con transparencia */
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 `;
@@ -149,6 +148,20 @@ export const StyledSelect = styled.select`
   }
 `;
 
+// Mensaje de éxito
+const SuccessMessage = styled.div`
+  color: green;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 1rem;
+  animation: fadeOut 3s forwards;
+
+  @keyframes fadeOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+  }
+`;
+
 const AdminProductManager: React.FC = () => {
   const dispatch = useAppDispatch();
 
@@ -157,11 +170,13 @@ const AdminProductManager: React.FC = () => {
     price: "",
     quantity: "",
     description: "",
-    brand: "",   
-    color: "",    
-    category: "", 
+    brand: "",
+    color: "",
+    category: "",
     image: null as File | null,
   });
+
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false); // Estado para el mensaje de éxito
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -189,12 +204,37 @@ const AdminProductManager: React.FC = () => {
     if (newProduct.image) {
       formData.append("image", newProduct.image);
     }
+
     await dispatch(addProduct(formData));
+
+    // Mostrar el mensaje de éxito
+    setShowSuccessMessage(true);
+
+    // Ocultar el mensaje después de 3 segundos
+    setTimeout(() => {
+      setShowSuccessMessage(false);
+    }, 5000);
+
+    // Reiniciar el formulario
+    setNewProduct({
+      name: "",
+      price: "",
+      quantity: "",
+      description: "",
+      brand: "",
+      color: "",
+      category: "",
+      image: null,
+    });
   };
 
   return (
     <div>
       <SectionTitle>Agregar Producto</SectionTitle>
+
+      {/* Mostrar el mensaje de éxito temporalmente */}
+      {showSuccessMessage && <SuccessMessage>¡Producto agregado exitosamente!</SuccessMessage>}
+
       <AddProductForm onSubmit={handleAddProduct}>
         <Input
           type="text"
@@ -226,7 +266,7 @@ const AdminProductManager: React.FC = () => {
           value={newProduct.description}
           onChange={handleInputChange}
         />
-        
+
         {/* Selector de Marca */}
         <SelectWrapper>
           <StyledSelect
@@ -275,3 +315,4 @@ const AdminProductManager: React.FC = () => {
 };
 
 export default AdminProductManager;
+
