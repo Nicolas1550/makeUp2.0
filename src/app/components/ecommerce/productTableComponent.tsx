@@ -360,7 +360,7 @@ const ProductTableComponent: React.FC<ProductTableProps> = ({
                     <td>
                       {product.imageFileName && (
                         <Image
-                          src={`http://localhost:3001/uploads/images/${product.imageFileName}`}
+                          src={`https://makeupbackend2-0.onrender.com/uploads/images/${product.imageFileName}`}
                           alt={product.name}
                           width={50}
                           height={50}
