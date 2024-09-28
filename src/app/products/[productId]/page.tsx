@@ -158,7 +158,7 @@ const ProductPage: React.FC = () => {
         <ProductWrapper>
           <ProductImageContainer>
             <ProductImage
-              src={`http://localhost:3001/uploads/images/${product.imageFileName}`}
+              src={`https://makeupbackend2-0.onrender.com/uploads/images/${product.imageFileName}`}
               alt={product.name}
             />
           </ProductImageContainer>
